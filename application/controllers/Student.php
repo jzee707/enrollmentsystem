@@ -55,6 +55,16 @@ function editStudent($id)
     
 }
 
+public function registration() {     
+         
+    $data = array();
+
+    $data['province'] = $this->auth->getProvince();
+      
+    $this->load->view('student/registration', $data);
+    
+}
+
  
  //------------- FUNCTION -------------//
     
@@ -241,6 +251,7 @@ function editStudent($id)
     {
                
         $this->form_validation->set_rules('lrn', 'LRN', 'trim|required');
+        $this->form_validation->set_rules('studenttype', 'Student Type', 'trim|required');
         $this->form_validation->set_rules('firstname', 'First Name', 'trim|required');
         $this->form_validation->set_rules('lastname', 'Last Name', 'trim|required');
         $this->form_validation->set_rules('birthdate', 'Birthdate', 'trim|required');
@@ -256,12 +267,12 @@ function editStudent($id)
 
  
         if ($this->form_validation->run() == FALSE) {
-            $this->addNewStudent();
+            $this->registration();
         } else {
             
             $lrn = $this->security->xss_clean($this->input->post('lrn'));
             $idno = '';
-            $studenttype = 'New';
+            $studenttype = $this->security->xss_clean($this->input->post('studenttype'));
             $firstname = $this->security->xss_clean($this->input->post('firstname'));
             $lastname = $this->security->xss_clean($this->input->post('lastname'));
             $middlename = $this->security->xss_clean($this->input->post('middlename'));

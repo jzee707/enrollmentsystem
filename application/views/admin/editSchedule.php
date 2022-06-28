@@ -24,7 +24,7 @@
                     <!-- form start -->
 
 
-                    <form role="form" id="addUser" action="<?php echo base_url() ?>" method="post" role="form">
+                    <form role="form" id="addUser" action="<?php echo base_url() ?>editOldSchedule" method="post" role="form">
                         <div class="box-body">
 
                         <div class="row">                           
@@ -42,12 +42,45 @@
                                             </select>
                                         </div>
                                 </div> 
+
+                                <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="strand">Strand</label>
+                                                    <br>
+                                                    <select name="strand" id="strand" class="form-control"> 
+                                                    <?php
+                                                                foreach($strand->result_array() as $row)
+                                                                {
+                                                                    echo '<option value="'.$row["id"].'">'.$row["strandcode"].'</option>';
+                                                                }
+                                                                ?>                                                 
+                                                    </select>
+                                                </div>
+                                    </div> 
                             </div>
 
 
                             <div class="row">
                                     <div class="col-md-6">
-                                                <div class="form-group">
+
+                                        <div class="form-group">
+                                                <label for="last_name">Section</label>
+                                                <br>
+                                                <select name="section" id="section" class="form-control">
+                                                <?php
+                                                                foreach($section->result_array() as $row)
+                                                                {
+                                                                    echo '<option value="'.$row["id"].'">'.$row["section"].'</option>';
+                                                                }
+                                                                ?>
+        
+                                                </select>
+                                            </div>
+                                                
+                                        </div> 
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
                                                     <label for="last_name">Subject</label>
                                                     <br>
                                                     <select name="subject" id="subject" class="form-control">
@@ -60,22 +93,7 @@
 
                                                     </select>
                                                 </div>
-                                        </div> 
-
-                                <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="last_name">Section</label>
-                                            <br>
-                                            <select name="section" id="section" class="form-control">
-                                            <?php
-                                                            foreach($section->result_array() as $row)
-                                                            {
-                                                                echo '<option value="'.$row["id"].'">'.$row["section"].'</option>';
-                                                            }
-                                                            ?>
-     
-                                            </select>
-                                        </div>
+                                        
                                 </div> 
 
                             </div>
@@ -210,9 +228,92 @@ $(document).ready(function(){
     
 $('#gradelevel').change(function(){
     var gradelevel = $('#gradelevel').val();
+    
+
     if(gradelevel != '')
     {
-    $.ajax({
+
+    if(gradelevel == 'Grade 11' || gradelevel == 'Grade 12')
+    {
+        $.ajax({
+        url:"<?php echo base_url(); ?>schedule/getStrand",
+        method:"POST",
+        data:{gradelevel:gradelevel},
+        success:function(data)
+        {
+        $('#strand').html(data);
+
+        }
+    });
+
+     
+    }
+
+    else
+    {
+        
+        $('#strand').html('');
+        $('#subject').html('');
+ 
+
+        $.ajax({
+        url:"<?php echo base_url(); ?>schedule/getSection",
+        method:"POST",
+        data:{gradelevel:gradelevel},
+        success:function(data)
+        {
+        $('#section').html(data);
+
+        }
+    });
+
+
+
+    }
+
+    }
+    else
+    {
+    $('#subject').html('');
+    $('#section').html('');
+    }
+
+
+
+});
+
+$('#strand').change(function(){
+    var gradelevel = $('#gradelevel').val();
+    var strand = $('#strand').val();
+    
+
+    if(strand != '')
+    {
+
+        $.ajax({
+        url:"<?php echo base_url(); ?>schedule/getSectionSHS",
+        method:"POST",
+        data:{gradelevel:gradelevel,strand:strand},
+        success:function(data)
+        {
+        $('#section').html(data);
+
+        }
+    });
+
+     
+    }
+
+
+});
+
+$('#section').change(function(){
+    var gradelevel = $('#gradelevel').val();
+    
+    if(gradelevel != '')
+    {
+
+        $.ajax({
         url:"<?php echo base_url(); ?>schedule/getSubject",
         method:"POST",
         data:{gradelevel:gradelevel},
@@ -223,36 +324,18 @@ $('#gradelevel').change(function(){
         }
     });
 
-    $.ajax({
-        url:"<?php echo base_url(); ?>schedule/getSection",
-        method:"POST",
-        data:{gradelevel:gradelevel},
-        success:function(data)
-        {
-        $('#section').html(data);
-
-        }
-    });
-    }
-    else
-    {
-    $('#subject').html('');
-    $('#section').html('');
-    }
-
-    if(gradelevel != 'Grade 11' || gradelevel != 'Grade 12')
-    {
-        document.getElementById("term").value = "";
-       
-
+     
     }
 
 
 });
 
+    
+
         document.getElementById("gradelevel").value= "<?php echo $scheduleInfo->gradelevel ?>";
         document.getElementById("section").value= "<?php echo $scheduleInfo->sectionid ?>";
         document.getElementById("subject").value = "<?php echo $scheduleInfo->subjectid ?>";
+        document.getElementById("strand").value = "<?php echo $scheduleInfo->strandid ?>";
 
         document.getElementById("adviser").value = "<?php echo $scheduleInfo->adviserid ?>";
         document.getElementById("term").value = "<?php echo $scheduleInfo->term ?>";

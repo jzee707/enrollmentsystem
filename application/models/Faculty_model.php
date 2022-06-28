@@ -178,6 +178,22 @@ class Faculty_model extends CI_Model {
         return TRUE;
     }
 
+    function editAccount($facultyInfo, $id)
+    {       
+        $this->db->where('id', $id);
+        $this->db->update('tbl_account', $facultyInfo);
+              
+        return TRUE;
+    }
+
+    function editEnrollment($facultyInfo, $id)
+    {       
+        $this->db->where('id', $id);
+        $this->db->update('tbl_enrollsched', $facultyInfo);
+              
+        return TRUE;
+    }
+
   function deleteUser($userId, $userInfo)
     {
         $this->db->where('id', $userId);
@@ -243,7 +259,7 @@ class Faculty_model extends CI_Model {
 
     function scheduleListingCount($id,$syid)
     {
-        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
+        $this->db->select("es.scheduleid as id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
         $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
@@ -263,7 +279,7 @@ class Faculty_model extends CI_Model {
 
     function scheduleListing($id,$syid, $page, $segment) {
 
-        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
+        $this->db->select("es.scheduleid as id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
         $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
@@ -274,6 +290,91 @@ class Faculty_model extends CI_Model {
         $this->db->join('tbl_strand st','st.id=sc.strandid','left');
         $this->db->where('sd.adviserid', $id);
         $this->db->where('e.syid=', $syid);
+        
+        
+        $this->db->limit($page, $segment);
+        $query = $this->db->get();
+        
+        $result = $query->result();        
+        return $result;
+    }
+
+    function recordListingCount($id,$syid)
+    {
+        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
+        $this->db->from('tbl_schedule sd');
+        $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
+        $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
+        $this->db->join('tbl_faculty a','a.id=sd.adviserid');
+        $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
+        $this->db->join('tbl_section sc','sc.id=sd.sectionid');
+        $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
+        $this->db->join('tbl_strand st','st.id=sc.strandid','left');
+        $this->db->where('sd.adviserid', $id);
+        $this->db->where('e.syid<>', $syid);
+                
+
+        $query = $this->db->get();
+        
+        return $query->num_rows();
+    }
+
+    function recordListing($id,$syid, $page, $segment) {
+
+        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
+        $this->db->from('tbl_schedule sd');
+        $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
+        $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
+        $this->db->join('tbl_faculty a','a.id=sd.adviserid');
+        $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
+        $this->db->join('tbl_section sc','sc.id=sd.sectionid');
+        $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
+        $this->db->join('tbl_strand st','st.id=sc.strandid','left');
+        $this->db->where('sd.adviserid', $id);
+        $this->db->where('e.syid<>', $syid);
+        
+        
+        $this->db->limit($page, $segment);
+        $query = $this->db->get();
+        
+        $result = $query->result();        
+        return $result;
+    }
+
+    function studentListingCount($schedid)
+    {
+        $this->db->select("es.id,s.idno,concat(s.firstname, ' ',s.lastname) as name, s.address,e.type,es.status");
+        $this->db->from('tbl_enrollment e');
+        $this->db->join('tbl_enrollsched es','es.enrollmentid=e.id');
+        $this->db->join('tbl_schedule sd','sd.id=es.scheduleid');
+        $this->db->join('tbl_faculty a','a.id=sd.adviserid');
+        $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
+        $this->db->join('tbl_student s','s.id=e.studentid');
+        $this->db->join('tbl_section sc','sc.id=sd.sectionid');
+        $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
+        $this->db->join('tbl_strand st','st.id=sc.strandid','left');
+        $this->db->where('es.scheduleid', $schedid);
+
+                
+
+        $query = $this->db->get();
+        
+        return $query->num_rows();
+    }
+
+    function studentListing($schedid, $page, $segment) {
+
+        $this->db->select("es.id,s.idno,concat(s.firstname, ' ',s.lastname) as name, s.address,e.type,es.status");
+        $this->db->from('tbl_enrollment e');
+        $this->db->join('tbl_enrollsched es','es.enrollmentid=e.id');
+        $this->db->join('tbl_schedule sd','sd.id=es.scheduleid');
+        $this->db->join('tbl_faculty a','a.id=sd.adviserid');
+        $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
+        $this->db->join('tbl_student s','s.id=e.studentid');
+        $this->db->join('tbl_section sc','sc.id=sd.sectionid');
+        $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
+        $this->db->join('tbl_strand st','st.id=sc.strandid','left');
+        $this->db->where('es.scheduleid', $schedid);
         
         
         $this->db->limit($page, $segment);

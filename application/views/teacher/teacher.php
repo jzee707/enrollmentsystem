@@ -44,8 +44,8 @@
               <!-- small box -->
               <div class="small-box bg-red">
                 <div class="inner">
-                  <h3 style="text-align:center">2022 - 2023</h3>
-                  <p>Active School Year</p>
+                  <h3 style="text-align:center"><?php echo $dashboardInfo->schoolyear; ?></h3>
+                  <p><?php echo $dashboardInfo->semester; ?> Semester</p>
                 </div>
 
                

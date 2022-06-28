@@ -341,6 +341,8 @@ function signout()
             
             $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
             $section = $this->security->xss_clean($this->input->post('section'));
+            $etype = $this->security->xss_clean($this->input->post('etype'));
+            $strand = $this->security->xss_clean($this->input->post('strand'));
             $timeStamp = date('Y-m-d');
 
             $schoolyear =0;
@@ -351,7 +353,7 @@ function signout()
                 $schoolyear = $row->id;
             }           
             
-            $chk = $this->auth->addPreEnrollment($id,$schoolyear,$timeStamp);
+            $chk = $this->auth->addPreEnrollment($id,$schoolyear,$timeStamp,$etype,$strand);
 
             $enrollid = $this->db->select("*")->limit(1)->order_by('id',"DESC")->get("tbl_enrollment")->row();
  

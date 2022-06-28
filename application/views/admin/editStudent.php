@@ -330,7 +330,10 @@ $('#city').change(function(){
         document.getElementById("province").value= "<?php echo $studentInfo->province ?>";
         document.getElementById("city").value= "<?php echo $studentInfo->city ?>";
         document.getElementById("barangay").value = "<?php echo $studentInfo->addid ?>";
-        
+
+        document.getElementById("gender").value= "<?php echo $studentInfo->gender ?>";
+        document.getElementById("studenttype").value= "<?php echo $studentInfo->studenttype ?>";
+        ocument.getElementById("status").value= "<?php echo $studentInfo->status ?>";
 
        
 

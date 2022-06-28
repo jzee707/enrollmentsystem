@@ -36,6 +36,7 @@ function editSchedule($id)
     $data['faculty'] = $this->auth->getAdviser();
     $data['subject'] = $this->auth->getSubjectList();
     $data['section'] = $this->auth->getSectionList();
+    $data['strand'] = $this->auth->getStrandList();
 
     $this->load->view('templates/adminheader', $data);
     $this->load->view("admin/editSchedule",  $data);
@@ -116,12 +117,77 @@ function editSchedule($id)
         
     }
 
+    function editOldSchedule()
+    {
+        $id = $this->input->post('sid');
+               
+        $this->form_validation->set_rules('subject', 'Subject', 'trim|required');
+        $this->form_validation->set_rules('section', 'Section', 'trim|required');
+        $this->form_validation->set_rules('gradelevel', 'Grade Level', 'trim|required');
+        $this->form_validation->set_rules('adviser', 'Adviser', 'trim|required');
+        $this->form_validation->set_rules('room', 'Room', 'trim|required');
+        $this->form_validation->set_rules('day', 'Day', 'trim|required');
+        $this->form_validation->set_rules('timestart', 'Time Start', 'trim|required');
+        $this->form_validation->set_rules('timeend', 'Time End', 'trim|required');
+        $this->form_validation->set_rules('status', 'Status', 'trim|required');
+
+ 
+        if ($this->form_validation->run() == FALSE) {
+            $this->editSchedule();
+        } else {
+            
+            $subject = $this->security->xss_clean($this->input->post('subject'));
+            $section = $this->security->xss_clean($this->input->post('section'));
+            $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
+            $adviser = $this->security->xss_clean($this->input->post('adviser'));
+            $room = $this->security->xss_clean($this->input->post('room'));
+            $day = $this->security->xss_clean($this->input->post('day'));
+            $timestart = $this->security->xss_clean($this->input->post('timestart'));
+            $term = $this->security->xss_clean($this->input->post('term'));
+            $timeend = $this->security->xss_clean($this->input->post('timeend'));
+            $status = $this->security->xss_clean($this->input->post('status'));
+            $timeStamp = date('Y-m-d');
+
+            $schoolyear = 0;
+
+            $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+		if (!empty($row->id))
+		{
+			$schoolyear = $row->id;
+		}
+            
+                       
+           
+        $studentInfo = array('subjectid'=>$subject,'sectionid'=>$section,'room'=>$room,'day'=>$day,'timefrom'=>$timestart,'timeto'=>$timeend,'adviserid'=>$adviser,'syid'=>$schoolyear,'term'=>$term,'status'=>$status);
+                
+        $result = $this->auth->editSchedule($studentInfo, $id);
+        
+        if($result == true)
+        {
+            $this->session->set_flashdata('success', 'Schedule Data Updated.');
+
+            redirect('schedule');
+           
+        }
+
+        else
+        {
+            $this->session->set_flashdata('error', 'User updation failed');
+
+            $this->editSchedule($id);
+      
+        }
+
+        }
+        
+    }
+
     function editOldJHSubject()
     {
             
             $id = $this->input->post('sid');
                     
-            $this->form_validation->set_rules('subject', 'Subject', 'trim|required');
+        $this->form_validation->set_rules('subject', 'Subject', 'trim|required');
         $this->form_validation->set_rules('section', 'Section', 'trim|required');
         $this->form_validation->set_rules('gradelevel', 'Grade Level', 'trim|required');
         $this->form_validation->set_rules('adviser', 'Adviser', 'trim|required');
@@ -179,22 +245,113 @@ function editSchedule($id)
             }
         
     }
+
+    function archiveschedule($id)
+    {
+                        
+                $studentInfo = array('id'=>$id,'status'=>'Inactive',);
+                
+                $result = $this->auth->editSchedule($studentInfo, $id);
+
+                
+                if($result == true)
+                {
+                    $this->session->set_flashdata('success', 'Schedule Data Archived.');                 
+
+                    redirect('archivedschedule');
+                   
+                }
+
+                else
+                {
+                    $this->session->set_flashdata('error', 'User updation failed');
+
+                    redirect('archivedschedule');
+              
+                }
+        
+    }
+
+    function retreieveschedule($id)
+    {
+                        
+                $studentInfo = array('id'=>$id,'status'=>'Active',);
+                
+                $result = $this->auth->editSchedule($studentInfo, $id);
+
+                
+                if($result == true)
+                {
+                    $this->session->set_flashdata('success', 'Schedule Data Restored.');                 
+
+                    redirect('schedule');
+                   
+                }
+
+                else
+                {
+                    $this->session->set_flashdata('error', 'User updation failed');
+
+                    redirect('schedule');
+              
+                }
+        
+    }
                     
    
     function scheduleListing()
     {
+        $status = 'Active';
 
         $searchText = $this->security->xss_clean($this->input->post('searchText'));
+
+        
+        $schoolyear =0;
+    
+        $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+        if (!empty($row->id))
+        {
+            $schoolyear = $row->id;
+        }
            
-        $count = $this->auth->scheduleListingCount($searchText);
+        $count = $this->auth->scheduleListingCount($searchText,$status,$schoolyear);
 
         $returns = $this->paginationCompress ( "schedule/scheduleListing/", $count, 10 );
         
-        $data['userRecords'] = $this->auth->scheduleListing($searchText, $returns["page"], $returns["segment"]);
+        $data['userRecords'] = $this->auth->scheduleListing($searchText, $status,$schoolyear,$returns["page"], $returns["segment"]);
         
 
             $this->load->view('templates/adminheader', $data);
             $this->load->view("admin/schedule",  $data);
+            $this->load->view('templates/adminfooter', $data);
+
+    }
+
+    function scheduleArchivedListing()
+    {
+
+        $status = 'Inactive';
+
+        $searchText = $this->security->xss_clean($this->input->post('searchText'));
+           
+        
+        $schoolyear =0;
+    
+        $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+        if (!empty($row->id))
+        {
+            $schoolyear = $row->id;
+        }
+           
+        $count = $this->auth->scheduleListingCount($searchText,$status,$schoolyear);
+
+        $returns = $this->paginationCompress ( "schedule/scheduleListing/", $count, 10 );
+        
+        $data['userRecords'] = $this->auth->scheduleListing($searchText, $status,$schoolyear,$returns["page"], $returns["segment"]);
+        
+
+            $this->load->view('templates/adminheader', $data);
+            $this->load->view("admin/archivedschedule",  $data);
             $this->load->view('templates/adminfooter', $data);
 
     }
@@ -226,6 +383,15 @@ function editSchedule($id)
    
        }
 
+       public function getSectionSHS(){
+        if($this->input->post('gradelevel'))
+           {
+   
+           echo $this->auth->getSectionSHS($this->input->post('gradelevel'),$this->input->post('strand'));
+           }
+   
+       }
+
        public function getSection(){
         if($this->input->post('gradelevel'))
            {
@@ -235,9 +401,16 @@ function editSchedule($id)
    
        }
 
-       
+       public function getStrand(){
+        if($this->input->post('gradelevel'))
+           {
+   
+           echo $this->auth->getStrand($this->input->post('gradelevel'));
+           }
+   
+       }
 
-    
+
     function paginationCompress($link, $count, $perPage = 10, $segment = 3) {
 		$this->load->library ( 'pagination' );
 

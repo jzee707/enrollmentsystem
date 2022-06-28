@@ -85,7 +85,7 @@
                         <td class="text-center">
                        
                             <a class="btn btn-sm btn-info" href="<?php echo base_url().'editEnrollment/'.$record->id; ?>" title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a class="btn btn-sm btn-danger archiveUser" href="#" data-id="<?php echo $record->id; ?>" title="Archive"><i class="fa fa-trash"></i></a> 
+                            <a class="btn btn-sm btn-danger" href="<?php echo base_url().'archivedenrollment/'.$record->id; ?>" title="Archive"><i class="fa fa-trash"></i></a> 
                         </td>
                     </tr>
                     <?php

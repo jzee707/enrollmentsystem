@@ -106,7 +106,7 @@
               <ul class="treeview-menu">
               <li><a href="<?php echo base_url();?>teacherdashboard"><i class="fa fa-users"></i>Dashboard</a></li>
                 <li><a href="<?php echo base_url(); ?>myschedule"><i class="fa fa-users"></i>My Schedule</a></li>
-                <li><a href=""><i class="fa fa-users"></i>Records</a></li>
+                <li><a href="<?php echo base_url(); ?>myrecord"><i class="fa fa-users"></i>Records</a></li>
               </ul>
             </li>
           

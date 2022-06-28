@@ -200,11 +200,18 @@ function editFaculty($id)
                 
                 
                 $facultyInfo = array('idno'=>$idno,'firstname'=>$firstname,'lastname'=>$lastname,'middlename'=>$middlename,'suffix'=>$suffix,'birthdate'=>$birthdate,'gender'=>$gender,'addid'=>$barangay,'address'=>$address,'contactperson'=>$contactperson,'contactno'=>$contactno,'status'=>$status);
+
+                $accountInfo = array('usertype'=>$facultytype);
                 
                 $result = $this->auth->editFaculty($facultyInfo, $id);
+
+                $row = $this->db->select("*")->where('id',$id)->get("tbl_faculty")->row();
+                $accountid = $row->accountid;
                 
                 if($result == true)
                 {
+                    $this->auth->editAccount($accountInfo, $accountid);
+
                     $this->session->set_flashdata('success', 'Faculty Data Updated.');
 
                     redirect('faculty');
@@ -276,6 +283,58 @@ function editFaculty($id)
                 }
         
     }
+
+    function dropstudent($id)
+    {
+                        
+                $studentInfo = array('id'=>$id,'status'=>'Dropped',);
+                
+                $result = $this->auth->editEnrollment($studentInfo, $id);
+
+                
+                if($result == true)
+                {
+                    $this->session->set_flashdata('success', 'Drop student successfuly.');                 
+
+                    redirect('myschedule');
+                   
+                }
+
+                else
+                {
+                    $this->session->set_flashdata('error', 'User updation failed');
+
+                    redirect('myschedule');
+              
+                }
+        
+    }
+
+    function restorestudent($id)
+    {
+                        
+                $studentInfo = array('id'=>$id,'status'=>'Active',);
+                
+                $result = $this->auth->editEnrollment($studentInfo, $id);
+
+                
+                if($result == true)
+                {
+                    $this->session->set_flashdata('success', 'Student Restored.');                 
+
+                    redirect('myschedule');
+                   
+                }
+
+                else
+                {
+                    $this->session->set_flashdata('error', 'User updation failed');
+
+                    redirect('myschedule');
+              
+                }
+        
+    }
                     
     
     function facultyListing()
@@ -338,8 +397,64 @@ function editFaculty($id)
             
         $data['userRecords'] = $this->auth->scheduleListing($id,$schoolyear, $returns["page"], $returns["segment"]);
         
-        $this->load->view('templates/userheader', $data);
+        $this->load->view('templates/teacherheader', $data);
         $this->load->view('teacher/schedule', $data);
+        $this->load->view('templates/userfooter', $data);  
+                 
+    }
+
+    public function myrecord() {     
+         
+        $data = array();
+    
+        $row = $this->db->select("*")->where('accountid',$this->session->userdata('id'))->get("tbl_faculty")->row();
+            $id = $row->id;
+    
+        $schoolyear =0;
+    
+        $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+        if (!empty($row->id))
+        {
+            $schoolyear = $row->id;
+        }
+          
+    
+        $count = $this->auth->recordListingCount($id,$schoolyear);
+    
+        $returns = $this->paginationCompress ( "faculty/myrecords/", $count, 10 );
+            
+        $data['userRecords'] = $this->auth->recordListing($id,$schoolyear, $returns["page"], $returns["segment"]);
+        
+        $this->load->view('templates/teacherheader', $data);
+        $this->load->view('teacher/records', $data);
+        $this->load->view('templates/userfooter', $data);  
+                 
+    }
+
+    public function studentlist($schedid) {     
+         
+        $data = array();
+    
+        $row = $this->db->select("*")->where('accountid',$this->session->userdata('id'))->get("tbl_faculty")->row();
+            $id = $row->id;
+    
+        $schoolyear =0;
+    
+        $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+        if (!empty($row->id))
+        {
+            $schoolyear = $row->id;
+        }
+          
+    
+        $count = $this->auth->studentListingCount($schedid);
+    
+        $returns = $this->paginationCompress ( "faculty/studentlist/", $count, 10 );
+            
+        $data['userRecords'] = $this->auth->studentListing($schedid, $returns["page"], $returns["segment"]);
+        
+        $this->load->view('templates/teacherheader', $data);
+        $this->load->view('teacher/students', $data);
         $this->load->view('templates/userfooter', $data);  
                  
     }

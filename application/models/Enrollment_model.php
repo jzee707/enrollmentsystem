@@ -85,11 +85,13 @@ class Enrollment_model extends CI_Model {
     
 
  
-    public function addEnrollment($id,$syid,$timeStamp) {
+    public function addEnrollment($id,$syid,$timeStamp,$etype,$strand) {
 
         $data = array(
             'studentid' => $id,
             'syid' => $syid,
+            'type' => $etype,
+            'strandid' => $strand,
             'date_requested' => $timeStamp,
             'date_enrolled' => $timeStamp,
             'status' => 'Active',
@@ -163,7 +165,7 @@ class Enrollment_model extends CI_Model {
         return $query->row();
     }
     
-    function enrollmentListingCount($searchText = '',$status)
+    function enrollmentListingCount($searchText = '',$status,$schoolyear)
     {
         $this->db->select("e.id,concat(s.firstname, ' ',s.lastname) as student,sc.gradelevel,sc.section,sd.term,sy.schoolyear,s.accountid,st.strandcode,e.date_requested,e.date_enrolled,e.status");
         $this->db->from('tbl_schedule sd');
@@ -178,7 +180,7 @@ class Enrollment_model extends CI_Model {
 
 
         $likeCriteria = "(concat(s.firstname, ' ',s.lastname)  LIKE '".$searchText."%'
-        AND e.status='".$status."')";
+        AND e.status='".$status."' AND e.syid='".$schoolyear."')";
                             
        $this->db->where($likeCriteria);
 
@@ -187,7 +189,7 @@ class Enrollment_model extends CI_Model {
         return $query->num_rows();
     }
 
-    function enrollmentListing($searchText = '', $status,$page, $segment) {
+    function enrollmentListing($searchText = '', $status,$schoolyear,$page, $segment) {
 
         $this->db->select("e.id,concat(s.firstname, ' ',s.lastname) as student,sc.gradelevel,sc.section,sd.term,st.strandcode,sy.schoolyear,s.accountid,e.date_requested,e.date_enrolled,e.status");
         $this->db->from('tbl_schedule sd');
@@ -200,7 +202,7 @@ class Enrollment_model extends CI_Model {
 
 
             $likeCriteria = "(concat(s.firstname, ' ',s.lastname)  LIKE '".$searchText."%'
-            AND e.status='".$status."')";
+            AND e.status='".$status."' AND e.syid='".$schoolyear."')";
 
             $this->db->where($likeCriteria);
             $this->db->group_by('e.id');

@@ -44,20 +44,6 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="last_name">Status</label>
-                                            <br>
-                                            <select name="status" id="status" class="form-control">
-                                                <option value="Active">Active</option>
-                                                <option value="Inactive">Inactive</option>
-                                            </select>
-                                        </div>
-                                </div> 
-                            </div>
-
 
                         </div><!-- /.box-body -->
     

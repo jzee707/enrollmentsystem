@@ -46,10 +46,9 @@
 
                                     <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="last_name">Strand</label>
+                                                    <label for="strand">Strand</label>
                                                     <br>
-                                                    <select name="strand" id="strand" class="form-control">
-
+                                                    <select name="strand" id="strand" class="form-control">                                                  
                                                     </select>
                                                 </div>
                                     </div> 
@@ -61,7 +60,7 @@
 
                                 <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="last_name">Section</label>
+                                            <label for="section">Section</label>
                                             <br>
                                             <select name="section" id="section" class="form-control">
      
@@ -209,9 +208,102 @@ $(document).ready(function(){
     
 $('#gradelevel').change(function(){
     var gradelevel = $('#gradelevel').val();
+    
+
     if(gradelevel != '')
     {
-    $.ajax({
+
+    if(gradelevel == 'Grade 11' || gradelevel == 'Grade 12')
+    {
+        $.ajax({
+        url:"<?php echo base_url(); ?>schedule/getStrand",
+        method:"POST",
+        data:{gradelevel:gradelevel},
+        success:function(data)
+        {
+        $('#strand').html(data);
+
+        }
+    });
+
+    
+
+    document.getElementById("term").removeAttribute("disabled");
+
+    document.getElementById("term").value = "";
+
+     
+    }
+
+    else
+    {
+        
+        $('#strand').html('');
+        $('#subject').html('');
+
+        document.getElementById("term").setAttribute("disabled", "disabled");
+
+        document.getElementById("term").value = "";
+ 
+
+        $.ajax({
+        url:"<?php echo base_url(); ?>schedule/getSection",
+        method:"POST",
+        data:{gradelevel:gradelevel},
+        success:function(data)
+        {
+        $('#section').html(data);
+
+        }
+    });
+
+
+
+    }
+
+    }
+    else
+    {
+    $('#subject').html('');
+    $('#section').html('');
+    }
+
+
+
+});
+
+$('#strand').change(function(){
+    var gradelevel = $('#gradelevel').val();
+    var strand = $('#strand').val();
+    
+
+    if(strand != '')
+    {
+
+        $.ajax({
+        url:"<?php echo base_url(); ?>schedule/getSectionSHS",
+        method:"POST",
+        data:{gradelevel:gradelevel,strand:strand},
+        success:function(data)
+        {
+        $('#section').html(data);
+
+        }
+    });
+
+     
+    }
+
+
+});
+
+$('#section').change(function(){
+    var gradelevel = $('#gradelevel').val();
+    
+    if(gradelevel != '')
+    {
+
+        $.ajax({
         url:"<?php echo base_url(); ?>schedule/getSubject",
         method:"POST",
         data:{gradelevel:gradelevel},
@@ -222,28 +314,7 @@ $('#gradelevel').change(function(){
         }
     });
 
-    $.ajax({
-        url:"<?php echo base_url(); ?>schedule/getSection",
-        method:"POST",
-        data:{gradelevel:gradelevel},
-        success:function(data)
-        {
-        $('#section').html(data);
-
-        }
-    });
-    }
-    else
-    {
-    $('#subject').html('');
-    $('#section').html('');
-    }
-
-    if(gradelevel != 'Grade 11' || gradelevel != 'Grade 12')
-    {
-        document.getElementById("term").value = "";
-       
-
+     
     }
 
 
@@ -252,4 +323,4 @@ $('#gradelevel').change(function(){
     
 });
 
-    </script>
+</script>

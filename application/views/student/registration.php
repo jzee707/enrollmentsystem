@@ -118,6 +118,19 @@
                         <div class="box-body">
 
                             <div class="row">
+                                <div class="col-md-3">                                
+                                    <div class="form-group">
+                                        <label for="type">Student Type</label>
+                                        <select name="studenttype" id="studenttype"  class="form-control">
+                                            <option value="Old">Old</option>
+                                            <option value="New">New</option>
+                                            <option value="Transferee">Transferee</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
 
                                 <div class="col-md-6">
                                     <div class="form-group">

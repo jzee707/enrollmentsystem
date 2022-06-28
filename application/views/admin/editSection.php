@@ -44,18 +44,6 @@
                                 </div> 
                             </div>
 
-
-                            <div class="row">
-                                <div class="col-md-6">                                
-                                    <div class="form-group">
-                                        <label for="first_name">Section</label>
-                                        <input type="text" class="form-control" id="section" name="section" maxlength="128" value="<?php echo $strandInfo->section;?>" required>
-                                        <input type="hidden" class="form-control" id="sid" name="sid" value="<?php echo $strandInfo->id;?>" maxlength="128" required>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-
                             <div class="row">                           
                                 <div class="col-md-6">
                                         <div class="form-group">
@@ -78,6 +66,20 @@
                                 </div> 
                             </div>
 
+
+                            <div class="row">
+                                <div class="col-md-6">                                
+                                    <div class="form-group">
+                                        <label for="first_name">Section</label>
+                                        <input type="text" class="form-control" id="section" name="section" maxlength="128" value="<?php echo $strandInfo->section;?>" required>
+                                        <input type="hidden" class="form-control" id="sid" name="sid" value="<?php echo $strandInfo->id;?>" maxlength="128" required>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+
+                          
+
                             <div class="row">                           
                                 <div class="col-md-6">
                                         <div class="form-group">
@@ -94,21 +96,6 @@
                                         </div>
                                 </div> 
                             </div>
-
-                            <div class="row">                           
-                                <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="last_name">Status</label>
-                                            <br>
-                                            <select name="status" id="status" class="form-control">
-                                                <option value="Active">Active</option>
-                                                <option value="Inactive">Inactive</option>
-                                            </select>
-                                        </div>
-                                </div> 
-                            </div>
-
-                        
 
 
                         </div><!-- /.box-body -->
@@ -181,7 +168,6 @@ $('#gradelevel').change(function(){
         document.getElementById("strand").value= "<?php echo $strandInfo->strandid ?>";
         document.getElementById("gradelevel").value= "<?php echo $strandInfo->gradelevel ?>";
         document.getElementById("adviser").value = "<?php echo $strandInfo->adviserid ?>";
-        document.getElementById("status").value = "<?php echo $strandInfo->status ?>";
 
     
 });

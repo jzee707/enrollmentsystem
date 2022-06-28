@@ -288,8 +288,24 @@ class Subject_model extends CI_Model {
 
 		
     }
-    
 
+    function getStrand($gradelevel)
+	{
+        $this->db->select('id,strandcode');
+        $this->db->from('tbl_strand');
+        $this->db->where('status','Active');
+        $query = $this->db->get();
+
+       
+		
+        foreach($query->result() as $row)
+        {
+         $output .= '<option value="'.$row->id.'">'.$row->strandcode.'</option>';
+        }
+        
+        return $output;
+		
+    }
 
 }
 ?>

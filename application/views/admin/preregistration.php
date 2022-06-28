@@ -84,7 +84,7 @@
                         <td class="text-center">
                             <a class="btn btn-sm btn-info"href="<?php echo base_url().'student/approvedRequest/'.$record->id; ?>" data-id="<?php echo $record->id; ?>" title="Approve"><i class="fa fa-check"></i></a> 
                             <a class="btn btn-sm btn-info"href="<?php echo base_url().'student/declinedRequest/'.$record->id; ?>" data-id="<?php echo $record->id; ?>" title="Decline"><i class="fa fa-close"></i></a> 
-                            <a class="btn btn-sm btn-danger archiveUser" href="#" data-id="<?php echo $record->id; ?>" title="Archive"><i class="fa fa-trash"></i></a> 
+                           
                         </td>
                     </tr>
                     <?php

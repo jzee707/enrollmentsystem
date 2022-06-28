@@ -77,6 +77,14 @@ $route['archivedfaculty'] = 'faculty/facultyArchivedListing';
 $route['archivefaculty/(:any)'] = 'faculty/archivefaculty/$1';
 $route['retreievefaculty/(:any)'] = 'faculty/retreievefaculty/$1';
 
+$route['archivedschedule'] = 'schedule/scheduleArchivedListing';
+$route['archivedschedule/(:any)'] = 'schedule/archiveschedule/$1';
+$route['retreieveschedule/(:any)'] = 'schedule/retreieveschedule/$1';
+
+$route['archivedenrollment'] = 'enrollment/enrollmentArchivedListing';
+$route['archivedenrollment/(:any)'] = 'enrollment/archiveenrollment/$1';
+$route['retreieveenrollment/(:any)'] = 'enrollment/retreieveenrollment/$1';
+
 $route['login'] = 'admin/login';
 $route['signup'] = 'auth/signup';
 $route['about'] = 'auth/about';
@@ -93,6 +101,10 @@ $route['studentrecords'] = 'auth/studentrecords';
 
 $route['teacherdashboard'] = 'auth/teacherdashboard';
 $route['myschedule'] = 'faculty/myschedule';
+$route['myrecord'] = 'faculty/myrecord';
+$route['studentlist/(:any)'] = 'faculty/studentlist/$1';
+$route['dropstudent/(:any)'] = 'faculty/dropstudent/$1';
+$route['restorestudent/(:any)'] = 'faculty/restorestudent/$1';
 
 $route['addNewStudent'] = 'student/addnewstudent';
 $route['addStudent'] = 'student/addstudent';

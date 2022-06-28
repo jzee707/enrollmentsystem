@@ -53,6 +53,7 @@
                         <th>Term</th>
                         <th>School Year</th>                      
                         <th>Status</th>
+                        <th class="text-center"></th>
 
                     </tr>
 
@@ -73,6 +74,12 @@
                         <td><?php echo $record->term ?></td>
                         <td><?php echo $record->schoolyear ?></td>
                         <td><?php echo $record->status ?></td>
+
+                        <td class="text-center">
+                       
+                            <a class="btn btn-sm btn-info" href="<?php echo base_url().'studentlist/'.$record->id; ?>" title="View Student"><i class="fa fa-eye"></i></a>
+ 
+                        </td>
 
                     </tr>
                     <?php

@@ -138,6 +138,14 @@ class Schedule_model extends CI_Model {
             return FALSE;
         }
     }
+
+    function editSchedule($scheduleInfo, $id)
+    {       
+        $this->db->where('id', $id);
+        $this->db->update('tbl_schedule', $scheduleInfo);
+              
+        return TRUE;
+    }
     
 
   function deleteUser($userId, $userInfo)
@@ -150,7 +158,7 @@ class Schedule_model extends CI_Model {
 
     function getScheduleInfo($id)
     {
-        $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sd.subjectid,sd.sectionid,sd.adviserid,sd.syid,sb.subject,sc.section,sy.schoolyear,sd.status");
+        $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sd.subjectid,sd.sectionid,sd.adviserid,sd.syid,sb.subject,sc.section,sy.schoolyear,sc.strandid,sd.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_faculty a','a.id=sd.adviserid');
         $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
@@ -162,7 +170,7 @@ class Schedule_model extends CI_Model {
         return $query->row();
     }
     
-    function scheduleListingCount($searchText = '')
+    function scheduleListingCount($searchText = '',$status,$schoolyear)
     {
         $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
         $this->db->from('tbl_schedule sd');
@@ -173,9 +181,9 @@ class Schedule_model extends CI_Model {
 
 
             $likeCriteria = "(sb.gradelevel  LIKE '".$searchText."%'
-                            AND sd.status='".'Active'."' 
+                            AND sd.status='".$status."'  AND sd.syid='".$schoolyear."'
                             OR description  LIKE '".$searchText."%'
-                            AND sd.status='".'Active'."')";
+                            AND sd.status='".$status."' AND sd.syid='".$schoolyear."')";
                             
        $this->db->where($likeCriteria);
        $this->db->order_by('sd.id','ASC');
@@ -185,7 +193,7 @@ class Schedule_model extends CI_Model {
         return $query->num_rows();
     }
 
-    function scheduleListing($searchText = '', $page, $segment) {
+    function scheduleListing($searchText = '', $status,$schoolyear,$page, $segment) {
 
         $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
         $this->db->from('tbl_schedule sd');
@@ -196,9 +204,9 @@ class Schedule_model extends CI_Model {
 
 
             $likeCriteria = "(sb.gradelevel  LIKE '".$searchText."%'
-                            AND sd.status='".'Active'."' 
+                            AND sd.status='".$status."' AND sd.syid='".$schoolyear."'
                             OR description  LIKE '".$searchText."%'
-                            AND sd.status='".'Active'."')";
+                            AND sd.status='".$status."' AND sd.syid='".$schoolyear."')";
 
             $this->db->where($likeCriteria);
       
@@ -332,19 +340,20 @@ class Schedule_model extends CI_Model {
 
     function getStrand($gradelevel)
 	{
-        $this->db->select('id,strandcode');
+        $this->db->select('id,strandcode,description');
         $this->db->from('tbl_strand');
         $this->db->where('status','Active');
+        $this->db->order_by('strandcode','ASC');
         $query = $this->db->get();
-		
 
+        $output = '<option selected disabled value="">Select Strand</option>';
+		
         foreach($query->result() as $row)
         {
          $output .= '<option value="'.$row->id.'">'.$row->strandcode.'</option>';
         }
         
         return $output;
-
 		
     }
 
@@ -356,7 +365,8 @@ class Schedule_model extends CI_Model {
         $this->db->where('status','Active');
         $this->db->order_by('subject','ASC');
         $query = $this->db->get();
-		
+
+        $output = '<option selected disabled value="">Select Subject</option>';	
 
         foreach($query->result() as $row)
         {
@@ -375,7 +385,29 @@ class Schedule_model extends CI_Model {
         $this->db->where('gradelevel',$gradelevel);
         $this->db->where('status','Active');
         $query = $this->db->get();
+
+        $output = '<option selected disabled value="">Select Section</option>';
 		
+        foreach($query->result() as $row)
+        {
+         $output .= '<option value="'.$row->id.'">'.$row->section.'</option>';
+        }
+        
+        return $output;
+
+		
+    }
+
+    function getSectionSHS($gradelevel,$strand)
+	{
+        $this->db->select('id,section');
+        $this->db->from('tbl_section');
+        $this->db->where('gradelevel',$gradelevel);
+        $this->db->where('strandid',$strand);
+        $this->db->where('status','Active');
+        $query = $this->db->get();
+		
+        $output = '<option selected disabled value="">Select Section</option>';
 
         foreach($query->result() as $row)
         {

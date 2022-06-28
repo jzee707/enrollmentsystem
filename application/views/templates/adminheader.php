@@ -6,6 +6,9 @@
     <title>Western College</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.4 -->
+    <!-- Select2 -->
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/dist/select2/css/select2.min.css">
+  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/dist/select2-bootstrap4-theme/select2-bootstrap4.min.css">
     <link href="<?php echo base_url(); ?>assets/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- FontAwesome 4.3.0 -->
     <link href="<?php echo base_url(); ?>assets/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
@@ -16,7 +19,7 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins 
          folder instead of downloading all of them to reduce the load. -->
     <link href="<?php echo base_url(); ?>assets/dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
-    
+
     <link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url(); ?>assets/img/logo.ico">
   
     <script src="<?php echo base_url(); ?>assets/bower_components/jquery/dist/jquery.min.js"></script>
@@ -157,6 +160,8 @@
               <ul class="treeview-menu">
                 <li><a href="<?php echo base_url(); ?>archivedstudent"><i class="fa fa-users"></i>Student</a></li>
                 <li><a href="<?php echo base_url(); ?>archivedfaculty"><i class="fa fa-users"></i>Faculty</a></li>
+                <li><a href="<?php echo base_url(); ?>archivedschedule"><i class="fa fa-users"></i>Schedule</a></li>
+                <li><a href="<?php echo base_url(); ?>archivedenrollment"><i class="fa fa-users"></i>Enrollment</a></li>
               </ul>
             </li>
 

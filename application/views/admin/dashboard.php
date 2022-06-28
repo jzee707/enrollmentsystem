@@ -58,7 +58,7 @@
               <div class="small-box bg-red">
                 <div class="inner">
                   <h3 style="text-align:center"><?php echo $dashboardInfo->schoolyear; ?></h3>
-                  <p>Active School Year</p>
+                  <p><?php echo $dashboardInfo->semester; ?> Semester</p>
                 </div>
 
                

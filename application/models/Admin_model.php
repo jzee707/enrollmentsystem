@@ -271,7 +271,7 @@ class Admin_model extends CI_Model {
 
     function getTotal()
     {
-        $this->db->select("(SELECT count(id) FROM tbl_student WHERE status='Active') as student,(SELECT count(id) FROM tbl_enrollment WHERE status='Active') as enrolled,(SELECT count(f.id) FROM tbl_faculty f INNER JOIN tbl_account a ON a.id=f.accountid WHERE usertype='Teacher') as teacher,(SELECT count(id) FROM tbl_section) as section,(SELECT count(id) FROM tbl_subject) as subject,(SELECT schoolyear FROM tbl_schoolyear WHERE status='Active') as schoolyear");
+        $this->db->select("(SELECT count(id) FROM tbl_student WHERE status='Active') as student,(SELECT count(id) FROM tbl_enrollment WHERE status='Active') as enrolled,(SELECT count(f.id) FROM tbl_faculty f INNER JOIN tbl_account a ON a.id=f.accountid WHERE usertype='Teacher') as teacher,(SELECT count(id) FROM tbl_section) as section,(SELECT count(id) FROM tbl_subject) as subject,(SELECT schoolyear FROM tbl_schoolyear WHERE status='Active') as schoolyear,(SELECT semester FROM tbl_semester WHERE status='Active') as semester");
         $this->db->from('tbl_student');
         $query = $this->db->get();
         

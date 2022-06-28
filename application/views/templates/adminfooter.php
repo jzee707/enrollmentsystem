@@ -11,6 +11,21 @@
     
     <script src="<?php echo base_url(); ?>assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/dist/js/adminlte.min.js" type="text/javascript"></script>
+    <script src="<?php echo base_url(); ?>assets/dist/select2/js/select2.full.min.js"></script>
+    <script>
+  $(function () {
+
+    $('.select2').select2()
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+
+  })
+
+    </script>
+
     
   </body>
 </html>

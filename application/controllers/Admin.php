@@ -302,7 +302,7 @@ function signout()
                
         $this->form_validation->set_rules('strandcode', 'Strand Code', 'trim|required');
         $this->form_validation->set_rules('description', 'Description', 'trim|required');
-        $this->form_validation->set_rules('status', 'Status', 'trim|required');
+
 
  
         if ($this->form_validation->run() == FALSE) {
@@ -311,7 +311,7 @@ function signout()
             
             $strandcode = $this->security->xss_clean($this->input->post('strandcode'));
             $description = $this->security->xss_clean($this->input->post('description'));
-            $status = $this->security->xss_clean($this->input->post('status'));
+            $status = 'Active';
             $timeStamp = date('Y-m-d');
             
                        
@@ -343,7 +343,7 @@ function signout()
 
             $this->form_validation->set_rules('strandcode', 'Strand Code', 'trim|required');
             $this->form_validation->set_rules('description', 'Description', 'trim|required');
-            $this->form_validation->set_rules('status', 'Status', 'trim|required');                 
+                           
                     
       
             if($this->form_validation->run() == FALSE)
@@ -356,11 +356,11 @@ function signout()
             {
                 $strandcode = $this->security->xss_clean($this->input->post('strandcode'));
                 $description = $this->security->xss_clean($this->input->post('description'));
-                $status = $this->security->xss_clean($this->input->post('status'));
+                
                 $timeStamp = date('Y-m-d');
                 
                 
-                $strandInfo = array('strandcode'=>$strandcode,'description'=>$description,'status'=>$status);
+                $strandInfo = array('strandcode'=>$strandcode,'description'=>$description);
                 
                 $result = $this->auth->editStrand($strandInfo, $id);
                 
@@ -389,7 +389,7 @@ function signout()
     function addSchoolYear()
     {
                
-        $this->form_validation->set_rules('yearstart', 'School Year Start', 'trim|required');
+        $this->form_validation->set_rules('yearstart', 'School Year Start', 'trim|required|callback_checkSchoolyear');
         $this->form_validation->set_rules('yearend', 'School Year End', 'trim|required');
         $this->form_validation->set_rules('status', 'Status', 'trim|required');
 
@@ -489,7 +489,6 @@ function signout()
         $this->form_validation->set_rules('gradelevel', 'Grade Level', 'trim|required');
         $this->form_validation->set_rules('section', 'Section', 'trim|required');
         $this->form_validation->set_rules('adviser', 'Adviser', 'trim|required');
-        $this->form_validation->set_rules('status', 'Status', 'trim|required');
 
  
         if ($this->form_validation->run() == FALSE) {
@@ -500,7 +499,7 @@ function signout()
             $section = $this->security->xss_clean($this->input->post('section'));
             $adviser = $this->security->xss_clean($this->input->post('adviser'));
             $strand = $this->security->xss_clean($this->input->post('strand'));
-            $status = $this->security->xss_clean($this->input->post('status'));
+            $status = 'Active';
             $timeStamp = date('Y-m-d');
             
                        
@@ -535,7 +534,7 @@ function signout()
             $this->form_validation->set_rules('gradelevel', 'Grade Level', 'trim|required');
             $this->form_validation->set_rules('section', 'Section', 'trim|required');
             $this->form_validation->set_rules('adviser', 'Adviser', 'trim|required');
-            $this->form_validation->set_rules('status', 'Status', 'trim|required');               
+             
                     
       
             if($this->form_validation->run() == FALSE)
@@ -549,12 +548,12 @@ function signout()
                 $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
                 $section = $this->security->xss_clean($this->input->post('section'));
                 $adviser = $this->security->xss_clean($this->input->post('adviser'));
-                $strand = $this->security->xss_clean($this->input->post('strand'));
+
                 $status = $this->security->xss_clean($this->input->post('status'));
                 $timeStamp = date('Y-m-d');
                 
                 
-                $strandInfo = array('gradelevel'=>$gradelevel,'section'=>$section,'adviserid'=>$adviser,'strandid'=>$strand,'status'=>$status);
+                $strandInfo = array('gradelevel'=>$gradelevel,'section'=>$section,'adviserid'=>$adviser,'strandid'=>$strand);
                 
                 $result = $this->auth->editSection($strandInfo, $id);
                 
@@ -766,6 +765,29 @@ function signout()
                                             
             }       
     }
+
+    function checkSchoolyear() {
+
+        $yearstart = new DateTime($this->input->post('yearstart'));
+        $yearend = new DateTime($this->input->post('yearend'));
+
+        $abs_diff = $yearend->diff($yearstart)->format('%a');; //3
+
+       
+        if ($abs_diff < 364) {
+
+            $this->form_validation->set_message('checkSchoolyear', 'School Year Date must exceed to a year above.');
+
+            return FALSE;
+        }
+
+        else
+        {
+            return TRUE;
+        }
+       
+     
+       } 
 
     function strandListing()
     {

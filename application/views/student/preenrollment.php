@@ -26,7 +26,7 @@
                     <form role="form" id="addUser" action="<?php echo base_url() ?>auth/addEnrollment" method="post" role="form">
                         <div class="box-body">
 
-                            <div class="row">                           
+                        <div class="row">                           
                                 <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="last_name">Grade Level</label>
@@ -41,23 +41,24 @@
                                                 <option value="Grade 12">Grade 12</option>
                                             </select>
                                         </div>
-                                </div>
+                                </div> 
 
-                            </div>
-                            
-                                <div class="row">     
-                                
                                 <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="last_name">Strand</label>
+                                                    <label for="strand">Strand</label>
                                                     <br>
-                                                    <select name="strand" id="strand" class="form-control">
-
+                                                    <select name="strand" id="strand" class="form-control">                                                  
                                                     </select>
                                                 </div>
-                                    </div> 
+                                </div> 
+
+                                 
+                            </div>
+
+                            <div class="row"> 
 
                                 <div class="col-md-6">
+                                    
                                         <div class="form-group">
                                             <label for="last_name">Section</label>
                                             <br>
@@ -66,7 +67,21 @@
      
                                             </select>
                                         </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="last_name">Grade Level</label>
+                                            <br>
+                                            <select name="etype" id="etype" class="form-control">
+                                                <option selected disabled value=""></option>
+                                                <option value="Regular">Regular</option>
+                                                <option value="Irregular">Irregular</option>
+                                            </select>
+                                        </div>
                                 </div> 
+
+
                             </div>
 
 
@@ -125,7 +140,42 @@ $('#gradelevel').change(function(){
     var gradelevel = $('#gradelevel').val();
     if(gradelevel != '')
     {
-    $.ajax({
+        if(gradelevel == 'Grade 11' || gradelevel == 'Grade 12')
+    {
+        $.ajax({
+        url:"<?php echo base_url(); ?>schedule/getStrand",
+        method:"POST",
+        data:{gradelevel:gradelevel},
+        success:function(data)
+        {
+        $('#strand').html(data);
+
+        }
+    });
+
+    $('#section').html('');
+    $('#sched_data').html('');
+
+    
+
+    document.getElementById("etype").removeAttribute("disabled");
+
+    document.getElementById("etype").value = "Regular";
+
+     
+    }
+
+    else
+    {
+        $('#strand').html('');
+        $('#sched_data').html('');
+
+        document.getElementById("etype").setAttribute("disabled", "disabled");
+
+        document.getElementById("etype").value = "Regular";
+ 
+
+        $.ajax({
         url:"<?php echo base_url(); ?>enrollment/getSection",
         method:"POST",
         data:{gradelevel:gradelevel},
@@ -135,6 +185,12 @@ $('#gradelevel').change(function(){
 
         }
     });
+
+
+
+    }
+
+
     }
     else
     {
@@ -162,6 +218,31 @@ $('#section').change(function(){
     else
     {
     $('#sched_data').html('');
+    }
+
+
+});
+
+$('#strand').change(function(){
+    var gradelevel = $('#gradelevel').val();
+    var strand = $('#strand').val();
+    
+
+    if(strand != '')
+    {
+
+        $.ajax({
+        url:"<?php echo base_url(); ?>schedule/getSectionSHS",
+        method:"POST",
+        data:{gradelevel:gradelevel,strand:strand},
+        success:function(data)
+        {
+        $('#section').html(data);
+
+        }
+    });
+
+     
     }
 
 
