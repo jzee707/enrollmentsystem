@@ -59,6 +59,14 @@ public function academics() {
 public function signup() {     
          
     $data = array();
+
+            $name = $this->security->xss_clean($this->input->post('name'));
+            $email = $this->security->xss_clean($this->input->post('email'));
+            $password = $this->security->xss_clean($this->input->post('password'));
+
+            $data['name'] = $name;
+            $data['email'] = $email;
+            $data['password'] = $password;
     
     $this->load->view('templates/header', $data);
     $this->load->view('auth/signup', $data);
@@ -73,15 +81,27 @@ function addAccount()
         $this->form_validation->set_rules('email', 'Email', 'trim|valid_email|required|callback_checkEmail');
         $this->form_validation->set_rules('password', 'Password', 'trim|required|callback_checkPassword');
         $this->form_validation->set_rules('copassword', 'Confirm Password', 'trim|required');
- 
-        if ($this->form_validation->run() == FALSE) {
-            $this->signup();
-        } else {
-            
+
             $name = $this->security->xss_clean($this->input->post('name'));
             $email = $this->security->xss_clean($this->input->post('email'));
             $password = $this->security->xss_clean($this->input->post('password'));
             $timeStamp = date('Y-m-d');
+ 
+        if ($this->form_validation->run() == FALSE) {
+           
+            $data = array();
+
+            $data['name'] = $name;
+            $data['email'] = $email;
+            $data['password'] = $password;
+    
+            $this->load->view('templates/header', $data);
+            $this->load->view('auth/signup', $data);
+            $this->load->view('templates/footer', $data);
+
+        } else {
+            
+            
             
                        
             $this->auth->setName($name);  
@@ -259,12 +279,13 @@ public function studentdashboard() {
     else
     {
         $usertype = $this->session->userdata('usertype');
+        $id = $this->session->userdata('id');
 
         if($usertype == "Student"){
 
             $data = array();
 
-            $data['dashboardInfo'] = $this->auth->getTotal();
+            $data['dashboardInfo'] = $this->auth->getTotal($id);
 
             $this->load->view('templates/userheader', $data);
             $this->load->view('student/student', $data);

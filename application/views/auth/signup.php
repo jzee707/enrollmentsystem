@@ -62,7 +62,7 @@
                             <div class="form-group">
                                 <div class="input-group mb-2">
 
-                                <input type="text" class="form-control border-0" name="name" placeholder="Name" style="height: 55px;">
+                                <input type="text" class="form-control border-0" name="name" placeholder="Name" style="height: 55px;" value="<?php echo $name;?>">
 
                                 </div>
                             </div> 
@@ -70,7 +70,7 @@
                             <div class="form-group">
                                 <div class="input-group mb-2">
 
-                                <input type="email" class="form-control border-0" id="email" name="email" placeholder="Email" style="height: 55px;">
+                                <input type="email" class="form-control border-0" id="email" name="email" placeholder="Email" style="height: 55px;" value="<?php echo $email;?>">
 
                                 </div>
                             </div> 
@@ -78,7 +78,7 @@
                             <div class="form-group">
                                 <div class="input-group mb-2">
 
-                                    <input type="password" class="form-control border-0" id="password" name="password" placeholder="Password" style="height: 55px;">
+                                    <input type="password" class="form-control border-0" id="password" name="password" placeholder="Password" style="height: 55px;" value="<?php echo $password;?>">
                                 
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" style="height:55px" type="button" id="btnshow" name="btnshow" onclick="tooglePassword()">Show</button>

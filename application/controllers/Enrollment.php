@@ -371,7 +371,7 @@ function editSchedule($id)
                            <td>'.$record->subject.'</td>
                            <td>'.$record->room.'</td>
                            <td>'.$record->day.'</td>
-                           <td>'.$record->time.'</td>
+                           <td>'.date("h:i A", strtotime($record->timefrom)) . ' - ' . date("h:i A", strtotime($record->timeto)).'</td>
                            <td>'.$record->name.'</td>
                            
 

@@ -151,7 +151,7 @@
             
             <li class="treeview active">
               <a href="#">
-                <i></i> <span>RECYCLE BIN</span>
+                <i></i> <span>ARCHIVED FILES</span>
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
                 </span>

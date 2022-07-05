@@ -133,7 +133,7 @@ function editSchedule($id)
 
  
         if ($this->form_validation->run() == FALSE) {
-            $this->editSchedule();
+            $this->editSchedule($id);
         } else {
             
             $subject = $this->security->xss_clean($this->input->post('subject'));

@@ -69,7 +69,7 @@ function editFaculty($id)
         $this->form_validation->set_rules('address', 'Address', 'trim|required');
         $this->form_validation->set_rules('contactperson', 'Contact Person', 'trim|required');
         $this->form_validation->set_rules('contactno', 'Contact No.', 'trim|required');
-        $this->form_validation->set_rules('email', 'Email', 'trim|required');
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|callback_checkEmail');
         $this->form_validation->set_rules('password', 'Password', 'trim|required');
         $this->form_validation->set_rules('status', 'Status', 'trim|required');
 
@@ -170,7 +170,7 @@ function editFaculty($id)
             $this->form_validation->set_rules('address', 'Address', 'trim|required');
             $this->form_validation->set_rules('contactperson', 'Contact Person', 'trim|required');
             $this->form_validation->set_rules('contactno', 'Contact No.', 'trim|required');
-            $this->form_validation->set_rules('email', 'Email', 'trim|required');
+            $this->form_validation->set_rules('email', 'Email', 'trim|required|callback_checkEmail');
             $this->form_validation->set_rules('status', 'Status', 'trim|required');                   
                  
       
@@ -244,7 +244,7 @@ function editFaculty($id)
                 {
                     $this->session->set_flashdata('success', 'Faculty Data Archived.');                 
 
-                    redirect('archivedfaculty');
+                    redirect('faculty');
                    
                 }
 
@@ -252,7 +252,7 @@ function editFaculty($id)
                 {
                     $this->session->set_flashdata('error', 'User updation failed');
 
-                    redirect('archivedfaculty');
+                    redirect('faculty');
               
                 }
         
@@ -270,7 +270,7 @@ function editFaculty($id)
                 {
                     $this->session->set_flashdata('success', 'Faculty Data Restored.');                 
 
-                    redirect('faculty');
+                    redirect('archivedfaculty');
                    
                 }
 
@@ -278,7 +278,7 @@ function editFaculty($id)
                 {
                     $this->session->set_flashdata('error', 'User updation failed');
 
-                    redirect('faculty');
+                    redirect('archivedfaculty');
               
                 }
         
@@ -291,10 +291,14 @@ function editFaculty($id)
                 
                 $result = $this->auth->editEnrollment($studentInfo, $id);
 
+                $student = $this->auth->getStudentInfo($id);
+
                 
                 if($result == true)
                 {
-                    $this->session->set_flashdata('success', 'Drop student successfuly.');                 
+                    $this->session->set_flashdata('success', 'Drop student successfuly.');  
+                    
+                    $this->auth->SendEmailSubject($student->firstname,$student->lastname,$student->email);
 
                     redirect('myschedule');
                    
@@ -339,13 +343,14 @@ function editFaculty($id)
     
     function facultyListing()
     {
+        
         $status = 'Active';
 
         $searchText = $this->security->xss_clean($this->input->post('searchText'));
            
         $count = $this->auth->facultyListingCount($searchText,$status);
 
-        $returns = $this->paginationCompress ( "faculty/facultyListing/", $count, 10 );
+        $returns = $this->paginationCompress ("faculty/facultyListing/", $count, 10 );
         
         $data['userRecords'] = $this->auth->facultyListing($searchText, $status,$returns["page"], $returns["segment"]);
         
@@ -378,6 +383,8 @@ function editFaculty($id)
     public function myschedule() {     
          
         $data = array();
+
+        $searchText = $this->security->xss_clean($this->input->post('searchText'));
     
         $row = $this->db->select("*")->where('accountid',$this->session->userdata('id'))->get("tbl_faculty")->row();
             $id = $row->id;
@@ -391,11 +398,11 @@ function editFaculty($id)
         }
           
     
-        $count = $this->auth->scheduleListingCount($id,$schoolyear);
+        $count = $this->auth->scheduleListingCount($id,$schoolyear,$searchText);
     
         $returns = $this->paginationCompress ( "faculty/myschedule/", $count, 10 );
             
-        $data['userRecords'] = $this->auth->scheduleListing($id,$schoolyear, $returns["page"], $returns["segment"]);
+        $data['userRecords'] = $this->auth->scheduleListing($id,$schoolyear,$searchText,$returns["page"], $returns["segment"]);
         
         $this->load->view('templates/teacherheader', $data);
         $this->load->view('teacher/schedule', $data);
@@ -406,6 +413,8 @@ function editFaculty($id)
     public function myrecord() {     
          
         $data = array();
+
+       
     
         $row = $this->db->select("*")->where('accountid',$this->session->userdata('id'))->get("tbl_faculty")->row();
             $id = $row->id;
@@ -434,6 +443,10 @@ function editFaculty($id)
     public function studentlist($schedid) {     
          
         $data = array();
+
+        $searchText = $this->security->xss_clean($this->input->post('searchText'));
+
+        $data['sched'] =$schedid;
     
         $row = $this->db->select("*")->where('accountid',$this->session->userdata('id'))->get("tbl_faculty")->row();
             $id = $row->id;
@@ -447,17 +460,41 @@ function editFaculty($id)
         }
           
     
-        $count = $this->auth->studentListingCount($schedid);
+        $count = $this->auth->studentListingCount($schedid,$searchText);
     
         $returns = $this->paginationCompress ( "faculty/studentlist/", $count, 10 );
             
-        $data['userRecords'] = $this->auth->studentListing($schedid, $returns["page"], $returns["segment"]);
+        $data['userRecords'] = $this->auth->studentListing($schedid, $searchText,$returns["page"], $returns["segment"]);
         
         $this->load->view('templates/teacherheader', $data);
         $this->load->view('teacher/students', $data);
         $this->load->view('templates/userfooter', $data);  
                  
     }
+
+    function checkEmail() {
+
+        $email = $this->security->xss_clean($this->input->post('email'));
+        $id = $this->input->post('sid');
+
+        $check = $this->db->get_where('tbl_account', array('email' => $email), 1);
+
+        $row = $this->auth->getFacultyInfo($id);
+
+        if ($check->num_rows() > 0 && $email != $row->email) {
+
+            $this->form_validation->set_message('checkEmail', 'This email already exists.');
+
+            return FALSE;
+        }
+
+        else
+        {
+            return TRUE;
+        }
+     
+     
+       } 
 
     public function getCity(){
         if($this->input->post('province'))

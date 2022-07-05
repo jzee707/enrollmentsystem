@@ -172,7 +172,7 @@ class Schedule_model extends CI_Model {
     
     function scheduleListingCount($searchText = '',$status,$schoolyear)
     {
-        $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
+        $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.timefrom,sd.timeto,sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_faculty a','a.id=sd.adviserid');
         $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
@@ -195,7 +195,7 @@ class Schedule_model extends CI_Model {
 
     function scheduleListing($searchText = '', $status,$schoolyear,$page, $segment) {
 
-        $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
+        $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.timefrom,sd.timeto,sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_faculty a','a.id=sd.adviserid');
         $this->db->join('tbl_subject sb','sb.id=sd.subjectid');

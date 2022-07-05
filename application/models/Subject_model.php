@@ -32,6 +32,10 @@ class Subject_model extends CI_Model {
         $this->_gradelevel = $gradelevel;
     }
 
+    public function setStrand($strand) {
+        $this->_strand = $strand;
+    }
+
 
     public function setStatus($status) {
         $this->_status = $status;
@@ -44,7 +48,7 @@ class Subject_model extends CI_Model {
         $data = array(
             'subject' => $this->_subject,
             'description' => $this->_description,
-            'gradelevel' => $this->_gradelevel,
+            'gradelevel' => $this->_gradelevel,           
             'type' => 'JHS'
         );
 
@@ -72,6 +76,7 @@ class Subject_model extends CI_Model {
             'subject' => $this->_subject,
             'description' => $this->_description,
             'gradelevel' => $this->_gradelevel,
+            'strandid' => $this->_strand,
             'type' => 'SHS'
         );
 
@@ -105,9 +110,10 @@ class Subject_model extends CI_Model {
 
     function getSHSubjectInfo($id)
     {
-        $this->db->select("id,subject,description,gradelevel,type,status");
-        $this->db->from('tbl_subject');
-        $this->db->where('id', $id);
+        $this->db->select('s.id,s.gradelevel,s.subject,s.description,s.status,st.id as strandcode');
+        $this->db->from('tbl_subject s');
+        $this->db->join('tbl_strand st','st.id=s.strandid','left');
+        $this->db->where('s.id', $id);
         $query = $this->db->get();
         
         return $query->row();
@@ -122,6 +128,7 @@ class Subject_model extends CI_Model {
             $likeCriteria = "(subject  LIKE '".$searchText."%'
                             AND status='".'Active'."' AND type='".'JHS'."'
                             OR description  LIKE '".$searchText."%'
+                            AND status='".'Active'."' AND type='".'JHS'."' OR gradelevel LIKE '".$searchText."%'
                             AND status='".'Active'."' AND type='".'JHS'."')";
                             
        $this->db->where($likeCriteria);
@@ -137,15 +144,13 @@ class Subject_model extends CI_Model {
         $this->db->from('tbl_subject');
 
 
-            $likeCriteria = "(subject  LIKE '".$searchText."%'
-                            AND status='".'Active'."' AND type='".'JHS'."'
-                            OR description  LIKE '".$searchText."%'
-                            AND status='".'Active'."' AND type='".'JHS'."')";
+        $likeCriteria = "(subject  LIKE '".$searchText."%'
+        AND status='".'Active'."' AND type='".'JHS'."'
+        OR description  LIKE '".$searchText."%'
+        AND status='".'Active'."' AND type='".'JHS'."' OR gradelevel LIKE '".$searchText."%'
+        AND status='".'Active'."' AND type='".'JHS'."')";
 
-            $this->db->where($likeCriteria);
-       
-        
-
+            $this->db->where($likeCriteria);       
       
         $this->db->limit($page, $segment);
         $query = $this->db->get();
@@ -156,14 +161,15 @@ class Subject_model extends CI_Model {
 
     function shsubjectListingCount($searchText = '')
     {
-        $this->db->select('id,gradelevel,subject,description,status');
-        $this->db->from('tbl_subject');
+        $this->db->select('s.id,s.gradelevel,s.subject,s.description,s.status,st.strandcode');
+        $this->db->from('tbl_subject s');
+        $this->db->join('tbl_strand st','st.id=s.strandid','left');
 
-
-            $likeCriteria = "(subject  LIKE '".$searchText."%'
-                            AND status='".'Active'."' AND type='".'SHS'."'
-                            OR description  LIKE '".$searchText."%'
-                            AND status='".'Active'."' AND type='".'SHS'."')";
+        $likeCriteria = "(s.subject  LIKE '".$searchText."%'
+        AND s.status='".'Active'."' AND s.type='".'SHS'."'
+        OR s.description  LIKE '".$searchText."%'
+        AND s.status='".'Active'."' AND s.type='".'SHS'."' OR s.gradelevel LIKE '".$searchText."%'
+        AND s.status='".'Active'."' AND s.type='".'SHS'."')";
                             
        $this->db->where($likeCriteria);
 
@@ -174,25 +180,33 @@ class Subject_model extends CI_Model {
 
     function shsubjectListing($searchText = '', $page, $segment) {
 
-        $this->db->select('id,gradelevel,subject,description,status');
-        $this->db->from('tbl_subject');
+        $this->db->select('s.id,s.gradelevel,s.subject,s.description,s.status,st.strandcode');
+        $this->db->from('tbl_subject s');
+        $this->db->join('tbl_strand st','st.id=s.strandid','left');
 
+        $likeCriteria = "(s.subject  LIKE '".$searchText."%'
+        AND s.status='".'Active'."' AND s.type='".'SHS'."'
+        OR s.description  LIKE '".$searchText."%'
+        AND s.status='".'Active'."' AND s.type='".'SHS'."' OR s.gradelevel LIKE '".$searchText."%'
+        AND s.status='".'Active'."' AND s.type='".'SHS'."')";
 
-            $likeCriteria = "(subject  LIKE '".$searchText."%'
-                            AND status='".'Active'."' AND type='".'SHS'."'
-                            OR description  LIKE '".$searchText."%'
-                            AND status='".'Active'."' AND type='".'SHS'."')";
-
-            $this->db->where($likeCriteria);
-       
-        
-
+        $this->db->where($likeCriteria);
       
         $this->db->limit($page, $segment);
         $query = $this->db->get();
         
         $result = $query->result();        
         return $result;
+    }
+
+    function getStrandList()
+	{
+        $this->db->select('id,strandcode');
+        $this->db->from('tbl_strand');
+        $this->db->where('status','Active');
+		
+        return $this->db->get();
+		
     }
  
     function getRegion()

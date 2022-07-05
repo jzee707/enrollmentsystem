@@ -38,6 +38,15 @@
                     <h3 class="box-title">Student List</h3>
                     <div class="box-tools">
 
+                        <form action="<?php echo base_url().'studentlist/'.$sched; ?> " method="POST" id="searchList">
+                            <div class="input-group">
+                              <input type="text" name="searchText"  class="form-control input-sm pull-right" style="width: 150px;" placeholder="Search"/>
+                              <div class="input-group-btn">
+                                <button class="btn btn-sm btn-default searchList"><i class="fa fa-search"></i></button>
+                              </div>
+                            </div>
+                        </form>
+
                     </div>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
@@ -74,7 +83,7 @@
                         {
                             ?>
 
-                            <a class="btn btn-sm btn-info" href="<?php echo base_url().'restorestudent/'.$record->id; ?>" title="Restore"><i class="fa fa-check"></i></a>
+                            <a class="btn btn-sm btn-info" href="<?php echo base_url().'restorestudent/'.$record->id; ?>" title="Enroll"><i class="fa fa-check"></i></a>
                         
                         <?php 
                         }

@@ -63,7 +63,7 @@
 
                                 <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="strand">Strand</label>
+                                                    <label for="strand" id="lblstrand">Strand</label>
                                                     <br>
                                                     <select name="strand" id="strand" class="form-control">                                                  
                                                     </select>
@@ -177,6 +177,10 @@ $('#gradelevel').change(function(){
     {
         if(gradelevel == 'Grade 11' || gradelevel == 'Grade 12')
     {
+
+        document.getElementById('strand').style.visibility = 'visible';
+        document.getElementById('lblstrand').style.visibility = 'visible';
+
         $.ajax({
         url:"<?php echo base_url(); ?>schedule/getStrand",
         method:"POST",
@@ -204,6 +208,9 @@ $('#gradelevel').change(function(){
     {
         $('#strand').html('');
         $('#sched_data').html('');
+
+        document.getElementById('strand').style.visibility = 'hidden';
+        document.getElementById('lblstrand').style.visibility = 'hidden';
 
         document.getElementById("etype").setAttribute("disabled", "disabled");
 

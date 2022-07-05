@@ -45,7 +45,7 @@
 
                                 <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="strand">Strand</label>
+                                                    <label for="strand" id="lblstrand">Strand</label>
                                                     <br>
                                                     <select name="strand" id="strand" class="form-control">                                                  
                                                     </select>
@@ -162,6 +162,9 @@ $('#gradelevel').change(function(){
 
     document.getElementById("etype").value = "Regular";
 
+    document.getElementById('strand').style.visibility = 'visible';
+    document.getElementById('lblstrand').style.visibility = 'visible';
+
      
     }
 
@@ -169,6 +172,9 @@ $('#gradelevel').change(function(){
     {
         $('#strand').html('');
         $('#sched_data').html('');
+
+        document.getElementById('strand').style.visibility = 'hidden';
+        document.getElementById('lblstrand').style.visibility = 'hidden';
 
         document.getElementById("etype").setAttribute("disabled", "disabled");
 

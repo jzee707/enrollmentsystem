@@ -69,7 +69,7 @@
                         <td><?php echo $record->subject ?></td>
                         <td><?php echo $record->room ?></td>
                         <td><?php echo $record->day ?></td>
-                        <td><?php echo $record->time ?></td>
+                        <td><?php echo date("h:i A", strtotime($record->timefrom)) . ' - ' . date("h:i A", strtotime($record->timeto)) ?></td>
                         <td><?php echo $record->term ?></td>
                         <td><?php echo $record->schoolyear ?></td>
                         <td><?php echo $record->status ?></td>

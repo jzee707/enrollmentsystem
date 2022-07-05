@@ -321,7 +321,7 @@ class Admin_model extends CI_Model {
         $this->db->from('tbl_schoolyear');
 
 
-            $likeCriteria = "(schoolyear LIKE '".$searchText."%')";
+        $likeCriteria = "(schoolyear LIKE '".$searchText."%')";
                             
        $this->db->where($likeCriteria);
 
@@ -354,8 +354,7 @@ class Admin_model extends CI_Model {
         $this->db->join('tbl_faculty f','f.id=s.adviserid');
         $this->db->join('tbl_strand st','st.id=s.strandid','left');
 
-
-        $likeCriteria = "(s.section LIKE '".$searchText."%' AND s.status='".'Active'."')";
+        $likeCriteria = "(s.section LIKE '".$searchText."%' AND s.status='".'Active'."' OR s.gradelevel LIKE '".$searchText."%' AND s.status='".'Active'."' OR concat(f.firstname, ' ',f.lastname) LIKE '".$searchText."%' AND s.status='".'Active'."')";
                             
         $this->db->where($likeCriteria);
 
@@ -371,8 +370,7 @@ class Admin_model extends CI_Model {
         $this->db->join('tbl_faculty f','f.id=s.adviserid');
         $this->db->join('tbl_strand st','st.id=s.strandid','left');
 
-
-            $likeCriteria = "(s.section LIKE '".$searchText."%' AND s.status='".'Active'."')";
+            $likeCriteria = "(s.section LIKE '".$searchText."%' AND s.status='".'Active'."' OR s.gradelevel LIKE '".$searchText."%' AND s.status='".'Active'."' OR concat(f.firstname, ' ',f.lastname) LIKE '".$searchText."%' AND s.status='".'Active'."')";
 
             $this->db->where($likeCriteria);
            

@@ -217,17 +217,17 @@ class Faculty_model extends CI_Model {
     
         function facultyListingCount($searchText = '',$status)
     {
-        $this->db->select('id,idno,firstname,middlename,lastname,suffix,status');
-        $this->db->from('tbl_student');
+        $this->db->select("f.id,f.idno,CONCAT(f.firstname, ' ',f.lastname) name,f.firstname,f.lastname,f.middlename,f.suffix,f.birthdate,f.gender,f.address,f.contactno,a.usertype,f.status");
+        $this->db->from('tbl_faculty f');
+        $this->db->join('tbl_account a','a.id=f.accountid');
+        
+        $likeCriteria = "(CONCAT(f.firstname, ' ',f.lastname)  LIKE '".$searchText."%'
+        AND f.status='".$status."'  AND a.usertype<>'".'Student'."' 
+        OR CONCAT(f.lastname, ' ',f.firstname)  LIKE '".$searchText."%'
+        AND f.status='".$status."'  AND a.usertype<>'".'Student'."' )";
 
-
-            $likeCriteria = "(CONCAT(firstname, ' ',lastname)  LIKE '".$searchText."%'
-                            AND status='".$status."'
-                            OR CONCAT(lastname, ' ',firstname)  LIKE '".$searchText."%'
-                            AND status='".$status."')";
-                            
-       $this->db->where($likeCriteria);
-       $query = $this->db->order_by('id','ASC');
+            $this->db->where($likeCriteria);
+            $this->db->order_by('id', 'ASC');
 
         $query = $this->db->get();
         
@@ -257,9 +257,9 @@ class Faculty_model extends CI_Model {
         return $result;
     }
 
-    function scheduleListingCount($id,$syid)
+    function scheduleListingCount($id,$syid,$searchText)
     {
-        $this->db->select("es.scheduleid as id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
+        $this->db->select("es.scheduleid as id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time, sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,sd.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
         $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
@@ -268,18 +268,21 @@ class Faculty_model extends CI_Model {
         $this->db->join('tbl_section sc','sc.id=sd.sectionid');
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
         $this->db->join('tbl_strand st','st.id=sc.strandid','left');
-        $this->db->where('sd.adviserid', $id);
-        $this->db->where('e.syid=', $syid);
-                
+
+        $likeCriteria = "(sd.adviserid ='".$id."'  AND e.syid='".$syid."' AND sd.status='".'Active'."' AND sb.gradelevel LIKE '".$searchText."%' OR sd.adviserid ='".$id."'  AND e.syid='".$syid."' AND sd.status='".'Active'."' AND sb.subject LIKE '".$searchText."%' OR sd.adviserid ='".$id."'  AND e.syid='".$syid."' AND sd.status='".'Active'."' AND sc.section LIKE '".$searchText."%')";
+
+        $this->db->where($likeCriteria);
+        $this->db->group_by('es.scheduleid');
+        $this->db->order_by('es.scheduleid','ASC');
 
         $query = $this->db->get();
         
         return $query->num_rows();
     }
 
-    function scheduleListing($id,$syid, $page, $segment) {
+    function scheduleListing($id,$syid, $searchText,$page, $segment) {
 
-        $this->db->select("es.scheduleid as id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
+        $this->db->select("es.scheduleid as id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,sd.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
         $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
@@ -288,10 +291,12 @@ class Faculty_model extends CI_Model {
         $this->db->join('tbl_section sc','sc.id=sd.sectionid');
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
         $this->db->join('tbl_strand st','st.id=sc.strandid','left');
-        $this->db->where('sd.adviserid', $id);
-        $this->db->where('e.syid=', $syid);
-        
-        
+       
+        $likeCriteria = "(sd.adviserid ='".$id."'  AND e.syid='".$syid."' AND sd.status='".'Active'."' AND sb.gradelevel LIKE '".$searchText."%' OR sd.adviserid ='".$id."'  AND e.syid='".$syid."' AND sd.status='".'Active'."' AND sb.subject LIKE '".$searchText."%' OR sd.adviserid ='".$id."'  AND e.syid='".$syid."' AND sd.status='".'Active'."' AND sc.section LIKE '".$searchText."%')";
+
+        $this->db->where($likeCriteria);           
+        $this->db->group_by('es.scheduleid');
+        $this->db->order_by('es.scheduleid','ASC');
         $this->db->limit($page, $segment);
         $query = $this->db->get();
         
@@ -301,7 +306,7 @@ class Faculty_model extends CI_Model {
 
     function recordListingCount($id,$syid)
     {
-        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
+        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time, sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
         $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
@@ -321,7 +326,7 @@ class Faculty_model extends CI_Model {
 
     function recordListing($id,$syid, $page, $segment) {
 
-        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
+        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time, sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
         $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
@@ -341,7 +346,7 @@ class Faculty_model extends CI_Model {
         return $result;
     }
 
-    function studentListingCount($schedid)
+    function studentListingCount($schedid,$searchText)
     {
         $this->db->select("es.id,s.idno,concat(s.firstname, ' ',s.lastname) as name, s.address,e.type,es.status");
         $this->db->from('tbl_enrollment e');
@@ -355,14 +360,16 @@ class Faculty_model extends CI_Model {
         $this->db->join('tbl_strand st','st.id=sc.strandid','left');
         $this->db->where('es.scheduleid', $schedid);
 
-                
+        $likeCriteria = "(es.scheduleid ='".$schedid."'AND sd.status='".'Active'."' AND concat(s.firstname, ' ',s.lastname) LIKE '".$searchText."%' OR es.scheduleid ='".$schedid."'AND sd.status='".'Active'."' AND s.idno LIKE '".$searchText."%')";
+
+        $this->db->where($likeCriteria);              
 
         $query = $this->db->get();
         
         return $query->num_rows();
     }
 
-    function studentListing($schedid, $page, $segment) {
+    function studentListing($schedid, $searchText,$page, $segment) {
 
         $this->db->select("es.id,s.idno,concat(s.firstname, ' ',s.lastname) as name, s.address,e.type,es.status");
         $this->db->from('tbl_enrollment e');
@@ -374,8 +381,11 @@ class Faculty_model extends CI_Model {
         $this->db->join('tbl_section sc','sc.id=sd.sectionid');
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
         $this->db->join('tbl_strand st','st.id=sc.strandid','left');
-        $this->db->where('es.scheduleid', $schedid);
-        
+       
+        $likeCriteria = "(es.scheduleid ='".$schedid."'AND sd.status='".'Active'."' AND concat(s.firstname, ' ',s.lastname) LIKE '".$searchText."%' OR es.scheduleid ='".$schedid."'AND sd.status='".'Active'."' AND s.idno LIKE '".$searchText."%')";
+
+        $this->db->where($likeCriteria);              
+
         
         $this->db->limit($page, $segment);
         $query = $this->db->get();
@@ -476,6 +486,57 @@ class Faculty_model extends CI_Model {
         return $this->db->get();
 
 		
+    }
+
+    function getStudentInfo($id)
+    {
+        $this->db->select("s.id,s.idno,s.lrn,CONCAT(s.firstname, ' ',s.lastname) name,s.firstname,s.lastname,s.middlename,s.suffix,s.birthdate,s.gender,s.addid,s.address,a.province,a.city,a.barangay,s.religion,s.nationality,ac.email,s.contactno,s.mother,s.father,s.guardian,s.studenttype,s.status");
+        $this->db->from('tbl_student as s');
+        $this->db->join('tbl_address as a','a.id=s.addid');
+        $this->db->join('tbl_account as ac','ac.id=s.accountid');
+        $this->db->join('tbl_enrollment as e','e.studentid=s.id');
+        $this->db->join('tbl_enrollsched as es','es.enrollmentid=e.id');
+        $this->db->where('es.id', $id);
+        $query = $this->db->get();
+        
+        return $query->row();
+    }
+
+    public function SendEmailSubject($firstname,$lastname,$email) {   
+        
+        $subject = "Enrolled Subject Notice";
+        $message = "
+        <p>Good Day! ". $firstname . ' ' . $lastname.'.'."</p>
+         
+        <p>We want to informed you that you've dropped a subject. If you re-enroll the sujbect kindly contact your subject teacher or administrator.
+
+        <p>Keep Safe,</p>
+
+        <p>Western Colleges Inc.</p>";
+		
+	
+        $this->load->config('email');
+        $this->load->library('email');
+
+		$this->email->set_newline("\r\n");
+
+        $this->email->from('wcihighschool2022@gmail.com');
+        $this->email->to($email);
+        $this->email->subject($subject);
+		$this->email->message($message); 
+
+
+		 if($this->email->send()){
+
+
+		}
+
+		else{
+   		show_error($this->email->print_debugger());
+		
+        } 
+        
+   
     }
     
 

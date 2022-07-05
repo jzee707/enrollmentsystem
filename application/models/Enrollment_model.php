@@ -345,7 +345,7 @@ class Enrollment_model extends CI_Model {
 
     function getScheduleList($section,$schoolyear) {
 
-        $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
+        $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_faculty a','a.id=sd.adviserid');
         $this->db->join('tbl_subject sb','sb.id=sd.subjectid');

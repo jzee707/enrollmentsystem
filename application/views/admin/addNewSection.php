@@ -47,7 +47,7 @@
                             <div class="row">                           
                                 <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="last_name">Strand</label>
+                                            <label for="last_name" id="lblstrand">Strand</label>
                                             <br>
                                             <select name="strand" id="strand" class="form-control">
                                             </select>
@@ -73,7 +73,7 @@
                                         <div class="form-group">
                                             <label for="last_name">Adviser</label>
                                             <br>
-                                            <select name="adviser" id="adviser" class="form-control">
+                                            <select name="adviser" id="adviser" class="form-control select2">
                                                             <?php
                                                             foreach($faculty->result_array() as $row)
                                                             {
@@ -137,6 +137,10 @@ $('#gradelevel').change(function(){
     var gradelevel = $('#gradelevel').val();
     if(gradelevel == 'Grade 11' || gradelevel == 'Grade 12')
     {
+
+        document.getElementById('strand').style.visibility = 'visible';
+        document.getElementById('lblstrand').style.visibility = 'visible';
+
     $.ajax({
         url:"<?php echo base_url(); ?>admin/getStrand",
         method:"POST",
@@ -151,6 +155,9 @@ $('#gradelevel').change(function(){
     else
     {
     $('#strand').html('');
+        document.getElementById('strand').style.visibility = 'hidden';
+        document.getElementById('lblstrand').style.visibility = 'hidden';
+
     }
 });
 

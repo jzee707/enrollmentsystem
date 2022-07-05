@@ -39,7 +39,7 @@
                     <h3 class="box-title">School Year  List</h3>
                     <div class="box-tools">
 
-                        <form action="<?php echo base_url() ?>aschoolyear" method="POST" id="searchList">
+                        <form action="<?php echo base_url() ?>schoolyear" method="POST" id="searchList">
                             <div class="input-group">
                               <input type="text" name="searchText"  class="form-control input-sm pull-right" style="width: 150px;" placeholder="Search"/>
                               <div class="input-group-btn">
@@ -73,8 +73,8 @@
                         <td><?php echo $record->dateto ?></td>
                         <td><?php echo $record->status ?></td>
                         <td class="text-center">
-                            <a class="btn btn-sm btn-info" href="<?php echo base_url().'activeschoolyear/'.$record->id; ?>" title="Make Active"><i class="fa fa-check"></i></a>
-                            <a class="btn btn-sm btn-info" href="<?php echo base_url().'editSchoolYear/'.$record->id; ?>" title="Edit"><i class="fa fa-pencil"></i></a>
+                            <a class="btn btn-sm btn-info" href="<?php echo base_url().'activeschoolyear/'.$record->id; ?>" title="Make Active">Make Active</a>
+                            <a class="btn btn-sm btn-info" href="<?php echo base_url().'editSchoolYear/'.$record->id; ?>" title="Edit">Edit</a>
                            
                         </td>
                     </tr>

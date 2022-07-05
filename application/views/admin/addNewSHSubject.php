@@ -39,6 +39,22 @@
                                             </select>
                                         </div>
                                 </div> 
+
+                                <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="strand" id="lblstrand">Strand</label>
+                                                    <br>
+                                                    <select name="strand" id="strand" class="form-control"> 
+                                                                <?php
+                                                                foreach($strand->result_array() as $row)
+                                                                {
+                                                                    echo '<option value="'.$row["id"].'">'.$row["strandcode"].'</option>';
+                                                                }
+                                                                ?>                                                     
+                                                    </select>
+                                                </div>
+                                </div> 
+
                             </div>
 
 

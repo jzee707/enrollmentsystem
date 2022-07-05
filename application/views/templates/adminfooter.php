@@ -13,6 +13,7 @@
     <script src="<?php echo base_url(); ?>assets/dist/js/adminlte.min.js" type="text/javascript"></script>
     <script src="<?php echo base_url(); ?>assets/dist/select2/js/select2.full.min.js"></script>
     <script>
+      
   $(function () {
 
     $('.select2').select2()

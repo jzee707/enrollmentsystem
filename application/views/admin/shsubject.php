@@ -56,6 +56,7 @@
                         <th>Grade Level</th>
                         <th>Subject</th>
                         <th>Description</th>
+                        <th>Strand</th>
 
                         <th class="text-center"></th>
                     </tr>
@@ -71,6 +72,7 @@
                         <td><?php echo $record->gradelevel ?></td>
                         <td><?php echo $record->subject ?></td>
                         <td><?php echo $record->description ?></td>
+                        <td><?php echo $record->strandcode ?></td>
 
                         <td class="text-center">
                        

@@ -71,7 +71,7 @@ public function registration() {
  function addStudent()
     {
                
-        $this->form_validation->set_rules('lrn', 'LRN', 'trim|required');
+        $this->form_validation->set_rules('lrn', 'LRN', 'trim|required|callback_checkLRN');
         $this->form_validation->set_rules('studenttype', 'Student Type', 'trim|required');
         $this->form_validation->set_rules('firstname', 'First Name', 'trim|required');
         $this->form_validation->set_rules('lastname', 'Last Name', 'trim|required');
@@ -84,7 +84,7 @@ public function registration() {
         $this->form_validation->set_rules('father', 'Fathers Name', 'trim|required');
         $this->form_validation->set_rules('guardian', 'Guardian', 'trim|required');
         $this->form_validation->set_rules('contactno', 'Contact No.', 'trim|required');
-        $this->form_validation->set_rules('email', 'Email', 'trim|required');
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|callback_checkEmail');
         $this->form_validation->set_rules('password', 'Password', 'trim|required');
         $this->form_validation->set_rules('status', 'Status', 'trim|required');
 
@@ -172,7 +172,7 @@ public function registration() {
             $id = $this->input->post('sid');
                     
             $this->form_validation->set_rules('idno', 'ID No.', 'trim|required');
-            $this->form_validation->set_rules('lrn', 'LRN', 'trim|required');
+            $this->form_validation->set_rules('lrn', 'LRN', 'trim|required|callback_checkLRN');
             $this->form_validation->set_rules('studenttype', 'Student Type', 'trim|required');
             $this->form_validation->set_rules('firstname', 'First Name', 'trim|required');
             $this->form_validation->set_rules('lastname', 'Last Name', 'trim|required');
@@ -185,7 +185,7 @@ public function registration() {
             $this->form_validation->set_rules('father', 'Fathers Name', 'trim|required');
             $this->form_validation->set_rules('guardian', 'Guardian', 'trim|required');
             $this->form_validation->set_rules('contactno', 'Contact No.', 'trim|required');
-            $this->form_validation->set_rules('email', 'Email', 'trim|required');
+            $this->form_validation->set_rules('email', 'Email', 'trim|required|callback_checkEmail');
             $this->form_validation->set_rules('status', 'Status', 'trim|required');
       
       
@@ -250,7 +250,7 @@ public function registration() {
     function addReStudent()
     {
                
-        $this->form_validation->set_rules('lrn', 'LRN', 'trim|required');
+        $this->form_validation->set_rules('lrn', 'LRN', 'trim|required|callback_checkLRN');
         $this->form_validation->set_rules('studenttype', 'Student Type', 'trim|required');
         $this->form_validation->set_rules('firstname', 'First Name', 'trim|required');
         $this->form_validation->set_rules('lastname', 'Last Name', 'trim|required');
@@ -502,6 +502,55 @@ public function registration() {
             $this->load->view('templates/adminfooter', $data);
 
     }
+
+    function checkLRN() {
+
+
+        $lrn = $this->security->xss_clean($this->input->post('lrn'));
+        $id = $this->input->post('sid');
+
+        $check = $this->db->get_where('tbl_student', array('lrn' => $lrn), 1);
+
+        $row = $this->auth->getStudentInfo($id);
+
+        if ($check->num_rows() > 0 && $lrn != $row->lrn) {
+
+            $this->form_validation->set_message('checkLRN', 'This LRN already exists.');
+
+            return FALSE;
+        }
+
+        else
+        {
+            return TRUE;
+        }
+     
+     
+       }
+
+       function checkEmail() {
+
+        $email = $this->security->xss_clean($this->input->post('email'));
+        $id = $this->input->post('sid');
+
+        $check = $this->db->get_where('tbl_account', array('email' => $email), 1);
+        
+        $row = $this->auth->getStudentInfo($id);
+
+        if ($check->num_rows() > 0 && $email != $row->email) {
+
+            $this->form_validation->set_message('checkEmail', 'This email already exists.');
+
+            return FALSE;
+        }
+
+        else
+        {
+            return TRUE;
+        }
+     
+     
+       } 
 
     public function getCity(){
         if($this->input->post('province'))

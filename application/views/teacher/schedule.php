@@ -38,6 +38,15 @@
                     <h3 class="box-title">Schedule List</h3>
                     <div class="box-tools">
 
+                    <form action="<?php echo base_url() ?>myschedule" method="POST" id="searchList">
+                            <div class="input-group">
+                              <input type="text" name="searchText"  class="form-control input-sm pull-right" style="width: 150px;" placeholder="Search"/>
+                              <div class="input-group-btn">
+                                <button class="btn btn-sm btn-default searchList"><i class="fa fa-search"></i></button>
+                              </div>
+                            </div>
+                        </form>
+
                     </div>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
@@ -70,7 +79,7 @@
                         <td><?php echo $record->subject ?></td>
                         <td><?php echo $record->room ?></td>
                         <td><?php echo $record->day ?></td>
-                        <td><?php echo $record->time ?></td>
+                        <td><?php echo date("h:i A", strtotime($record->timefrom)) . ' - ' . date("h:i A", strtotime($record->timeto)) ?></td>
                         <td><?php echo $record->term ?></td>
                         <td><?php echo $record->schoolyear ?></td>
                         <td><?php echo $record->status ?></td>

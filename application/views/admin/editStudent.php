@@ -44,7 +44,7 @@
                                 <div class="col-md-6">                                
                                     <div class="form-group">
                                         <label for="first_name">ID No.</label>
-                                        <input type="text" class="form-control" id="idno" name="idno" value="<?php echo $studentInfo->idno;?>" maxlength="128" required>
+                                        <input type="number" class="form-control" id="idno" name="idno" value="<?php echo $studentInfo->idno;?>" maxlength="128" required>
                                         <input type="hidden" class="form-control" id="sid" name="sid" value="<?php echo $studentInfo->id;?>" maxlength="128" required>
                                     </div>
                                     
@@ -52,7 +52,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="last_name">LRN</label>
-                                        <input type="text" class="form-control" id="lrn" name="lrn" value="<?php echo $studentInfo->lrn;?>" maxlength="128" required>
+                                        <input type="number" class="form-control" id="lrn" name="lrn" value="<?php echo $studentInfo->lrn;?>" maxlength="128" required>
                                     </div>
                                 </div>
                             </div>

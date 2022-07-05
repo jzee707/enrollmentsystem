@@ -267,7 +267,7 @@ class Auth_model extends CI_Model {
 
     function scheduleListingCount($id,$syid)
     {
-        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,es.status");
+        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,es.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
         $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
@@ -277,6 +277,7 @@ class Auth_model extends CI_Model {
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
         $this->db->where('e.studentid', $id);
         $this->db->where('e.syid', $syid);
+        $this->db->where('sd.status', 'Active');
                         
 
         $query = $this->db->get();
@@ -286,7 +287,7 @@ class Auth_model extends CI_Model {
 
     function scheduleListing($id,$syid, $page, $segment) {
 
-        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,es.status");
+        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,es.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
         $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
@@ -296,6 +297,7 @@ class Auth_model extends CI_Model {
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
         $this->db->where('e.studentid', $id);
         $this->db->where('e.syid', $syid);
+        $this->db->where('sd.status', 'Active');
       
         $this->db->limit($page, $segment);
         $query = $this->db->get();
@@ -306,7 +308,7 @@ class Auth_model extends CI_Model {
 
     function recordsListingCount($id,$syid)
     {
-        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
+        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
         $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
@@ -326,7 +328,7 @@ class Auth_model extends CI_Model {
 
     function recordsListing($id,$syid, $page, $segment) {
 
-        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
+        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time, sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
         $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
@@ -348,7 +350,7 @@ class Auth_model extends CI_Model {
 
     function getTotal()
     {
-        $this->db->select("(SELECT count(id) FROM tbl_student WHERE status='Active') as student,(SELECT count(id) FROM tbl_enrollment WHERE status='Active') as enrolled,(SELECT count(f.id) FROM tbl_faculty f INNER JOIN tbl_account a ON a.id=f.accountid WHERE usertype='Teacher') as teacher,(SELECT count(id) FROM tbl_section) as section,(SELECT count(id) FROM tbl_subject) as subject,(SELECT schoolyear FROM tbl_schoolyear WHERE status='Active') as schoolyear,(SELECT semester FROM tbl_semester WHERE status='Active') as semester");
+        $this->db->select("(SELECT count(es.id) from tbl_enrollsched es INNER JOIN tbl_enrollment e ON e.id=es.enrollmentid INNER JOIN tbl_schoolyear sy ON sy.id=e.syid WHERE es.status='Active' AND sy.status='Active') as subject,(SELECT count(es.id) from tbl_enrollsched es INNER JOIN tbl_enrollment e ON e.id=es.enrollmentid INNER JOIN tbl_schoolyear sy ON sy.id=e.syid WHERE es.status='Dropped' AND sy.status='Active') as dropped,(SELECT schoolyear FROM tbl_schoolyear WHERE status='Active') as schoolyear,(SELECT semester FROM tbl_semester WHERE status='Active') as semester");
         $this->db->from('tbl_student');
         $query = $this->db->get();
         

@@ -3,8 +3,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <i class="fa fa-users"></i> Schedule Management
-        <small>Add Schedule</small>
+        <i class="fa fa-users"></i> Enrollment Management
+        <small>Edit Enrollment</small>
       </h1>
     </section>
     
@@ -19,21 +19,38 @@
                 
                 <div class="box box-primary">
                     <div class="box-header">
-                        <h3 class="box-title">Enter Schedule Details</h3>
+                        <h3 class="box-title">Enter Enrollment Details</h3>
                     </div><!-- /.box-header -->
                     <!-- form start -->
 
 
-                    <form role="form" id="addUser" action="<?php echo base_url() ?>addSchedule" method="post" role="form">
+                    <form role="form" id="addUser" action="<?php echo base_url() ?>addEnrollment" method="post" role="form">
                         <div class="box-body">
 
-                        <div class="row">                           
+                            <div class="row">                           
+                                <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="last_name">Student</label>
+                                            <br>
+                                            <select name="student" id="student" class="form-control select2">
+                                                            <?php
+                                                            foreach($student->result_array() as $row)
+                                                            {
+                                                                echo '<option value="'.$row["id"].'">'.$row["name"].'</option>';
+                                                            }
+                                                            ?>
+                                            </select>
+                                        </div>
+                                </div> 
+                            </div>
+
+                            <div class="row">                           
                                 <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="last_name">Grade Level</label>
                                             <br>
                                             <select name="gradelevel" id="gradelevel" class="form-control">
-                                            <option selected disabled value=""></option>
+                                                <option selected disabled value=""></option>
                                                 <option value="Grade 7">Grade 7</option>
                                                 <option value="Grade 8">Grade 8</option>
                                                 <option value="Grade 9">Grade 9</option>
@@ -44,108 +61,49 @@
                                         </div>
                                 </div> 
 
-                                    <div class="col-md-6">
+                                <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="strand" id="lblstrand">Strand</label>
                                                     <br>
                                                     <select name="strand" id="strand" class="form-control">                                                  
                                                     </select>
                                                 </div>
-                                    </div> 
-                                
-                                </div>
+                                </div> 
 
+                                 
+                            </div>
 
-                            <div class="row">
+                            <div class="row"> 
 
                                 <div class="col-md-6">
+                                    
                                         <div class="form-group">
-                                            <label for="section">Section</label>
+                                            <label for="last_name">Section</label>
                                             <br>
                                             <select name="section" id="section" class="form-control">
+                                            <option disabled value=""></option>
      
                                             </select>
                                         </div>
-                                </div> 
-                                    <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="last_name">Subject</label>
-                                                    <br>
-                                                    <select name="subject" id="subject" class="form-control">
-
-                                                    </select>
-                                                </div>
-                                    </div>   
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">                                
-                                    <div class="form-group">
-                                        <label for="first_name">Room</label>
-                                        <input type="text" class="form-control" id="room" name="room" maxlength="128" required>
-                                    </div>
-                                    
                                 </div>
 
-                                <div class="col-md-6">                                
-                                    <div class="form-group">
-                                        <label for="first_name">Day (M-T-W-TH-F)</label>
-                                        <input type="text" class="form-control" id="day" name="day" maxlength="128" required>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">                                
-                                    <div class="form-group">
-                                        <label for="first_name">Time Start</label>
-                                        <input type="time" class="form-control" id="timestart" name="timestart" maxlength="128" required>
-                                    </div>
-                                    
-                                </div>
-
-                                <div class="col-md-6">                                
-                                    <div class="form-group">
-                                        <label for="first_name">Time End</label>
-                                        <input type="time" class="form-control" id="timeend" name="timeend" maxlength="128" required>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-
-
-                            <div class="row">                           
                                 <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="last_name">Teacher</label>
+                                            <label for="last_name">Student Type</label>
                                             <br>
-                                            <select name="adviser" id="adviser" class="form-control select2">
-                                                            <?php
-                                                            foreach($faculty->result_array() as $row)
-                                                            {
-                                                                echo '<option value="'.$row["id"].'">'.$row["name"].'</option>';
-                                                            }
-                                                            ?>
+                                            <select name="etype" id="etype" class="form-control">
+                                                <option selected disabled value=""></option>
+                                                <option value="Regular">Regular</option>
+                                                <option value="Irregular">Irregular</option>
                                             </select>
                                         </div>
                                 </div> 
+
+
                             </div>
 
-                            <div class="row">       
-                                
-                                <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="last_name">Term</label>
-                                            <br>
-                                            <select name="term" id="term" class="form-control">
-                                                <option value=""></option>
-                                                <option value="1st">1st</option>
-                                                <option value="2nd">2nd</option>
-                                            </select>
-                                        </div>
-                                </div> 
+
+                            <div class="row"> 
 
                                 <div class="col-md-6">
                                         <div class="form-group">
@@ -159,12 +117,19 @@
                                 </div> 
                             </div>
 
+                            <a class="btn btn-primary" hidden id="addbtn" name="addbtn" href="<?php echo base_url() ?>">Add Subject</a>
+
+                            <div id="sched_data" class="box-body table-responsive no-padding">
+
+                            </div><!-- /.box-body -->
+
 
                         </div><!-- /.box-body -->
     
                         <div class="box-footer">
                             <input type="submit" class="btn btn-primary" value="Submit" />
-                            <a class="btn btn-primary" href="<?php echo base_url() ?>schedule">Cancel</a>
+                            <a class="btn btn-primary" href="<?php echo base_url() ?>enrollment">Cancel</a>
+
                         </div>
                     </form>
                 </div>
@@ -208,12 +173,9 @@ $(document).ready(function(){
     
 $('#gradelevel').change(function(){
     var gradelevel = $('#gradelevel').val();
-    
-
     if(gradelevel != '')
     {
-
-    if(gradelevel == 'Grade 11' || gradelevel == 'Grade 12')
+        if(gradelevel == 'Grade 11' || gradelevel == 'Grade 12')
     {
 
         document.getElementById('strand').style.visibility = 'visible';
@@ -230,31 +192,33 @@ $('#gradelevel').change(function(){
         }
     });
 
+    $('#section').html('');
+    $('#sched_data').html('');
+
     
 
-    document.getElementById("term").removeAttribute("disabled");
+    document.getElementById("etype").removeAttribute("disabled");
 
-    document.getElementById("term").value = "";
+    document.getElementById("etype").value = "Regular";
 
      
     }
 
     else
     {
-        
         $('#strand').html('');
-        $('#subject').html('');
+        $('#sched_data').html('');
 
         document.getElementById('strand').style.visibility = 'hidden';
         document.getElementById('lblstrand').style.visibility = 'hidden';
 
-        document.getElementById("term").setAttribute("disabled", "disabled");
+        document.getElementById("etype").setAttribute("disabled", "disabled");
 
-        document.getElementById("term").value = "";
+        document.getElementById("etype").value = "Regular";
  
 
         $.ajax({
-        url:"<?php echo base_url(); ?>schedule/getSection",
+        url:"<?php echo base_url(); ?>enrollment/getSection",
         method:"POST",
         data:{gradelevel:gradelevel},
         success:function(data)
@@ -268,13 +232,51 @@ $('#gradelevel').change(function(){
 
     }
 
+
     }
     else
     {
-    $('#subject').html('');
     $('#section').html('');
     }
 
+
+});
+
+$('#section').change(function(){
+    var section = $('#section').val();
+    var gradelevel = $('#gradelevel').val();
+
+    if(section != '')
+    {
+        if(gradelevel == 'Grade 11' || gradelevel == 'Grade 12')
+        {
+        
+
+        }
+
+        else
+        {
+
+            $.ajax({
+        url:"<?php echo base_url(); ?>enrollment/load_sched",
+        method:"POST",
+        data:{section:section},
+        success:function(data)
+        {
+        $('#sched_data').html(data);
+
+        }
+    });
+
+        }
+
+
+   
+    }
+    else
+    {
+    $('#sched_data').html('');
+    }
 
 
 });
@@ -301,22 +303,31 @@ $('#strand').change(function(){
      
     }
 
+    
+
 
 });
 
-$('#section').change(function(){
+document.getElementById('addbtn').style.visibility = 'hidden';
+
+$('#etype').change(function(){
+    var etype = $('#etype').val();
+    var section = $('#section').val();
     var gradelevel = $('#gradelevel').val();
     
-    if(gradelevel != '')
+
+    if(etype == 'Regular')
     {
 
+        document.getElementById('addbtn').style.visibility = 'hidden';
+
         $.ajax({
-        url:"<?php echo base_url(); ?>schedule/getSubject",
+        url:"<?php echo base_url(); ?>enrollment/load_sched",
         method:"POST",
-        data:{gradelevel:gradelevel},
+        data:{section:section},
         success:function(data)
         {
-        $('#subject').html(data);
+        $('#sched_data').html(data);
 
         }
     });
@@ -324,10 +335,29 @@ $('#section').change(function(){
      
     }
 
+    else
+    {
+
+        document.getElementById('addbtn').style.visibility = 'visible';
+
+        $.ajax({
+        url:"<?php echo base_url(); ?>enrollment/load_schedirg",
+        method:"POST",
+        data:{section:section,etype:etype},
+        success:function(data)
+        {
+        $('#sched_data').html(data);
+
+        }
+    });
+
+    }
+   
+
 
 });
 
     
 });
 
-</script>
+    </script>

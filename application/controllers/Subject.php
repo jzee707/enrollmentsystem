@@ -30,7 +30,7 @@ public function jhsubject() {
 
 function addNewJHSubject()
 {
-    $data = array();
+    $data = array();  
 
     $this->load->view('templates/adminheader', $data);
     $this->load->view("admin/addNewJHSubject",  $data);
@@ -54,6 +54,8 @@ function addNewSHSubject()
 {
     $data = array();
 
+    $data['strand'] = $this->auth->getStrandList();
+
     $this->load->view('templates/adminheader', $data);
     $this->load->view("admin/addNewSHSubject",  $data);
     $this->load->view('templates/adminfooter', $data);  
@@ -65,6 +67,7 @@ function editSHSubject($id)
     $data = array();
 
     $data['subjectInfo'] = $this->auth->getSHSubjectInfo($id);
+    $data['strand'] = $this->auth->getStrandList();
 
     $this->load->view('templates/adminheader', $data);
     $this->load->view("admin/editSHSubject",  $data);
@@ -91,13 +94,14 @@ function editSHSubject($id)
             $subject = $this->security->xss_clean($this->input->post('subject'));
             $description = $this->security->xss_clean($this->input->post('description'));
             $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
+            $strand = $this->security->xss_clean($this->input->post('strand'));
             $status = $this->security->xss_clean($this->input->post('status'));
             $timeStamp = date('Y-m-d');
             
                        
             $this->auth->setSubject($subject);  
             $this->auth->setDescription($description);
-            $this->auth->setGradeLevel($gradelevel);
+            $this->auth->setGradeLevel($gradelevel);          
             $this->auth->setStatus($status);
             
             $chk = $this->auth->addJHSubject();
@@ -188,6 +192,7 @@ function editSHSubject($id)
             $subject = $this->security->xss_clean($this->input->post('subject'));
             $description = $this->security->xss_clean($this->input->post('description'));
             $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
+            $strand = $this->security->xss_clean($this->input->post('strand'));
             $status = $this->security->xss_clean($this->input->post('status'));
             $timeStamp = date('Y-m-d');
             
@@ -195,6 +200,7 @@ function editSHSubject($id)
             $this->auth->setSubject($subject);  
             $this->auth->setDescription($description);
             $this->auth->setGradeLevel($gradelevel);
+            $this->auth->setStrand($strand);
             $this->auth->setStatus($status);
             
             $chk = $this->auth->addSHSubject();
@@ -239,11 +245,12 @@ function editSHSubject($id)
                 $subject = $this->security->xss_clean($this->input->post('subject'));
                 $description = $this->security->xss_clean($this->input->post('description'));
                 $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
+                $strand = $this->security->xss_clean($this->input->post('strand'));
                 $status = $this->security->xss_clean($this->input->post('status'));
                 $timeStamp = date('Y-m-d');
               
                 
-                $studentInfo = array('subject'=>$subject,'description'=>$description,'gradelevel'=>$gradelevel,'type'=>'SHS','status'=>$status);
+                $studentInfo = array('subject'=>$subject,'description'=>$description,'gradelevel'=>$gradelevel,'strandid'=>$strand,'type'=>'SHS','status'=>$status);
                 
                 $result = $this->auth->editJHSubject($studentInfo, $id);
                 
