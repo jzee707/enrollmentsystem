@@ -51,6 +51,10 @@ class Admin_model extends CI_Model {
     public function setYearEnd($yearend) {
         $this->_yearend = $yearend;
     }
+    
+    public function setLimit($limit) {
+        $this->_limit = $limit;
+    }
 
     public function setStatus($status) {
         $this->_status = $status;
@@ -163,6 +167,7 @@ class Admin_model extends CI_Model {
             'gradelevel' => $this->_gradelevel,
             'adviserid' => $this->_adviser,
             'strandid' => $this->_strandcode,
+            'limit' => $this->_limit,
             'status' => $this->_status,
         );
 
@@ -225,7 +230,7 @@ class Admin_model extends CI_Model {
 
     function getSectionInfo($id)
     {
-        $this->db->select("s.id,s.section,s.adviserid,s.gradelevel,concat(f.firstname, ' ',f.lastname) as name,s.strandid,st.strandcode,s.status");
+        $this->db->select("s.id,s.section,s.adviserid,s.gradelevel,concat(f.firstname, ' ',f.lastname) as name,s.strandid,st.strandcode,s.level,s.status");
         $this->db->from('tbl_section s');
         $this->db->join('tbl_faculty f','f.id=s.adviserid');
         $this->db->join('tbl_strand st','st.id=s.strandid','left');
@@ -271,7 +276,7 @@ class Admin_model extends CI_Model {
 
     function getTotal()
     {
-        $this->db->select("(SELECT count(id) FROM tbl_student WHERE status='Active') as student,(SELECT count(id) FROM tbl_enrollment WHERE status='Active') as enrolled,(SELECT count(f.id) FROM tbl_faculty f INNER JOIN tbl_account a ON a.id=f.accountid WHERE usertype='Teacher') as teacher,(SELECT count(id) FROM tbl_section) as section,(SELECT count(id) FROM tbl_subject) as subject,(SELECT schoolyear FROM tbl_schoolyear WHERE status='Active') as schoolyear,(SELECT semester FROM tbl_semester WHERE status='Active') as semester");
+        $this->db->select("(SELECT count(id) FROM tbl_student WHERE status='Active') as student,(SELECT count(id) FROM tbl_enrollment WHERE status='Active') as enrolled,(SELECT count(f.id) FROM tbl_faculty f INNER JOIN tbl_account a ON a.id=f.accountid WHERE a.usertype='Teacher' and f.status='Active') as teacher,(SELECT count(id) FROM tbl_section) as section,(SELECT count(id) FROM tbl_subject) as subject,(SELECT schoolyear FROM tbl_schoolyear WHERE status='Active') as schoolyear,(SELECT semester FROM tbl_semester WHERE status='Active') as semester");
         $this->db->from('tbl_student');
         $query = $this->db->get();
         
@@ -280,7 +285,7 @@ class Admin_model extends CI_Model {
     
         function strandListingCount($searchText = '')
     {
-        $this->db->select('id,strandcode,description');
+        $this->db->select('id,strandcode,description,status');
         $this->db->from('tbl_strand');
 
 
@@ -349,7 +354,7 @@ class Admin_model extends CI_Model {
 
     function sectionListingCount($searchText = '')
     {
-        $this->db->select("s.id,s.section,s.gradelevel,concat(f.firstname, ' ',f.lastname) as name,st.strandcode,s.status");
+        $this->db->select("s.id,s.section,s.gradelevel,concat(f.firstname, ' ',f.lastname) as name,st.strandcode,s.level,s.status");
         $this->db->from('tbl_section s');
         $this->db->join('tbl_faculty f','f.id=s.adviserid');
         $this->db->join('tbl_strand st','st.id=s.strandid','left');
@@ -365,7 +370,7 @@ class Admin_model extends CI_Model {
 
     function sectionListing($searchText = '', $page, $segment) {
 
-        $this->db->select("s.id,s.section,s.gradelevel,concat(f.firstname, ' ',f.lastname) as name,st.strandcode,s.status");
+        $this->db->select("s.id,s.section,s.gradelevel,concat(f.firstname, ' ',f.lastname) as name,st.strandcode,s.level,s.status");
         $this->db->from('tbl_section s');
         $this->db->join('tbl_faculty f','f.id=s.adviserid');
         $this->db->join('tbl_strand st','st.id=s.strandid','left');

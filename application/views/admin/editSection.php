@@ -97,6 +97,16 @@
                                 </div> 
                             </div>
 
+                            <div class="row">
+                                <div class="col-md-6">                                
+                                    <div class="form-group">
+                                        <label for="first_name">Limit</label>
+                                        <input type="text" class="form-control" id="limit" name="limit"  value="<?php echo $strandInfo->level;?>" maxlength="128">
+                                    </div>
+                                    
+                                </div>
+                            </div>  
+
 
                         </div><!-- /.box-body -->
     
@@ -177,6 +187,7 @@ $('#gradelevel').change(function(){
         document.getElementById("strand").value= "<?php echo $strandInfo->strandid ?>";
         document.getElementById("gradelevel").value= "<?php echo $strandInfo->gradelevel ?>";
         document.getElementById("adviser").value = "<?php echo $strandInfo->adviserid ?>";
+        document.getElementById("strand").value = "<?php echo $strandInfo->strandid ?>";
 
     
 });

@@ -15,7 +15,7 @@
               <!-- small box -->
               <div class="small-box bg-green">
                 <div class="inner">
-                  <h3>0</h3>
+                  <h3><?php echo $dashboardInfo->subject; ?></h3>
                   <p>Total Subjects</p>
                 </div>
                 <div class="icon">
@@ -29,7 +29,7 @@
               <!-- small box -->
               <div class="small-box bg-blue">
                 <div class="inner">
-                  <h3>0</h3>
+                  <h3><?php echo $dashboardInfo->dropped; ?></h3>
                   <p>Dropped Students</p>
                 </div>
                 <div class="icon">

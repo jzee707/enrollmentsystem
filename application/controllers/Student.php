@@ -511,18 +511,42 @@ public function registration() {
 
         $check = $this->db->get_where('tbl_student', array('lrn' => $lrn), 1);
 
-        $row = $this->auth->getStudentInfo($id);
+        $id = $this->input->post('sid');
 
-        if ($check->num_rows() > 0 && $lrn != $row->lrn) {
+        $row = 0;
 
-            $this->form_validation->set_message('checkLRN', 'This LRN already exists.');
+        if(!empty($id))
+        {
+            $row = $this->auth->getStudentInfo($id);
 
-            return FALSE;
+            if ($check->num_rows() > 0 && $lrn != $row->lrn) {
+
+                $this->form_validation->set_message('checkLRN', 'This LRN already exists.');
+    
+                return FALSE;
+            }
+    
+            else
+            {
+                return TRUE;
+            }
+            
         }
-
+        
         else
         {
-            return TRUE;
+
+            if ($check->num_rows() > 0 ) {
+
+                $this->form_validation->set_message('checkLRN', 'This LRN already exists.');
+    
+                return FALSE;
+            }
+    
+            else
+            {
+                return TRUE;
+            }
         }
      
      
@@ -531,24 +555,47 @@ public function registration() {
        function checkEmail() {
 
         $email = $this->security->xss_clean($this->input->post('email'));
+       
+        $check = $this->db->get_where('tbl_account', array('email' => $email), 1);
+
         $id = $this->input->post('sid');
 
-        $check = $this->db->get_where('tbl_account', array('email' => $email), 1);
-        
-        $row = $this->auth->getStudentInfo($id);
+        $row = 0;
 
-        if ($check->num_rows() > 0 && $email != $row->email) {
+        if(!empty($id))
+        {
+            $row = $this->auth->getStudentInfo($id);
 
-            $this->form_validation->set_message('checkEmail', 'This email already exists.');
+            if ($check->num_rows() > 0 && $email != $row->email) {
 
-            return FALSE;
+                $this->form_validation->set_message('checkEmail', 'This email already exists.');
+    
+                return FALSE;
+            }
+    
+            else
+            {
+                return TRUE;
+            }
+            
         }
-
+        
         else
         {
-            return TRUE;
-        }
-     
+
+            if ($check->num_rows() > 0 ) {
+
+                $this->form_validation->set_message('checkEmail', 'This email already exists.');
+    
+                return FALSE;
+            }
+    
+            else
+            {
+                return TRUE;
+            }
+
+        }   
      
        } 
 

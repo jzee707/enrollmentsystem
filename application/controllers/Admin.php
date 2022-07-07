@@ -489,6 +489,7 @@ function signout()
         $this->form_validation->set_rules('gradelevel', 'Grade Level', 'trim|required');
         $this->form_validation->set_rules('section', 'Section', 'trim|required');
         $this->form_validation->set_rules('adviser', 'Adviser', 'trim|required');
+        $this->form_validation->set_rules('limit', 'Limit', 'trim|required');
 
  
         if ($this->form_validation->run() == FALSE) {
@@ -499,6 +500,7 @@ function signout()
             $section = $this->security->xss_clean($this->input->post('section'));
             $adviser = $this->security->xss_clean($this->input->post('adviser'));
             $strand = $this->security->xss_clean($this->input->post('strand'));
+            $limit = $this->security->xss_clean($this->input->post('limit'));
             $status = 'Active';
             $timeStamp = date('Y-m-d');
             
@@ -507,6 +509,7 @@ function signout()
             $this->auth->setGradelevel($gradelevel);
             $this->auth->setSection($section);
             $this->auth->setAdviser($adviser);
+            $this->auth->setLimit($limit);
             $this->auth->setStatus($status);
             
             $chk = $this->auth->addNewSection();
@@ -534,6 +537,8 @@ function signout()
             $this->form_validation->set_rules('gradelevel', 'Grade Level', 'trim|required');
             $this->form_validation->set_rules('section', 'Section', 'trim|required');
             $this->form_validation->set_rules('adviser', 'Adviser', 'trim|required');
+            $this->form_validation->set_rules('strand', 'Strand', 'trim|required');
+            $this->form_validation->set_rules('limit', 'Limit', 'trim|required');
              
                     
       
@@ -548,12 +553,13 @@ function signout()
                 $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
                 $section = $this->security->xss_clean($this->input->post('section'));
                 $adviser = $this->security->xss_clean($this->input->post('adviser'));
-
+                $limit = $this->security->xss_clean($this->input->post('limit'));
+                $strand = $this->security->xss_clean($this->input->post('strand'));
                 $status = $this->security->xss_clean($this->input->post('status'));
                 $timeStamp = date('Y-m-d');
                 
                 
-                $strandInfo = array('gradelevel'=>$gradelevel,'section'=>$section,'adviserid'=>$adviser,'strandid'=>$strand);
+                $strandInfo = array('gradelevel'=>$gradelevel,'section'=>$section,'adviserid'=>$adviser, 'level'=>$limit,'strandid'=>$strand);
                 
                 $result = $this->auth->editSection($strandInfo, $id);
                 

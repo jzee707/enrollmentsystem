@@ -317,7 +317,7 @@ public function teacherdashboard() {
 
             $data = array();
 
-            $data['dashboardInfo'] = $this->auth->getTotal();
+            $data['dashboardInfo'] = $this->auth->getTotalFaculty();
 
             $this->load->view('templates/teacherheader', $data);
             $this->load->view('teacher/teacher', $data);

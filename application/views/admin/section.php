@@ -57,6 +57,7 @@
                         <th>Adviser</th>
                         <th>Section</th>
                         <th>Strand</th>
+                        <th>Limit</th>
 
                         <th class="text-center"></th>
                     </tr>
@@ -73,6 +74,7 @@
                         <td><?php echo $record->name ?></td>
                         <td><?php echo $record->section ?></td>
                         <td><?php echo $record->strandcode ?></td>
+                        <td><?php echo $record->level ?></td>
 
                         <td class="text-center">
                        
