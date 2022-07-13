@@ -85,7 +85,7 @@ class Enrollment_model extends CI_Model {
     
 
  
-    public function addEnrollment($id,$syid,$timeStamp,$etype,$strand) {
+    public function addEnrollment($id,$syid,$timeStamp,$etype,$strand,$status) {
 
         $data = array(
             'studentid' => $id,
@@ -94,8 +94,16 @@ class Enrollment_model extends CI_Model {
             'strandid' => $strand,
             'date_requested' => $timeStamp,
             'date_enrolled' => $timeStamp,
-            'status' => 'Active',
+            'status' => $status,
         );
+
+        $this->db->insert('tbl_enrollment', $data);
+        if (!empty($this->db->insert_id()) && $this->db->insert_id() > 0) {
+            return TRUE;
+            
+        } else {
+            return FALSE;
+        }
     }
     
     
@@ -103,6 +111,14 @@ class Enrollment_model extends CI_Model {
     {       
         $this->db->where('id', $id);
         $this->db->update('tbl_enrollment', $studentInfo);
+              
+        return TRUE;
+    }
+
+    function deleteEnrollment($id)
+    {       
+        $this->db->where('enrollmentid', $id);
+        $this->db->delete('tbl_enrollsched');
               
         return TRUE;
     }
@@ -164,8 +180,21 @@ class Enrollment_model extends CI_Model {
         
         return $query->row();
     }
+
+    function getEnrollmentInfo($id)
+    {
+        $this->db->select("e.id,e.studentid,e.strandid,e.type,sd.sectionid,e.status,sc.gradelevel");
+        $this->db->from('tbl_enrollment e');
+        $this->db->join('tbl_enrollsched es','es.enrollmentid=e.id');
+        $this->db->join('tbl_schedule sd','sd.id=es.scheduleid');
+        $this->db->join('tbl_section sc','sc.id=sd.sectionid');
+        $this->db->where('e.id', $id);
+        $query = $this->db->get();
+        
+        return $query->row();
+    }
     
-    function enrollmentListingCount($searchText = '',$status,$schoolyear)
+    function enrollmentListingCount($searchText,$status,$schoolyear)
     {
         $this->db->select("e.id,concat(s.firstname, ' ',s.lastname) as student,sc.gradelevel,sc.section,sd.term,sy.schoolyear,s.accountid,st.strandcode,e.date_requested,e.date_enrolled,e.status");
         $this->db->from('tbl_schedule sd');
@@ -182,14 +211,14 @@ class Enrollment_model extends CI_Model {
         $likeCriteria = "(concat(s.firstname, ' ',s.lastname)  LIKE '".$searchText."%'
         AND e.status='".$status."' AND e.syid='".$schoolyear."')";
                             
-       $this->db->where($likeCriteria);
+        $this->db->where($likeCriteria);
+        $this->db->group_by('e.id');
 
         $query = $this->db->get();
-        
         return $query->num_rows();
     }
 
-    function enrollmentListing($searchText = '', $status,$schoolyear,$page, $segment) {
+    function enrollmentListing($searchText, $status,$schoolyear,$page, $segment) {
 
         $this->db->select("e.id,concat(s.firstname, ' ',s.lastname) as student,sc.gradelevel,sc.section,sd.term,st.strandcode,sy.schoolyear,s.accountid,e.date_requested,e.date_enrolled,e.status");
         $this->db->from('tbl_schedule sd');
@@ -201,11 +230,11 @@ class Enrollment_model extends CI_Model {
         $this->db->join('tbl_strand st','st.id=sc.strandid','left');
 
 
-            $likeCriteria = "(concat(s.firstname, ' ',s.lastname)  LIKE '".$searchText."%'
-            AND e.status='".$status."' AND e.syid='".$schoolyear."')";
+        $likeCriteria = "(concat(s.firstname, ' ',s.lastname)  LIKE '".$searchText."%'
+        AND e.status='".$status."' AND e.syid='".$schoolyear."')";
 
-            $this->db->where($likeCriteria);
-            $this->db->group_by('e.id');
+        $this->db->where($likeCriteria);
+        $this->db->group_by('e.id');
       
         $this->db->limit($page, $segment);
         $query = $this->db->get();
@@ -242,21 +271,26 @@ class Enrollment_model extends CI_Model {
 
     function getStrand($gradelevel)
 	{
-        $this->db->select('id,strandcode');
-        $this->db->from('tbl_strand');
-        $this->db->where('status','Active');
+        $this->db->select('s.id,s.strandcode,s.description');
+        $this->db->from('tbl_strand s');
+        $this->db->join('tbl_section sc','sc.strandid=s.id');
+        $this->db->join('tbl_schedule sd','sd.sectionid=sc.id');
+        $this->db->where('sd.status','Active');
+        $this->db->group_by('s.strandcode');
+        $this->db->order_by('strandcode','ASC');
         $query = $this->db->get();
-		
 
+        $output = '<option selected disabled value="">Select Strand</option>';
+		
         foreach($query->result() as $row)
         {
          $output .= '<option value="'.$row->id.'">'.$row->strandcode.'</option>';
         }
         
         return $output;
-
 		
     }
+
 
     function getSubject($gradelevel)
 	{
@@ -283,21 +317,69 @@ class Enrollment_model extends CI_Model {
         $this->db->from('tbl_section sc');
         $this->db->join('tbl_schedule sd','sd.sectionid=sc.id');
 		$this->db->where('sc.gradelevel',$gradelevel);
-        $this->db->group_by('sc.section');
-        $this->db->order_by('sc.section','ASC');
+        $this->db->group_by('sc.id');
+        $this->db->order_by('sc.id','ASC');
         $query = $this->db->get();
 		
-        $output .= '<option value="'.''.'">'.''.'</option>';
+        $output = '<option selected disabled value="">Select Section</option>';
 
         foreach($query->result() as $row)
         {
-         $output .= '<option value="'.$row->id.'">'.$row->section.'</option>';
+         $output .= '<option  value="'.$row->id.'">'.$row->section.'</option>';
         }
         
         return $output;
-
 		
     }
+
+    function getSectionEdit($id)
+	{
+        $this->db->select('sc.id,sc.section');
+        $this->db->from('tbl_section sc');
+        $this->db->join('tbl_schedule sd','sd.sectionid=sc.id');
+        $this->db->join('tbl_enrollsched es','es.scheduleid=.sd.id');
+		$this->db->where('es.enrollmentid',$id);
+        $this->db->group_by('sc.id');
+        $this->db->order_by('sc.id','ASC');
+
+        return $this->db->get();
+		
+    }
+
+    function getSectionSHS($gradelevel,$strand)
+	{
+        $this->db->select('sc.id,sc.section');
+        $this->db->from('tbl_section sc');
+        $this->db->join('tbl_schedule sd','sd.sectionid=sc.id');
+		$this->db->where('sc.gradelevel',$gradelevel);
+        $this->db->where('sc.strandid',$strand);
+        $this->db->group_by('sc.id');
+        $this->db->order_by('sc.id','ASC');
+        $query = $this->db->get();
+		
+        $output = '<option selected disabled value="">Select Section</option>';
+
+        foreach($query->result() as $row)
+        {
+         $output .= '<option disabled selected value="'.$row->id.'">'.$row->section.'</option>';
+        }
+        
+        return $output;
+    }
+
+    function getGradeLevel()
+	{
+        $this->db->select('s.gradelevel');
+        $this->db->from('tbl_schedule sc');
+        $this->db->join('tbl_section s','sc.sectionid=s.id');
+        $this->db->group_by('s.gradelevel');
+        $this->db->order_by('s.gradelevel','ASC');
+  
+        return $this->db->get();
+		
+    }
+
+    
 
     function scheduleListingInfo($section,$syid) {
 

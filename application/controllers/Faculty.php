@@ -236,13 +236,21 @@ function editFaculty($id)
     {
                         
                 $studentInfo = array('id'=>$id,'status'=>'Inactive',);
+
+                $row = $this->db->select("*")->where('id',$id)->get("tbl_faculty")->row();
+                $accountid = $row->accountid;
+
+                $accountInfo = array('id'=>$accountid,'status'=>'Inactive',);
                 
                 $result = $this->auth->editFaculty($studentInfo, $id);
+
+               
 
                 
                 if($result == true)
                 {
-                    $this->session->set_flashdata('success', 'Faculty Data Archived.');                 
+                    $this->session->set_flashdata('success', 'Faculty Data Archived.');      
+                    $this->auth->editAccount($accountInfo, $accountid);           
 
                     redirect('faculty');
                    
@@ -481,19 +489,41 @@ function editFaculty($id)
 
         $row = $this->auth->getFacultyInfo($id);
 
-        if ($check->num_rows() > 0 && $email != $row->email) {
+        if(!empty($id))
+        {
+            $row = $this->auth->getFacultyInfo($id);
 
-            $this->form_validation->set_message('checkEmail', 'This email already exists.');
+            if ($check->num_rows() > 0 && $email != $row->email) {
 
-            return FALSE;
+                $this->form_validation->set_message('checkEmail', 'This email already exists.');
+    
+                return FALSE;
+            }
+    
+            else
+            {
+                return TRUE;
+            }
+
+            
         }
-
+        
         else
         {
-            return TRUE;
+
+            if ($check->num_rows() > 0 ) {
+
+                $this->form_validation->set_message('checkEmail', 'This email already exists.');
+    
+                return FALSE;
+            }
+    
+            else
+            {
+                return TRUE;
+            }
         }
-     
-     
+
        } 
 
     public function getCity(){

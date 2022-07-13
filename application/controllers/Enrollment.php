@@ -20,11 +20,31 @@ function addNewEnrollment()
 {
     $data = array();
 
+
     $data['faculty'] = $this->auth->getAdviser();
     $data['student'] = $this->auth->getStudentList();
+    $data['grade'] = $this->auth->getGradeLevel();
+
 
     $this->load->view('templates/adminheader', $data);
     $this->load->view("admin/addNewEnrollment",  $data);
+    $this->load->view('templates/adminfooter', $data);  
+    
+}
+
+function editEnrollment($id)
+{
+    $data = array();
+
+    $data['enrollmentInfo'] = $this->auth->getEnrollmentInfo($id);
+    $data['section'] = $this->auth->getSectionEdit($id);
+    $data['faculty'] = $this->auth->getAdviser();
+    $data['student'] = $this->auth->getStudentList();
+    $data['grade'] = $this->auth->getGradeLevel();
+
+
+    $this->load->view('templates/adminheader', $data);
+    $this->load->view("admin/editEnrollment",  $data);
     $this->load->view('templates/adminfooter', $data);  
     
 }
@@ -62,11 +82,30 @@ function editSchedule($id)
          $id = $this->security->xss_clean($this->input->post('student'));
          $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
          $section = $this->security->xss_clean($this->input->post('section'));
-         $etype = $this->security->xss_clean($this->input->post('etype'));
+         $etype = $this->security->xss_clean($this->input->post('stype'));
          $strand = $this->security->xss_clean($this->input->post('strand'));
+         $status = $this->security->xss_clean($this->input->post('status'));
+         $schedid = $this->security->xss_clean($this->input->post('schedid'));
          $timeStamp = date('Y-m-d');
 
-         $schoolyear =0;
+         $comorbidity ="";
+
+         if ($schedid!="")
+        {
+            $comorbidity = substr(implode(', ', $schedid), 0);
+
+        }
+
+        else
+        {
+            $comorbidity = "";
+            
+        }
+
+         echo $comorbidity;
+
+
+         /* $schoolyear = 0;
 
          $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
          if (!empty($row->id))
@@ -74,7 +113,7 @@ function editSchedule($id)
              $schoolyear = $row->id;
          }           
          
-         $chk = $this->auth->addEnrollment($id,$schoolyear,$timeStamp,$etype,$strand);
+         $chk = $this->auth->addEnrollment($id,$schoolyear,$timeStamp,$etype,$strand,$status);
 
          $enrollid = $this->db->select("*")->limit(1)->order_by('id',"DESC")->get("tbl_enrollment")->row();
 
@@ -96,10 +135,76 @@ function editSchedule($id)
              }
 
          redirect('enrollment');
+          */
 
      }
      
  }
+
+
+ function editOldEnrollment()
+    {
+        $sid = $this->input->post('sid');
+               
+        $this->form_validation->set_rules('student', 'Student', 'trim|required');
+        $this->form_validation->set_rules('gradelevel', 'Grade Level', 'trim|required');
+        $this->form_validation->set_rules('section', 'Section', 'trim|required');
+
+ 
+        if ($this->form_validation->run() == FALSE) {
+            $this->editEnrollment($id);
+        } else {
+            
+            $id = $this->security->xss_clean($this->input->post('student'));
+            $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
+            $section = $this->security->xss_clean($this->input->post('section'));
+            $etype = $this->security->xss_clean($this->input->post('stype'));
+            $strand = $this->security->xss_clean($this->input->post('strand'));
+            $status = $this->security->xss_clean($this->input->post('status'));
+            $timeStamp = date('Y-m-d');
+
+            $schoolyear = 0;
+
+            $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+            if (!empty($row->id))
+            {
+                $schoolyear = $row->id;
+            }
+
+                                            
+            $enrollmentInfo = array('studentid'=>$id,'type'=>$etype,'strandid'=>$strand,'status'=>$status);
+
+            $this->auth->deleteEnrollment($sid);
+                    
+            $result = $this->auth->editEnrollment($enrollmentInfo, $sid);
+
+            $schedule = $this->auth->scheduleListingInfo($section, $schoolyear);
+
+            foreach($schedule as $record)
+            {
+                $this->auth->addSchedule($sid,$record->id);
+            }
+        
+            if($result == true)
+            {
+                $this->session->set_flashdata('success', 'Enrollment Data Updated.');
+
+                redirect('enrollment');
+            }
+
+            else
+            {
+                $this->session->set_flashdata('error', 'User updation failed');
+
+                
+        
+            }
+
+          
+
+        }
+        
+    }
 
  function archiveenrollment($id)
  {
@@ -227,7 +332,7 @@ function editSchedule($id)
            
         $count = $this->auth->enrollmentListingCount($searchText,$status,$schoolyear);
 
-        $returns = $this->paginationCompress ( "enrollment/enrollmentListing/", $count, 10 );
+        $returns = $this->paginationCompress ( "enrollment/preenrollmentListing/", $count, 10 );
         
         $data['userRecords'] = $this->auth->enrollmentListing($searchText, $status,$schoolyear,$returns["page"], $returns["segment"]);
         
@@ -333,6 +438,24 @@ function editSchedule($id)
    
        }
 
+       public function getSectionSHS(){
+        if($this->input->post('gradelevel'))
+           {
+   
+           echo $this->auth->getSectionSHS($this->input->post('gradelevel'),$this->input->post('strand'));
+           }
+   
+       }
+
+       public function getStrand(){
+        if($this->input->post('gradelevel'))
+           {
+   
+           echo $this->auth->getStrand($this->input->post('gradelevel'));
+           }
+   
+       }
+
        function load_sched()
        {
         $schoolyear =0;
@@ -428,7 +551,7 @@ function editSchedule($id)
                {
                    $output .= '
                    <tr>
-                           <td>'.$record->id.'</td>
+                           <td><input type="hidden" name="schedid[]" value="'. $record->id.'" >'.$record->id.'</td>
                            <td>'.$record->subject.'</td>
                            <td>'.$record->room.'</td>
                            <td>'.$record->day.'</td>

@@ -59,6 +59,7 @@
                         <th>Gender</th>
                         <th>Address</th>
                         <th>Contact No.</th>
+                        <th>Email</th>
                         <th>User Type</th>
                         <th>Status</th>
                         <th class="text-center"></th>
@@ -78,6 +79,7 @@
                         <td><?php echo $record->gender ?></td>
                         <td><?php echo $record->address ?></td>
                         <td><?php echo $record->contactno ?></td>
+                        <td><?php echo $record->email ?></td>
                         <td><?php echo $record->usertype ?></td>
                         <td><?php echo $record->status ?></td>
                         <td class="text-center">

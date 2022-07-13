@@ -167,7 +167,7 @@ class Admin_model extends CI_Model {
             'gradelevel' => $this->_gradelevel,
             'adviserid' => $this->_adviser,
             'strandid' => $this->_strandcode,
-            'limit' => $this->_limit,
+            'level' => $this->_limit,
             'status' => $this->_status,
         );
 
@@ -352,7 +352,7 @@ class Admin_model extends CI_Model {
     }
    
 
-    function sectionListingCount($searchText = '')
+    function sectionListingCount($searchText)
     {
         $this->db->select("s.id,s.section,s.gradelevel,concat(f.firstname, ' ',f.lastname) as name,st.strandcode,s.level,s.status");
         $this->db->from('tbl_section s');
@@ -368,16 +368,19 @@ class Admin_model extends CI_Model {
         return $query->num_rows();
     }
 
-    function sectionListing($searchText = '', $page, $segment) {
+    function sectionListing($searchText, $page, $segment) {
 
         $this->db->select("s.id,s.section,s.gradelevel,concat(f.firstname, ' ',f.lastname) as name,st.strandcode,s.level,s.status");
         $this->db->from('tbl_section s');
         $this->db->join('tbl_faculty f','f.id=s.adviserid');
         $this->db->join('tbl_strand st','st.id=s.strandid','left');
 
-            $likeCriteria = "(s.section LIKE '".$searchText."%' AND s.status='".'Active'."' OR s.gradelevel LIKE '".$searchText."%' AND s.status='".'Active'."' OR concat(f.firstname, ' ',f.lastname) LIKE '".$searchText."%' AND s.status='".'Active'."')";
+        $likeCriteria = "(s.section LIKE '".$searchText."%' AND s.status='".'Active'."' 
+        OR s.gradelevel LIKE '".$searchText."%' AND s.status='".'Active'."' 
+        OR concat(f.firstname, ' ',f.lastname) LIKE '".$searchText."%' AND s.status='".'Active'."'
+        OR st.strandcode LIKE '".$searchText."%' AND s.status='".'Active'."')";
 
-            $this->db->where($likeCriteria);
+        $this->db->where($likeCriteria);
            
         $this->db->limit($page, $segment);
         $query = $this->db->get();

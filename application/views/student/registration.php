@@ -135,7 +135,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="last_name">LRN</label>
-                                        <input type="text" class="form-control" id="lrn" name="lrn" maxlength="128" required>
+                                        <input type="number" class="form-control" id="lrn" name="lrn" maxlength="128" required>
                                     </div>
                                 </div>
                             </div>

@@ -155,6 +155,9 @@ function preenrollment()
 
     else
     {
+
+        $data['grade'] = $this->auth->getGradeLevel();
+
         $this->load->view('templates/userheader', $data);
         $this->load->view("student/preenrollment",  $data);
         $this->load->view('templates/userfooter', $data); 
@@ -312,12 +315,13 @@ public function teacherdashboard() {
     else
     {
         $usertype = $this->session->userdata('usertype');
+        $id = $this->session->userdata('id');
 
         if($usertype == "Teacher"){
 
             $data = array();
 
-            $data['dashboardInfo'] = $this->auth->getTotalFaculty();
+            $data['dashboardInfo'] = $this->auth->getTotalFaculty($id);
 
             $this->load->view('templates/teacherheader', $data);
             $this->load->view('teacher/teacher', $data);
@@ -351,22 +355,22 @@ function signout()
     {
                
         $this->form_validation->set_rules('gradelevel', 'Grade Level', 'trim|required');
-        $this->form_validation->set_rules('section', 'Section', 'trim|required');
+        $this->form_validation->set_rules('sectionid', 'Section', 'trim|required');
 
         $row = $this->db->select("*")->where('accountid',$this->session->userdata('id'))->get("tbl_student")->row();
         $id = $row->id;
  
         if ($this->form_validation->run() == FALSE) {
-            $this->addNewStrand();
+            $this->preenrollment();
         } else {
             
             $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
-            $section = $this->security->xss_clean($this->input->post('section'));
-            $etype = $this->security->xss_clean($this->input->post('etype'));
+            $section = $this->security->xss_clean($this->input->post('sectionid'));
+            $etype = $this->security->xss_clean($this->input->post('stype'));
             $strand = $this->security->xss_clean($this->input->post('strand'));
             $timeStamp = date('Y-m-d');
 
-            $schoolyear =0;
+            $schoolyear = 0;
 
             $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
             if (!empty($row->id))
@@ -382,23 +386,45 @@ function signout()
 
             foreach($schedule as $record)
             {
-                $this->auth->addSchedule($enrollid->id,$record->id);
+
+             $this->auth->addSchedule($enrollid->id,$record->id);
+
             }
 
 
             if($chk > 0)
-                {
-                    $this->session->set_flashdata('success', 'Request Added Successfully');
-                }
-                else
-                {
-                    $this->session->set_flashdata('error', 'Strand creation failed');
-                }
+            {
+                $this->session->set_flashdata('success', 'Request Added Successfully');
+            }
+            else
+            {
+                $this->session->set_flashdata('error', 'Strand creation failed');
+            }
 
             redirect('preenrollment');
 
         }
         
+    }
+
+    public function getSection(){
+
+        $query = $this->db->query("SELECT sc.id,sc.section 
+        FROM tbl_section sc INNER JOIN tbl_schedule sd ON sd.sectionid=sc.id WHERE sc.gradelevel='".$this->input->post('gradelevel')."' GROUP BY sc.section ORDER BY sc.section ASC LIMIT 1");
+
+        $data['record'] = $query->result();
+    
+        echo json_encode($data);
+   
+    }
+
+       public function getSectionStudent(){
+        if($this->input->post('gradelevel'))
+        {
+
+        echo $this->auth->getSectionStudent($this->input->post('gradelevel'));
+        }
+
     }
 
     public function getCity(){
@@ -427,6 +453,67 @@ function signout()
         echo $this->auth->getStrand($this->input->post('gradelevel'));
         }
            
+       }
+
+       function load_sched()
+       {
+
+        $schoolyear = 0;
+
+        $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+        if (!empty($row->id))
+        {
+            $schoolyear = $row->id;
+        }  
+
+        $rowsection = $this->db->select("sc.id,sc.section")->limit(1)->order_by("sc.section","ASC")->group_by("sc.section")->where('sc.gradelevel',$this->input->post('gradelevel'))->join("tbl_schedule sd","sd.sectionid=sc.id")->get("tbl_section sc")->row();
+
+           $result = $this->auth->getScheduleList($rowsection->id,$schoolyear);
+           $output = '
+           
+           <h3 align="center">Schedule List</h3>	
+           <table class="table table-hover">
+           <thead>
+               <tr>
+                    <th>ID</th>                     
+                    <th>Subject</th>
+                    <th>Room</th>
+                    <th>Day</th>
+                    <th>Time</th>
+                    <th>Teacher</th>  
+                       
+               </tr>
+           </thead>
+           <tbody>
+           ';
+           if(!empty($result))
+           {
+               foreach($result as $record)
+               {
+                   $output .= '
+                   <tr>
+                           <td>'.$record->id.'</td>
+                           <td>'.$record->subject.'</td>
+                           <td>'.$record->room.'</td>
+                           <td>'.$record->day.'</td>
+                           <td>'.date("h:i A", strtotime($record->timefrom)) . ' - ' . date("h:i A", strtotime($record->timeto)).'</td>
+                           <td>'.$record->name.'</td>
+                           
+
+                           ';
+   
+                               $output .= '
+                       
+                       </tr>
+                       ';
+                       
+                   }
+               }
+                   $output .= '
+   
+                       </tbody>
+                       </table>';
+           echo $output;
        }
 
        function checkEmail() {

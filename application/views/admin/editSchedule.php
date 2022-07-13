@@ -111,7 +111,7 @@
                                 <div class="col-md-6">                                
                                     <div class="form-group">
                                         <label for="first_name">Day (M-T-W-TH-F)</label>
-                                        <input type="text" class="form-control" id="day" name="day" maxlength="128" value="<?php echo $scheduleInfo->day;?>" required>
+                                        <input type="text" class="form-control" id="day" name="day" maxlength="128" value="<?php echo $scheduleInfo->day;?>" required style="text-transform:uppercase">
                                     </div>
                                     
                                 </div>

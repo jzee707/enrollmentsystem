@@ -238,8 +238,64 @@ class Auth_model extends CI_Model {
         return $query->row();
     }
 
+    function getGradeLevel()
+	{
+        $this->db->select('s.gradelevel');
+        $this->db->from('tbl_schedule sc');
+        $this->db->join('tbl_section s','sc.sectionid=s.id');
+        $this->db->group_by('s.gradelevel');
+        $this->db->order_by('s.gradelevel','ASC');
+  
+        return $this->db->get();
+		
+    }
 
-   
+    function getSectionStudent($gradelevel)
+	{
+        $this->db->select('sc.id,sc.section');
+        $this->db->from('tbl_section sc');
+        $this->db->join('tbl_schedule sd','sd.sectionid=sc.id');
+		$this->db->where('sc.gradelevel',$gradelevel);
+        $this->db->group_by('sc.id');
+        $this->db->order_by('sc.id','ASC');
+        $this->db->limit(1);
+  
+        $query = $this->db->get();
+		
+        $output = '<option disabled value="">Select Section</option>';
+
+        foreach($query->result() as $row)
+        {
+         $output .= '<option selected value="'.$row->id.'">'.$row->section.'</option>';
+        }
+        
+        return $output;
+		
+    }
+
+    function getSection($gradelevel)
+	{
+        $this->db->select('sc.id,sc.section');
+        $this->db->from('tbl_section sc');
+        $this->db->join('tbl_schedule sd','sd.sectionid=sc.id');
+		$this->db->where('sc.gradelevel',$gradelevel);
+        $this->db->group_by('sc.id');
+        $this->db->order_by('sc.id','ASC');
+        $this->db->limit(1);
+        $query = $this->db->get();
+		
+        $output = '<option selected disabled value="">Select Section</option>';
+
+        foreach($query->result() as $row)
+        {
+         $output .= '<option  value="'.$row->id.'">'.$row->section.'</option>';
+        }
+        
+        return $output;
+		
+    }
+
+
     function getEnrollmentInfo($id,$schoolyear)
     {
         $this->db->select("id,studentid,syid,status");
@@ -249,6 +305,23 @@ class Auth_model extends CI_Model {
         $query = $this->db->get();
         
         return $query->row();
+    }
+
+    function getScheduleList($section,$schoolyear) {
+
+        $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
+        $this->db->from('tbl_schedule sd');
+        $this->db->join('tbl_faculty a','a.id=sd.adviserid');
+        $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
+        $this->db->join('tbl_section sc','sc.id=sd.sectionid');
+        $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
+        $this->db->where('sd.sectionid',$section);
+        $this->db->where('sd.syid',$schoolyear);
+        
+        $query = $this->db->get();
+        
+        $result = $query->result();        
+        return $result;
     }
     
     
@@ -348,18 +421,18 @@ class Auth_model extends CI_Model {
         return $result;
     }
 
-    function getTotal()
+    function getTotal($id)
     {
-        $this->db->select("(SELECT count(id) FROM tbl_student WHERE status='Active') as student,(SELECT count(id) FROM tbl_enrollment WHERE status='Active') as enrolled,(SELECT count(f.id) FROM tbl_faculty f INNER JOIN tbl_account a ON a.id=f.accountid WHERE usertype='Teacher') as teacher,(SELECT count(id) FROM tbl_section) as section,(SELECT count(id) FROM tbl_subject) as subject,(SELECT schoolyear FROM tbl_schoolyear WHERE status='Active') as schoolyear,(SELECT semester FROM tbl_semester WHERE status='Active') as semester");
+        $this->db->select("(SELECT count(es.id) FROM tbl_enrollment e INNER JOIN tbl_enrollsched es ON es.enrollmentid=e.id INNER JOIN tbl_student s ON s.id=e.studentid INNER JOIN tbl_schedule sc ON sc.id=es.scheduleid WHERE s.accountid='" .$id ."' AND sc.status='Active' AND e.syid=(SELECT id FROM tbl_schoolyear WHERE status='Active') AND es.status='Active') as subject,(SELECT count(es.id) FROM tbl_enrollment e INNER JOIN tbl_enrollsched es ON es.enrollmentid=e.id INNER JOIN tbl_student s ON s.id=e.studentid INNER JOIN tbl_schedule sc ON sc.id=es.scheduleid WHERE s.accountid='" .$id ."' AND sc.status='Active' AND e.syid=(SELECT id FROM tbl_schoolyear WHERE status='Active') AND es.status='Dropped') as dropped,(SELECT schoolyear FROM tbl_schoolyear WHERE status='Active') as schoolyear,(SELECT semester FROM tbl_semester WHERE status='Active') as semester");
         $this->db->from('tbl_student');
         $query = $this->db->get();
         
         return $query->row();
     }
 
-    function getTotalFaculty()
+    function getTotalFaculty($id)
     {
-        $this->db->select("(SELECT count(es.id) from tbl_enrollsched es INNER JOIN tbl_enrollment e ON e.id=es.enrollmentid INNER JOIN tbl_schoolyear sy ON sy.id=e.syid WHERE es.status='Active' AND sy.status='Active') as subject,(SELECT count(es.id) from tbl_enrollsched es INNER JOIN tbl_enrollment e ON e.id=es.enrollmentid INNER JOIN tbl_schoolyear sy ON sy.id=e.syid WHERE es.status='Dropped' AND sy.status='Active') as dropped,(SELECT schoolyear FROM tbl_schoolyear WHERE status='Active') as schoolyear,(SELECT semester FROM tbl_semester WHERE status='Active') as semester");
+        $this->db->select("(SELECT count(s.id) from tbl_schedule s INNER JOIN tbl_schoolyear sy ON sy.id=s.syid WHERE s.status='Active' AND sy.status='Active' AND s.adviserid='" . $id ."') as subject,(SELECT count(es.id) from tbl_enrollsched es INNER JOIN tbl_enrollment e ON e.id=es.enrollmentid INNER JOIN tbl_schoolyear sy ON sy.id=e.syid INNER JOIN tbl_schedule s ON s.id=es.scheduleid WHERE es.status='Dropped' AND sy.status='Active' AND s.adviserid='" . $id ."') as dropped,(SELECT schoolyear FROM tbl_schoolyear WHERE status='Active') as schoolyear,(SELECT semester FROM tbl_semester WHERE status='Active') as semester");
         $this->db->from('tbl_student');
         $query = $this->db->get();
         

@@ -470,10 +470,7 @@ public function registration() {
 
         $count = $this->auth->studentsListingCount($searchText,$status);
 
-        $returns = $this->paginationCompress ("student/studentListing/", $count, 10);
-        
-        $data['userRecords'] = $this->auth->studentListing($searchText, $returns["page"], $returns["segment"],$status);
-        
+        $returns = $this->paginationCompress ("student/prestudentListing/", $count, 10);
         
         $data['userRecords'] = $this->auth->studentListing($searchText, $returns["page"], $returns["segment"],$status);
         

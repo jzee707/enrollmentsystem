@@ -398,6 +398,17 @@ class Schedule_model extends CI_Model {
 		
     }
 
+    function getGradeLevel()
+	{
+        $this->db->select('s.gradelevel');
+        $this->db->from('tbl_section s');
+        $this->db->group_by('s.gradelevel');
+        $this->db->order_by('s.gradelevel','ASC');
+ 
+        return $this->db->get();
+		
+    }
+
     function getSectionSHS($gradelevel,$strand)
 	{
         $this->db->select('id,section');

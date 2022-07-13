@@ -81,7 +81,7 @@ function editSHSubject($id)
  function addJHSubject()
     {
                
-        $this->form_validation->set_rules('subject', 'Subject', 'trim|required');
+        $this->form_validation->set_rules('subject', 'Subject', 'trim|required|callback_checkSubject');
         $this->form_validation->set_rules('description', 'Description', 'trim|required');
         $this->form_validation->set_rules('gradelevel', 'Grade Level', 'trim|required');
         $this->form_validation->set_rules('status', 'Status', 'trim|required');
@@ -127,7 +127,7 @@ function editSHSubject($id)
             
             $id = $this->input->post('sid');
                     
-            $this->form_validation->set_rules('subject', 'Subject', 'trim|required');
+            $this->form_validation->set_rules('subject', 'Subject', 'trim|required|callback_checkSubjectEdit');
             $this->form_validation->set_rules('description', 'Description', 'trim|required');
             $this->form_validation->set_rules('gradelevel', 'Grade Level', 'trim|required');
             $this->form_validation->set_rules('status', 'Status', 'trim|required');
@@ -179,7 +179,7 @@ function editSHSubject($id)
     function addSHSubject()
     {
                
-        $this->form_validation->set_rules('subject', 'Subject', 'trim|required');
+        $this->form_validation->set_rules('subject', 'Subject', 'trim|required|callback_checkSubject');
         $this->form_validation->set_rules('description', 'Description', 'trim|required');
         $this->form_validation->set_rules('gradelevel', 'Grade Level', 'trim|required');
         $this->form_validation->set_rules('status', 'Status', 'trim|required');
@@ -226,7 +226,7 @@ function editSHSubject($id)
             
             $id = $this->input->post('sid');
                     
-            $this->form_validation->set_rules('subject', 'Subject', 'trim|required');
+            $this->form_validation->set_rules('subject', 'Subject', 'trim|required|callback_checkSubjectEdit');
             $this->form_validation->set_rules('description', 'Description', 'trim|required');
             $this->form_validation->set_rules('gradelevel', 'Grade Level', 'trim|required');
             $this->form_validation->set_rules('status', 'Status', 'trim|required');
@@ -329,6 +329,79 @@ function editSHSubject($id)
            }
    
        }
+
+       function checkSubject() {
+
+        $subject = $this->security->xss_clean($this->input->post('subject'));
+        $description = $this->security->xss_clean($this->input->post('description'));
+        $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
+
+
+        $check = $this->db->get_where('tbl_subject', array('subject' => $subject,'description' => $description,'gradelevel' => $gradelevel), 1);
+
+        if ($check->num_rows() > 0) {
+
+            $this->form_validation->set_message('checkSubject', 'This Subject already exists.');
+
+            return FALSE;
+        }
+
+        else
+        {
+            return TRUE;
+        }
+     
+     
+       } 
+
+       function checkSubjectEdit() {
+
+        $subject = $this->security->xss_clean($this->input->post('subject'));
+        $description = $this->security->xss_clean($this->input->post('description'));
+        $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
+       
+        $check = $this->db->get_where('tbl_subject', array('subject' => $subject,'description' => $description,'gradelevel' => $gradelevel), 1);
+
+        $id = $this->input->post('sid');
+
+        $row = 0;
+
+        if(!empty($id))
+        {
+            $row = $this->auth->getJHSubjectInfo($id);
+
+            if ($check->num_rows() > 0 && $subject != $row->subject && $description != $row->description) {
+
+                $this->form_validation->set_message('checkSubjectEdit', 'This Subject already exists.');
+    
+                return FALSE;
+            }
+    
+            else
+            {
+                return TRUE;
+            }
+            
+        }
+        
+        else
+        {
+
+            if ($check->num_rows() > 0 ) {
+
+                $this->form_validation->set_message('checkSubjectEdit', 'This Subject already exists.');
+    
+                return FALSE;
+            }
+    
+            else
+            {
+                return TRUE;
+            }
+
+        }   
+     
+       } 
 
        
 

@@ -33,6 +33,7 @@
                                             <label for="last_name">Student</label>
                                             <br>
                                             <select name="student" id="student" class="form-control select2">
+                                            <option selected disabled value="">Select Student</option>
                                                             <?php
                                                             foreach($student->result_array() as $row)
                                                             {
@@ -50,13 +51,13 @@
                                             <label for="last_name">Grade Level</label>
                                             <br>
                                             <select name="gradelevel" id="gradelevel" class="form-control">
-                                                <option selected disabled value=""></option>
-                                                <option value="Grade 7">Grade 7</option>
-                                                <option value="Grade 8">Grade 8</option>
-                                                <option value="Grade 9">Grade 9</option>
-                                                <option value="Grade 10">Grade 10</option>
-                                                <option value="Grade 11">Grade 11</option>
-                                                <option value="Grade 12">Grade 12</option>
+                                                <option selected disabled value="">Select Grade Level</option>
+                                                <?php
+                                                            foreach($grade->result_array() as $row)
+                                                            {
+                                                                echo '<option value="'.$row["gradelevel"].'">'.$row["gradelevel"].'</option>';
+                                                            }
+                                                            ?>
                                             </select>
                                         </div>
                                 </div> 
@@ -81,7 +82,7 @@
                                             <label for="last_name">Section</label>
                                             <br>
                                             <select name="section" id="section" class="form-control">
-                                            <option disabled value=""></option>
+                                            <option disabled value="">Select Section</option>
      
                                             </select>
                                         </div>
@@ -90,9 +91,10 @@
                                 <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="last_name">Student Type</label>
+                                            <input type="hidden" class="form-control" id="stype" name="stype" >
                                             <br>
                                             <select name="etype" id="etype" class="form-control">
-                                                <option selected disabled value=""></option>
+                                                <option selected disabled value="">Select Type</option>
                                                 <option value="Regular">Regular</option>
                                                 <option value="Irregular">Irregular</option>
                                             </select>
@@ -117,7 +119,13 @@
                                 </div> 
                             </div>
 
-                            <a class="btn btn-primary" hidden id="addbtn" name="addbtn" href="<?php echo base_url() ?>">Add Subject</a>
+                            <div class="col-xs-152  text-right">     
+                            
+                                <a class="btn btn-primary" hidden id="addbtn" name="addbtn" href="<?php echo base_url() ?>">Add Subject</a>
+                                
+                            </div>
+
+                           
 
                             <div id="sched_data" class="box-body table-responsive no-padding">
 
@@ -193,13 +201,15 @@ $('#gradelevel').change(function(){
     });
 
     $('#section').html('');
+    $('#subject').html('');
     $('#sched_data').html('');
 
     
 
     document.getElementById("etype").removeAttribute("disabled");
+    document.getElementById("etype").value = "";
+    document.getElementById("stype").value = "";
 
-    document.getElementById("etype").value = "Regular";
 
      
     }
@@ -207,14 +217,16 @@ $('#gradelevel').change(function(){
     else
     {
         $('#strand').html('');
+        $('#subject').html('');
         $('#sched_data').html('');
 
         document.getElementById('strand').style.visibility = 'hidden';
         document.getElementById('lblstrand').style.visibility = 'hidden';
 
         document.getElementById("etype").setAttribute("disabled", "disabled");
-
         document.getElementById("etype").value = "Regular";
+        document.getElementById("stype").value = "Regular";
+
  
 
         $.ajax({
@@ -308,6 +320,12 @@ $('#strand').change(function(){
 
 });
 
+$('#etype').change(function(){
+    var etype = $('#etype').val();   
+
+    document.getElementById("stype").value = etype;
+});
+
 document.getElementById('addbtn').style.visibility = 'hidden';
 
 $('#etype').change(function(){
@@ -331,8 +349,7 @@ $('#etype').change(function(){
 
         }
     });
-
-     
+    
     }
 
     else
@@ -352,8 +369,6 @@ $('#etype').change(function(){
     });
 
     }
-   
-
 
 });
 

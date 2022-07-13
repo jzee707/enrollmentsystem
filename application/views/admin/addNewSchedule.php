@@ -33,13 +33,13 @@
                                             <label for="last_name">Grade Level</label>
                                             <br>
                                             <select name="gradelevel" id="gradelevel" class="form-control">
-                                            <option selected disabled value=""></option>
-                                                <option value="Grade 7">Grade 7</option>
-                                                <option value="Grade 8">Grade 8</option>
-                                                <option value="Grade 9">Grade 9</option>
-                                                <option value="Grade 10">Grade 10</option>
-                                                <option value="Grade 11">Grade 11</option>
-                                                <option value="Grade 12">Grade 12</option>
+                                            <option disabled selected value="">Select Grade Level</option>
+                                            <?php
+                                                            foreach($grade->result_array() as $row)
+                                                            {
+                                                                echo '<option value="'.$row["gradelevel"].'">'.$row["gradelevel"].'</option>';
+                                                            }
+                                                            ?>
                                             </select>
                                         </div>
                                 </div> 
@@ -91,7 +91,7 @@
                                 <div class="col-md-6">                                
                                     <div class="form-group">
                                         <label for="first_name">Day (M-T-W-TH-F)</label>
-                                        <input type="text" class="form-control" id="day" name="day" maxlength="128" required>
+                                        <input type="text" class="form-control" id="day" name="day" maxlength="128" required style="text-transform:uppercase">
                                     </div>
                                     
                                 </div>
@@ -230,10 +230,10 @@ $('#gradelevel').change(function(){
         }
     });
 
-    
+    $('#section').html('');
+    $('#subject').html('');
 
     document.getElementById("term").removeAttribute("disabled");
-
     document.getElementById("term").value = "";
 
      
@@ -282,6 +282,8 @@ $('#gradelevel').change(function(){
 $('#strand').change(function(){
     var gradelevel = $('#gradelevel').val();
     var strand = $('#strand').val();
+
+    $('#subject').html('');
     
 
     if(strand != '')

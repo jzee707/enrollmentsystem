@@ -21,6 +21,7 @@ function addNewSchedule()
     $data = array();
 
     $data['faculty'] = $this->auth->getAdviser();
+    $data['grade'] = $this->auth->getGradeLevel();
 
     $this->load->view('templates/adminheader', $data);
     $this->load->view("admin/addNewSchedule",  $data);
@@ -70,7 +71,7 @@ function editSchedule($id)
             $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
             $adviser = $this->security->xss_clean($this->input->post('adviser'));
             $room = $this->security->xss_clean($this->input->post('room'));
-            $day = $this->security->xss_clean($this->input->post('day'));
+            $day = strtoupper($this->security->xss_clean($this->input->post('day')));
             $timestart = $this->security->xss_clean($this->input->post('timestart'));
             $term = $this->security->xss_clean($this->input->post('term'));
             $timeend = $this->security->xss_clean($this->input->post('timeend'));
@@ -141,7 +142,7 @@ function editSchedule($id)
             $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
             $adviser = $this->security->xss_clean($this->input->post('adviser'));
             $room = $this->security->xss_clean($this->input->post('room'));
-            $day = $this->security->xss_clean($this->input->post('day'));
+            $day = strtoupper($this->security->xss_clean($this->input->post('day')));
             $timestart = $this->security->xss_clean($this->input->post('timestart'));
             $term = $this->security->xss_clean($this->input->post('term'));
             $timeend = $this->security->xss_clean($this->input->post('timeend'));

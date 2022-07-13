@@ -32,13 +32,13 @@
                                             <label for="last_name">Grade Level</label>
                                             <br>
                                             <select name="gradelevel" id="gradelevel" class="form-control">
-                                                <option selected disabled value=""></option>
-                                                <option value="Grade 7">Grade 7</option>
-                                                <option value="Grade 8">Grade 8</option>
-                                                <option value="Grade 9">Grade 9</option>
-                                                <option value="Grade 10">Grade 10</option>
-                                                <option value="Grade 11">Grade 11</option>
-                                                <option value="Grade 12">Grade 12</option>
+                                            <option selected disabled value="">Select Grade Level</option>
+                                                <?php
+                                                            foreach($grade->result_array() as $row)
+                                                            {
+                                                                echo '<option value="'.$row["gradelevel"].'">'.$row["gradelevel"].'</option>';
+                                                            }
+                                                            ?>
                                             </select>
                                         </div>
                                 </div> 
@@ -61,20 +61,22 @@
                                     
                                         <div class="form-group">
                                             <label for="last_name">Section</label>
+                                            <input type="hidden" class="form-control" id="sectionid" name="sectionid" maxlength="128" required>
                                             <br>
                                             <select name="section" id="section" class="form-control">
-                                            <option disabled value=""></option>
-     
-                                            </select>
+                                            <option disabled value="">Select Section</option>
+                                            </select>       
+                                           
                                         </div>
                                 </div>
 
                                 <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="last_name">Grade Level</label>
+                                            <label for="last_name">Student Type</label>
+                                            <input type="hidden" class="form-control" id="stype" name="stype" >
                                             <br>
                                             <select name="etype" id="etype" class="form-control">
-                                                <option selected disabled value=""></option>
+                                                <option selected disabled value="">Select Type</option>
                                                 <option value="Regular">Regular</option>
                                                 <option value="Irregular">Irregular</option>
                                             </select>
@@ -138,96 +140,105 @@ $(document).ready(function(){
     
 $('#gradelevel').change(function(){
     var gradelevel = $('#gradelevel').val();
+    var section = $('#sectionid').val();
+
     if(gradelevel != '')
     {
         if(gradelevel == 'Grade 11' || gradelevel == 'Grade 12')
-    {
-        $.ajax({
-        url:"<?php echo base_url(); ?>schedule/getStrand",
-        method:"POST",
-        data:{gradelevel:gradelevel},
-        success:function(data)
         {
-        $('#strand').html(data);
+            $.ajax({
+            url:"<?php echo base_url(); ?>schedule/getStrand",
+            method:"POST",
+            data:{gradelevel:gradelevel},
+            success:function(data)
+            {
+            $('#strand').html(data);
 
-        }
-    });
+            }
+        });
 
-    $('#section').html('');
-    $('#sched_data').html('');
-
-    
-
-    document.getElementById("etype").removeAttribute("disabled");
-
-    document.getElementById("etype").value = "Regular";
-
-    document.getElementById('strand').style.visibility = 'visible';
-    document.getElementById('lblstrand').style.visibility = 'visible';
-
-     
-    }
-
-    else
-    {
-        $('#strand').html('');
+        $('#section').html('');
         $('#sched_data').html('');
 
-        document.getElementById('strand').style.visibility = 'hidden';
-        document.getElementById('lblstrand').style.visibility = 'hidden';
+        document.getElementById("section").setAttribute("disabled", "disabled");
+        document.getElementById("etype").removeAttribute("disabled");
+        document.getElementById("etype").value = "";
+        document.getElementById("stype").value = "";
 
-        document.getElementById("etype").setAttribute("disabled", "disabled");
+        document.getElementById('strand').style.visibility = 'visible';
+        document.getElementById('lblstrand').style.visibility = 'visible';
 
-        document.getElementById("etype").value = "Regular";
- 
+        
+        }
+
+        else
+        {
+            $('#strand').html('');
+            $('#sched_data').html('');
+
+            document.getElementById('strand').style.visibility = 'hidden';
+            document.getElementById('lblstrand').style.visibility = 'hidden';
+
+            document.getElementById("etype").setAttribute("disabled", "disabled");
+            document.getElementById("section").setAttribute("disabled", "disabled");
+            document.getElementById("etype").value = "Regular";
+            document.getElementById("stype").value = "Regular";
+
+
+            $.ajax({
+            url:"<?php echo base_url(); ?>auth/getSection",
+            method:"POST",
+            dataType:"json",
+            data:{gradelevel:gradelevel},
+            success:function(data)
+            {
+                $('#sectionid').val(data.record[0].id);           
+  
+            }
+
+            });
+
+            $.ajax({
+            url:"<?php echo base_url(); ?>auth/getSectionStudent",
+            method:"POST",
+            data:{gradelevel:gradelevel},
+            success:function(data)
+            {
+            $('#section').html(data);
+
+            }
+
+            });
 
         $.ajax({
-        url:"<?php echo base_url(); ?>enrollment/getSection",
-        method:"POST",
-        data:{gradelevel:gradelevel},
-        success:function(data)
-        {
-        $('#section').html(data);
+            url:"<?php echo base_url(); ?>auth/load_sched",
+            method:"POST",
+            data:{gradelevel:gradelevel},
+            success:function(data)
+            {
+            $('#sched_data').html(data);
+
+            }
+        });
 
         }
-    });
-
-
-
-    }
-
 
     }
     else
     {
-    $('#section').html('');
+        $('#section').html('');
     }
-
 
 });
 
-$('#section').change(function(){
-    var section = $('#section').val();
-    if(section != '')
-    {
-    $.ajax({
-        url:"<?php echo base_url(); ?>enrollment/load_sched",
-        method:"POST",
-        data:{section:section},
-        success:function(data)
-        {
-        $('#sched_data').html(data);
+$('#etype').change(function(){
+    var etype = $('#etype').val();   
 
-        }
-    });
-    }
-    else
-    {
-    $('#sched_data').html('');
-    }
-
-
+    document.getElementById("stype").value = etype;
 });
+
+
+
 
 $('#strand').change(function(){
     var gradelevel = $('#gradelevel').val();
@@ -246,7 +257,7 @@ $('#strand').change(function(){
         $('#section').html(data);
 
         }
-    });
+        });
 
      
     }

@@ -150,6 +150,8 @@ $route['editOldSchedule'] = 'schedule/editOldSchedule';
 
 $route['addNewEnrollment'] = 'enrollment/addNewEnrollment';
 $route['addEnrollment'] = 'enrollment/addEnrollment';
+$route['editEnrollment/(:any)'] = 'enrollment/editEnrollment/$1';
+$route['editOldEnrollment'] = 'enrollment/editOldEnrollment';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

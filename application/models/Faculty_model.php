@@ -217,7 +217,7 @@ class Faculty_model extends CI_Model {
     
         function facultyListingCount($searchText = '',$status)
     {
-        $this->db->select("f.id,f.idno,CONCAT(f.firstname, ' ',f.lastname) name,f.firstname,f.lastname,f.middlename,f.suffix,f.birthdate,f.gender,f.address,f.contactno,a.usertype,f.status");
+        $this->db->select("f.id,f.idno,CONCAT(f.firstname, ' ',f.lastname) name,f.firstname,f.lastname,f.middlename,f.suffix,f.birthdate,f.gender,f.address,f.contactno,a.email,a.usertype,f.status");
         $this->db->from('tbl_faculty f');
         $this->db->join('tbl_account a','a.id=f.accountid');
         
@@ -236,7 +236,7 @@ class Faculty_model extends CI_Model {
 
     function facultyListing($searchText = '', $status,$page, $segment) {
 
-        $this->db->select("f.id,f.idno,CONCAT(f.firstname, ' ',f.lastname) name,f.firstname,f.lastname,f.middlename,f.suffix,f.birthdate,f.gender,f.address,f.contactno,a.usertype,f.status");
+        $this->db->select("f.id,f.idno,CONCAT(f.firstname, ' ',f.lastname) name,f.firstname,f.lastname,f.middlename,f.suffix,f.birthdate,f.gender,f.address,f.contactno,a.email,a.usertype,f.status");
         $this->db->from('tbl_faculty f');
         $this->db->join('tbl_account a','a.id=f.accountid');
         

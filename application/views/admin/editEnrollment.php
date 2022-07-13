@@ -24,7 +24,7 @@
                     <!-- form start -->
 
 
-                    <form role="form" id="addUser" action="<?php echo base_url() ?>addEnrollment" method="post" role="form">
+                    <form role="form" id="addUser" action="<?php echo base_url() ?>editOldEnrollment" method="post" role="form">
                         <div class="box-body">
 
                             <div class="row">                           
@@ -33,6 +33,7 @@
                                             <label for="last_name">Student</label>
                                             <br>
                                             <select name="student" id="student" class="form-control select2">
+                                            <option selected disabled value="">Select Student</option>
                                                             <?php
                                                             foreach($student->result_array() as $row)
                                                             {
@@ -50,13 +51,13 @@
                                             <label for="last_name">Grade Level</label>
                                             <br>
                                             <select name="gradelevel" id="gradelevel" class="form-control">
-                                                <option selected disabled value=""></option>
-                                                <option value="Grade 7">Grade 7</option>
-                                                <option value="Grade 8">Grade 8</option>
-                                                <option value="Grade 9">Grade 9</option>
-                                                <option value="Grade 10">Grade 10</option>
-                                                <option value="Grade 11">Grade 11</option>
-                                                <option value="Grade 12">Grade 12</option>
+                                                <option selected disabled value="">Select Grade Level</option>
+                                                <?php
+                                                            foreach($grade->result_array() as $row)
+                                                            {
+                                                                echo '<option value="'.$row["gradelevel"].'">'.$row["gradelevel"].'</option>';
+                                                            }
+                                                            ?>
                                             </select>
                                         </div>
                                 </div> 
@@ -64,6 +65,7 @@
                                 <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="strand" id="lblstrand">Strand</label>
+                                                    <input type="hidden" class="form-control" id="sid" name="sid" value="<?php echo $enrollmentInfo->id;?>" >
                                                     <br>
                                                     <select name="strand" id="strand" class="form-control">                                                  
                                                     </select>
@@ -81,7 +83,13 @@
                                             <label for="last_name">Section</label>
                                             <br>
                                             <select name="section" id="section" class="form-control">
-                                            <option disabled value=""></option>
+                                            <option selected disabled value="">Select Section</option>
+                                                            <?php
+                                                            foreach($section->result_array() as $row)
+                                                            {
+                                                                echo '<option value="'.$row["id"].'">'.$row["section"].'</option>';
+                                                            }
+                                                            ?>
      
                                             </select>
                                         </div>
@@ -90,9 +98,10 @@
                                 <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="last_name">Student Type</label>
+                                            <input type="hidden" class="form-control" id="stype" name="stype"  value="<?php echo $enrollmentInfo->type ?>">
                                             <br>
                                             <select name="etype" id="etype" class="form-control">
-                                                <option selected disabled value=""></option>
+                                                <option selected disabled value="">Select Type</option>
                                                 <option value="Regular">Regular</option>
                                                 <option value="Irregular">Irregular</option>
                                             </select>
@@ -170,6 +179,9 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+    load_sched();
+    
     
 $('#gradelevel').change(function(){
     var gradelevel = $('#gradelevel').val();
@@ -198,8 +210,8 @@ $('#gradelevel').change(function(){
     
 
     document.getElementById("etype").removeAttribute("disabled");
-
-    document.getElementById("etype").value = "Regular";
+    document.getElementById("etype").value = "";
+    document.getElementById("stype").value = "";
 
      
     }
@@ -215,6 +227,7 @@ $('#gradelevel').change(function(){
         document.getElementById("etype").setAttribute("disabled", "disabled");
 
         document.getElementById("etype").value = "Regular";
+        document.getElementById("stype").value = "Regular";
  
 
         $.ajax({
@@ -281,6 +294,13 @@ $('#section').change(function(){
 
 });
 
+$('#etype').change(function(){
+    var etype = $('#etype').val();   
+
+    document.getElementById("stype").value = etype;
+});
+
+
 $('#strand').change(function(){
     var gradelevel = $('#gradelevel').val();
     var strand = $('#strand').val();
@@ -331,8 +351,7 @@ $('#etype').change(function(){
 
         }
     });
-
-     
+    
     }
 
     else
@@ -352,12 +371,48 @@ $('#etype').change(function(){
     });
 
     }
-   
+
+});
+
 
 
 });
 
-    
-});
+function load_sched() {
+
+    var section = $('#section').val();
+    var gradelevel = $('#gradelevel').val();
+
+    if(gradelevel == 'Grade 11' || gradelevel == 'Grade 12')
+        {
+        
+
+        }
+
+        else
+        {
+
+            $.ajax({
+        url:"<?php echo base_url(); ?>enrollment/load_sched",
+        method:"POST",
+        data:{section:section},
+        success:function(data)
+        {
+        $('#sched_data').html(data);
+
+        }
+    });
+
+        }
+
+}
+
+
+document.getElementById("student").value= "<?php echo $enrollmentInfo->studentid ?>";
+document.getElementById("gradelevel").value= "<?php echo $enrollmentInfo->gradelevel ?>";
+document.getElementById("section").value= "<?php echo $enrollmentInfo->sectionid ?>";
+document.getElementById("etype").value= "<?php echo $enrollmentInfo->type ?>";
+document.getElementById("strand").value= "<?php echo $enrollmentInfo->strandid ?>";
+document.getElementById("status").value= "<?php echo $enrollmentInfo->status ?>";
 
     </script>
