@@ -317,6 +317,7 @@ class Enrollment_model extends CI_Model {
         $this->db->from('tbl_section sc');
         $this->db->join('tbl_schedule sd','sd.sectionid=sc.id');
 		$this->db->where('sc.gradelevel',$gradelevel);
+        $this->db->where('sc.level>',("SELECT count(enrollmentid),s.sectionid FROM tbl_enrollsched as es INNER JOIN tbl_schedule s ON s.id=es.scheduleid GROUP BY s.sectionid"));
         $this->db->group_by('sc.id');
         $this->db->order_by('sc.id','ASC');
         $query = $this->db->get();
@@ -418,8 +419,12 @@ class Enrollment_model extends CI_Model {
 	{
         $this->db->select("id,concat(firstname, ' ',lastname) as name, status");
         $this->db->from('tbl_student');   
-        $this->db->where('id<>',"(SELECT studentid FROM tbl_enrollment WHERE status= '".'Active' ."')");
-        $this->db->where('status','Active');
+
+        $likeCriteria = "(id  NOT IN (SELECT studentid FROM tbl_enrollment WHERE status='Active' AND syid=(SELECT id FROM tbl_schoolyear WHERE status='Active'))
+            AND status='Active')";
+
+            $this->db->where($likeCriteria);
+
 		
         return $this->db->get();
 		
@@ -434,6 +439,24 @@ class Enrollment_model extends CI_Model {
         $this->db->join('tbl_section sc','sc.id=sd.sectionid');
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
         $this->db->where('sd.sectionid',$section);
+        $this->db->where('sd.syid',$schoolyear);
+        
+        $query = $this->db->get();
+        
+        $result = $query->result();        
+        return $result;
+    }
+
+    function getAllScheduleList($gradelevel,$strand,$schoolyear) {
+
+        $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
+        $this->db->from('tbl_schedule sd');
+        $this->db->join('tbl_faculty a','a.id=sd.adviserid');
+        $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
+        $this->db->join('tbl_section sc','sc.id=sd.sectionid');
+        $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
+        $this->db->where('sb.gradelevel',$gradelevel);
+        $this->db->where('sb.strandid',$strand);
         $this->db->where('sd.syid',$schoolyear);
         
         $query = $this->db->get();

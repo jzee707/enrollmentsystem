@@ -86,6 +86,14 @@
 
                             </div>
 
+                            <div class="col-xs-152  text-right">     
+                            
+                            <a class="btn btn-primary addNew" hidden id="addbtn" name="addbtn" href="#">Add Subject</a>
+                            
+                            </div>
+
+                       
+
 
                             <div id="sched_data" class="box-body table-responsive no-padding">
 
@@ -134,6 +142,24 @@
     </section>
     
 </div>
+
+<div id="modal-view-event-add" class="modal modal-top fade calendar-modal">
+						<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content">
+								<form id="add-event">
+									<div class="modal-body">
+										
+                                        <div id="subject_data" class="box-body table-responsive no-padding">
+
+                                        </div><!-- /.box-body -->
+										
+
+									</div>
+
+								</form>
+							</div>
+						</div>
+					</div>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -247,17 +273,37 @@ $('#strand').change(function(){
 
     if(strand != '')
     {
+        document.getElementById("etype").value = "";
+        document.getElementById("stype").value = "";
+
+        $('#section').html('');
+        $('#sched_data').html('');
+        
 
         $.ajax({
-        url:"<?php echo base_url(); ?>schedule/getSectionSHS",
-        method:"POST",
-        data:{gradelevel:gradelevel,strand:strand},
-        success:function(data)
-        {
-        $('#section').html(data);
+            url:"<?php echo base_url(); ?>auth/getSectionIrreg",
+            method:"POST",
+            dataType:"json",
+            data:{gradelevel:gradelevel,strand:strand},
+            success:function(data)
+            {
+                $('#sectionid').val(data.record[0].id);           
+  
+            }
 
-        }
-        });
+            });
+
+            $.ajax({
+            url:"<?php echo base_url(); ?>auth/getSectionStudentIrreg",
+            method:"POST",
+            data:{gradelevel:gradelevel,strand:strand},
+            success:function(data)
+            {
+            $('#section').html(data);
+
+            }
+
+            });
 
      
     }
@@ -265,7 +311,82 @@ $('#strand').change(function(){
 
 });
 
+document.getElementById('addbtn').style.visibility = 'hidden';
+
+$('#etype').change(function(){
+    var etype = $('#etype').val();
+    var section = $('#section').val();
+    var gradelevel = $('#gradelevel').val();
+    
+
+    if(etype == 'Regular')
+    {
+
+        document.getElementById('addbtn').style.visibility = 'hidden';
+
+        $.ajax({
+        url:"<?php echo base_url(); ?>enrollment/load_sched",
+        method:"POST",
+        data:{section:section},
+        success:function(data)
+        {
+        $('#sched_data').html(data);
+
+        }
+    });
+    
+    }
+
+    else
+    {
+
+        document.getElementById('addbtn').style.visibility = 'visible';
+
+        $.ajax({
+        url:"<?php echo base_url(); ?>enrollment/load_schedirg",
+        method:"POST",
+        data:{section:section,etype:etype},
+        success:function(data)
+        {
+        $('#sched_data').html(data);
+
+        }
+    });
+
+    }
+
+});
+
     
 });
 
     </script>
+
+<script>
+jQuery(document).ready(function(){
+
+	jQuery(document).on("click", ".addNew", function(){
+
+        var gradelevel = $('#gradelevel').val();   
+        var strand = $('#strand').val();   
+
+         $.ajax({
+        url:"<?php echo base_url(); ?>enrollment/load_allsched",
+        method:"POST",
+        data:{gradelevel:gradelevel,strand:strand},
+        success:function(data)
+        { 
+            
+        $("#modal-view-event-add").modal('show');
+         $('#subject_data').html(data);
+
+        }
+    });
+ 
+	});
+	
+		
+	
+});
+</script>
+	

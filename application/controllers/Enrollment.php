@@ -88,22 +88,49 @@ function editSchedule($id)
          $schedid = $this->security->xss_clean($this->input->post('schedid'));
          $timeStamp = date('Y-m-d');
 
-         $comorbidity ="";
 
-         if ($schedid!="")
+         $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+         if (!empty($row->id))
+         {
+             $schoolyear = $row->id;
+         }           
+         
+         $chk = $this->auth->addEnrollment($id,$schoolyear,$timeStamp,$etype,$strand,$status);
+
+         $enrollid = $this->db->select("*")->limit(1)->order_by('id',"DESC")->get("tbl_enrollment")->row();
+
+         if($etype == "Regular")
+         {
+
+          $schedule = $this->auth->scheduleListingInfo($section, $schoolyear);
+
+          foreach($schedule as $record)
+          {
+              $this->auth->addSchedule($enrollid->id,$record->id);
+          }
+
+         }
+
+         else
+         {
+            for ($i = 0; $i < count($schedid) ; $i++) 
+            {
+                $this->auth->addSchedule($enrollid->id, $schedid[$i]);
+          
+            }
+
+         }
+
+        if($chk > 0)
         {
-            $comorbidity = substr(implode(', ', $schedid), 0);
-
+            $this->session->set_flashdata('success', 'Student Enrolled Successfully');
         }
-
         else
         {
-            $comorbidity = "";
-            
+            $this->session->set_flashdata('error', 'Student Enrolled failed');
         }
 
-         echo $comorbidity;
-
+        redirect('enrollment');
 
          /* $schoolyear = 0;
 
@@ -456,6 +483,65 @@ function editSchedule($id)
    
        }
 
+       function load_allsched()
+       {
+        $schoolyear =0;
+
+        $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+        if (!empty($row->id))
+        {
+            $schoolyear = $row->id;
+        }  
+
+           $result = $this->auth->getAllScheduleList($this->input->post('gradelevel'),$this->input->post('strand'),$schoolyear);
+           $output = '
+           
+           <h3 align="center">Schedule List</h3>	
+           <table class="table table-hover">
+           <thead>
+               <tr>
+                    <th>ID</th>                     
+                    <th>Subject</th>
+                    <th>Room</th>
+                    <th>Day</th>
+                    <th>Time</th>
+                    <th>Teacher</th>  
+                       
+               </tr>
+           </thead>
+           <tbody>
+           ';
+           if(!empty($result))
+           {
+               foreach($result as $record)
+               {
+                   $output .= '
+                   <tr>
+                           <td>'.$record->id.'</td>
+                           <td>'.$record->subject.'</td>
+                           <td>'.$record->room.'</td>
+                           <td>'.$record->day.'</td>
+                           <td>'.date("h:i A", strtotime($record->timefrom)) . ' - ' . date("h:i A", strtotime($record->timeto)).'</td>
+                           <td>'.$record->name.'</td>
+                           <td><a class="btn btn-sm btn-info" href="#" title="Add Subject">Add Subject</a></td>
+                           
+
+                           ';
+   
+                               $output .= '
+                       
+                       </tr>
+                       ';
+                       
+                   }
+               }
+                   $output .= '
+   
+                       </tbody>
+                       </table>';
+           echo $output;
+       }
+
        function load_sched()
        {
         $schoolyear =0;
@@ -496,7 +582,7 @@ function editSchedule($id)
                            <td>'.$record->day.'</td>
                            <td>'.date("h:i A", strtotime($record->timefrom)) . ' - ' . date("h:i A", strtotime($record->timeto)).'</td>
                            <td>'.$record->name.'</td>
-                           
+                          
 
                            ';
    

@@ -382,15 +382,28 @@ function signout()
 
             $enrollid = $this->db->select("*")->limit(1)->order_by('id',"DESC")->get("tbl_enrollment")->row();
  
-            $schedule = $this->auth->scheduleListingInfo($section, $schoolyear);
+            if($etype == "Regular")
+         {
 
-            foreach($schedule as $record)
+          $schedule = $this->auth->scheduleListingInfo($section, $schoolyear);
+
+          foreach($schedule as $record)
+          {
+              $this->auth->addSchedule($enrollid->id,$record->id);
+          }
+
+         }
+
+         else
+         {
+            for ($i = 0; $i < count($schedid) ; $i++) 
             {
-
-             $this->auth->addSchedule($enrollid->id,$record->id);
-
+                $this->auth->addSchedule($enrollid->id, $schedid[$i]);
+          
             }
 
+         }
+           
 
             if($chk > 0)
             {
@@ -427,6 +440,26 @@ function signout()
 
     }
 
+    public function getSectionIrreg(){
+
+        $query = $this->db->query("SELECT sc.id,sc.section 
+        FROM tbl_section sc INNER JOIN tbl_schedule sd ON sd.sectionid=sc.id WHERE sc.gradelevel='".$this->input->post('gradelevel')."' AND sc.strandid='".$this->input->post('strand')."'  GROUP BY sc.section ORDER BY sc.section ASC LIMIT 1");
+
+        $data['record'] = $query->result();
+    
+        echo json_encode($data);
+   
+    }
+
+       public function getSectionStudentIrreg(){
+        if($this->input->post('gradelevel'))
+        {
+
+        echo $this->auth->getSectionStudent($this->input->post('gradelevel'),$this->input->post('strand'));
+        }
+
+    }
+
     public function getCity(){
         if($this->input->post('province'))
            {
@@ -453,6 +486,65 @@ function signout()
         echo $this->auth->getStrand($this->input->post('gradelevel'));
         }
            
+       }
+
+       function load_allsched()
+       {
+        $schoolyear =0;
+
+        $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+        if (!empty($row->id))
+        {
+            $schoolyear = $row->id;
+        }  
+
+           $result = $this->auth->getAllScheduleList($this->input->post('gradelevel'),$this->input->post('strand'),$schoolyear);
+           $output = '
+           
+           <h3 align="center">Schedule List</h3>	
+           <table class="table table-hover">
+           <thead>
+               <tr>
+                    <th>ID</th>                     
+                    <th>Subject</th>
+                    <th>Room</th>
+                    <th>Day</th>
+                    <th>Time</th>
+                    <th>Teacher</th>  
+                       
+               </tr>
+           </thead>
+           <tbody>
+           ';
+           if(!empty($result))
+           {
+               foreach($result as $record)
+               {
+                   $output .= '
+                   <tr>
+                           <td>'.$record->id.'</td>
+                           <td>'.$record->subject.'</td>
+                           <td>'.$record->room.'</td>
+                           <td>'.$record->day.'</td>
+                           <td>'.date("h:i A", strtotime($record->timefrom)) . ' - ' . date("h:i A", strtotime($record->timeto)).'</td>
+                           <td>'.$record->name.'</td>
+                           <td><a class="btn btn-sm btn-info" href="#" title="Add Subject">Add Subject</a></td>
+                           
+
+                           ';
+   
+                               $output .= '
+                       
+                       </tr>
+                       ';
+                       
+                   }
+               }
+                   $output .= '
+   
+                       </tbody>
+                       </table>';
+           echo $output;
        }
 
        function load_sched()

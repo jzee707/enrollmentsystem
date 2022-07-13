@@ -121,7 +121,7 @@
 
                             <div class="col-xs-152  text-right">     
                             
-                                <a class="btn btn-primary" hidden id="addbtn" name="addbtn" href="<?php echo base_url() ?>">Add Subject</a>
+                                <a class="btn btn-primary addNew" hidden id="addbtn" name="addbtn" href="#">Add Subject</a>
                                 
                             </div>
 
@@ -175,6 +175,25 @@
     </section>
     
 </div>
+
+
+<div id="modal-view-event-add" class="modal modal-top fade calendar-modal">
+						<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content">
+								<form id="add-event">
+									<div class="modal-body">
+										
+                                        <div id="subject_data" class="box-body table-responsive no-padding">
+
+                                        </div><!-- /.box-body -->
+										
+
+									</div>
+
+								</form>
+							</div>
+						</div>
+					</div>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -376,3 +395,32 @@ $('#etype').change(function(){
 });
 
     </script>
+
+<script>
+jQuery(document).ready(function(){
+
+	jQuery(document).on("click", ".addNew", function(){
+
+        var gradelevel = $('#gradelevel').val();   
+        var strand = $('#strand').val();   
+
+         $.ajax({
+        url:"<?php echo base_url(); ?>enrollment/load_allsched",
+        method:"POST",
+        data:{gradelevel:gradelevel,strand:strand},
+        success:function(data)
+        { 
+            
+        $("#modal-view-event-add").modal('show');
+         $('#subject_data').html(data);
+
+        }
+    });
+ 
+	});
+	
+		
+	
+});
+</script>
+	

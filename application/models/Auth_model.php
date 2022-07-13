@@ -273,6 +273,30 @@ class Auth_model extends CI_Model {
 		
     }
 
+    function getSectionStudentIrreg($gradelevel,$strand)
+	{
+        $this->db->select('sc.id,sc.section');
+        $this->db->from('tbl_section sc');
+        $this->db->join('tbl_schedule sd','sd.sectionid=sc.id');
+		$this->db->where('sc.gradelevel',$gradelevel);
+        $this->db->where('sc.strandid',$strand);
+        $this->db->group_by('sc.id');
+        $this->db->order_by('sc.id','ASC');
+        $this->db->limit(1);
+  
+        $query = $this->db->get();
+		
+        $output = '<option disabled value="">Select Section</option>';
+
+        foreach($query->result() as $row)
+        {
+         $output .= '<option selected value="'.$row->id.'">'.$row->section.'</option>';
+        }
+        
+        return $output;
+		
+    }
+
     function getSection($gradelevel)
 	{
         $this->db->select('sc.id,sc.section');
