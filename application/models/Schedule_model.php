@@ -378,6 +378,28 @@ class Schedule_model extends CI_Model {
 		
     }
 
+    function getSubjectSHS($gradelevel,$strand)
+	{
+        $this->db->select('id,subject,description');
+        $this->db->from('tbl_subject');
+        $this->db->where('gradelevel',$gradelevel);
+        $this->db->where('strand',$strand);
+        $this->db->where('status','Active');
+        $this->db->order_by('subject','ASC');
+        $query = $this->db->get();
+
+        $output = '<option selected disabled value="">Select Subject</option>';	
+
+        foreach($query->result() as $row)
+        {
+         $output .= '<option value="'.$row->id.'">'.$row->subject.'</option>';
+        }
+        
+        return $output;
+
+		
+    }
+
     function getSection($gradelevel)
 	{
         $this->db->select('id,section');

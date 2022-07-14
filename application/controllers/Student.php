@@ -392,12 +392,19 @@ public function registration() {
     {
                         
                 $studentInfo = array('id'=>$id,'status'=>'Inactive',);
+
+                $row = $this->db->select("*")->where('id',$id)->get("tbl_student")->row();
+                $accountid = $row->accountid;
+
+                $accountInfo = array('id'=>$accountid,'status'=>'Inactive',);
                 
                 $result = $this->auth->editStudent($studentInfo, $id);
 
                 
                 if($result == true)
                 {
+                    $this->auth->editFaculty($accountInfo, $accountid);
+
                     $this->session->set_flashdata('success', 'Student Data Archived.');                 
 
                     redirect('student');
@@ -419,11 +426,18 @@ public function registration() {
                         
                 $studentInfo = array('id'=>$id,'status'=>'Active',);
                 
-                $result = $this->auth->editStudent($studentInfo, $id);
+                $row = $this->db->select("*")->where('id',$id)->get("tbl_student")->row();
+                $accountid = $row->accountid;
+
+                $accountInfo = array('id'=>$accountid,'status'=>'Active',);
+                
+                $result = $this->auth->editStudent($studentInfo, $accountid);
 
                 
                 if($result == true)
                 {
+                    $this->auth->editStudent($accountInfo, $id);
+
                     $this->session->set_flashdata('success', 'Student Data Restored.');                 
 
                     redirect('student');

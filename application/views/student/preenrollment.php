@@ -357,6 +357,36 @@ $('#etype').change(function(){
 
 });
 
+$("body").on("click", "#addSched", function(){
+
+            var schedid = $(this).closest("tr").find('td:eq(0)').text();
+            var subject = $(this).closest("tr").find('td:eq(1)').text();
+            var room = $(this).closest("tr").find('td:eq(2)').text();
+            var day = $(this).closest("tr").find('td:eq(3)').text();
+            var timesched = $(this).closest("tr").find('td:eq(4)').text();
+            var name = $(this).closest("tr").find('td:eq(5)').text();
+
+           
+
+            var html = '<tr>';
+            html += '<td> <input type="hidden" name="schedid[]" value="'+ schedid+'" >'+schedid+'</td>';
+            html += '<td>'+subject+'</td>';
+            html += '<td>'+room+'</td>';
+            html += '<td>'+day+'</td>';
+            html += '<td>'+timesched+'</td>';
+            html += '<td>'+name+'</td>';
+            html += '<td ><a class="btn btn-sm btn-info" onclick="RemoveRow()" title="Remove Subject"><i class="fa fa-trash"></i></a></tr>';
+        
+            $('#table_data').append(html);
+            $("#modal-view-event-add").modal('hide');
+                
+
+
+
+        });
+
+
+
     
 });
 
@@ -370,7 +400,7 @@ jQuery(document).ready(function(){
         var gradelevel = $('#gradelevel').val();   
         var strand = $('#strand').val();   
 
-         $.ajax({
+          $.ajax({
         url:"<?php echo base_url(); ?>enrollment/load_allsched",
         method:"POST",
         data:{gradelevel:gradelevel,strand:strand},
@@ -381,12 +411,21 @@ jQuery(document).ready(function(){
          $('#subject_data').html(data);
 
         }
-    });
+    });  
  
 	});
 	
 		
 	
 });
+</script>
+
+<script>
+  function RemoveRow() {
+      // event.target will be the input element.
+      var td = event.target.parentNode; 
+      var tr = td.parentNode; // the row to be removed
+      tr.parentNode.removeChild(tr);
+  }
 </script>
 	

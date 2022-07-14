@@ -270,12 +270,20 @@ function editFaculty($id)
     {
                         
                 $studentInfo = array('id'=>$id,'status'=>'Active',);
+
+                $row = $this->db->select("*")->where('id',$id)->get("tbl_faculty")->row();
+                $accountid = $row->accountid;
+
+                $accountInfo = array('id'=>$accountid,'status'=>'Active',);
                 
                 $result = $this->auth->editFaculty($studentInfo, $id);
+
 
                 
                 if($result == true)
                 {
+                    $this->auth->editFaculty($accountInfo, $id);
+
                     $this->session->set_flashdata('success', 'Faculty Data Restored.');                 
 
                     redirect('archivedfaculty');

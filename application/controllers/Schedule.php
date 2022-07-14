@@ -384,6 +384,15 @@ function editSchedule($id)
    
        }
 
+       public function getSubjectSHS(){
+        if($this->input->post('gradelevel'))
+           {
+   
+           echo $this->auth->getSubject($this->input->post('gradelevel'),$this->input->post('strand'));
+           }
+   
+       }
+
        public function getSectionSHS(){
         if($this->input->post('gradelevel'))
            {

@@ -486,6 +486,8 @@ function editSchedule($id)
        function load_allsched()
        {
         $schoolyear =0;
+        
+        $schedid = $this->security->xss_clean($this->input->post('schedid'));
 
         $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
         if (!empty($row->id))
@@ -523,7 +525,7 @@ function editSchedule($id)
                            <td>'.$record->day.'</td>
                            <td>'.date("h:i A", strtotime($record->timefrom)) . ' - ' . date("h:i A", strtotime($record->timeto)).'</td>
                            <td>'.$record->name.'</td>
-                           <td><a class="btn btn-sm btn-info" href="#" title="Add Subject">Add Subject</a></td>
+                           <td><a class="btn btn-sm btn-info" id="addSched" title="Add Subject">Add Subject</a></td>
                            
 
                            ';
@@ -629,7 +631,7 @@ function editSchedule($id)
                     <th class="text-center"></th>                 
                </tr>
            </thead>
-           <tbody>
+           <tbody id="table_data">
            ';
            if(!empty($result))
            {
@@ -641,9 +643,9 @@ function editSchedule($id)
                            <td>'.$record->subject.'</td>
                            <td>'.$record->room.'</td>
                            <td>'.$record->day.'</td>
-                           <td>'.$record->time.'</td>
+                           <td>'.date("h:i A", strtotime($record->timefrom)) . ' - ' . date("h:i A", strtotime($record->timeto)).'</td>
                            <td>'.$record->name.'</td>
-                           <td><a class="btn btn-sm btn-info" href="" title="Remove Subject"><i class="fa fa-trash"></i></a></td>
+                           <td><a class="btn btn-sm btn-info" onclick="RemoveRow()" title="Remove Subject"><i class="fa fa-trash"></i></a></td>
 
                            ';
    

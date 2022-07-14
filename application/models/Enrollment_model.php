@@ -316,8 +316,15 @@ class Enrollment_model extends CI_Model {
         $this->db->select('sc.id,sc.section');
         $this->db->from('tbl_section sc');
         $this->db->join('tbl_schedule sd','sd.sectionid=sc.id');
-		$this->db->where('sc.gradelevel',$gradelevel);
-        $this->db->where('sc.level>',("SELECT count(enrollmentid),s.sectionid FROM tbl_enrollsched as es INNER JOIN tbl_schedule s ON s.id=es.scheduleid GROUP BY s.sectionid"));
+
+        /* $likeCriteria = "(sc.gradelevel = '".$gradelevel."'
+        AND sc.level > (SELECT count(enrollmentid) FROM tbl_enrollsched as es INNER JOIN tbl_schedule s ON s.id=es.scheduleid GROUP BY s.sectionid))"; */
+        
+         $likeCriteria = "(sc.gradelevel = '".$gradelevel."')"; 
+
+        $this->db->where($likeCriteria);
+
+
         $this->db->group_by('sc.id');
         $this->db->order_by('sc.id','ASC');
         $query = $this->db->get();

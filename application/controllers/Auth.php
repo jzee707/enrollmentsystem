@@ -368,7 +368,9 @@ function signout()
             $section = $this->security->xss_clean($this->input->post('sectionid'));
             $etype = $this->security->xss_clean($this->input->post('stype'));
             $strand = $this->security->xss_clean($this->input->post('strand'));
+            $schedid = $this->security->xss_clean($this->input->post('schedid'));
             $timeStamp = date('Y-m-d');
+            
 
             $schoolyear = 0;
 
@@ -423,7 +425,7 @@ function signout()
     public function getSection(){
 
         $query = $this->db->query("SELECT sc.id,sc.section 
-        FROM tbl_section sc INNER JOIN tbl_schedule sd ON sd.sectionid=sc.id WHERE sc.gradelevel='".$this->input->post('gradelevel')."' GROUP BY sc.section ORDER BY sc.section ASC LIMIT 1");
+        FROM tbl_section sc INNER JOIN tbl_schedule sd ON sd.sectionid=sc.id WHERE sc.gradelevel='".$this->input->post('gradelevel')."' GROUP BY sc.id ORDER BY sc.id ASC LIMIT 1");
 
         $data['record'] = $query->result();
     
@@ -522,13 +524,13 @@ function signout()
                {
                    $output .= '
                    <tr>
-                           <td>'.$record->id.'</td>
-                           <td>'.$record->subject.'</td>
-                           <td>'.$record->room.'</td>
-                           <td>'.$record->day.'</td>
-                           <td>'.date("h:i A", strtotime($record->timefrom)) . ' - ' . date("h:i A", strtotime($record->timeto)).'</td>
-                           <td>'.$record->name.'</td>
-                           <td><a class="btn btn-sm btn-info" href="#" title="Add Subject">Add Subject</a></td>
+                           <td > <input type="hidden" name="schedid[]" value="'. $record->id.'" >'.$record->id.'</td>
+                           <td> '.$record->subject.'</td>
+                           <td>'. $record->room.'" '.$record->room.'</td>
+                           <td>'. $record->idv.'" '.$record->day.'</td>
+                           <td>'. $record->id.'" '.date("h:i A", strtotime($record->timefrom)) . ' - ' . date("h:i A", strtotime($record->timeto)).'</td>
+                           <td> '.$record->name.'</td>
+                           <td><a class="btn btn-sm btn-info" id="removeSched" title="Add Subject">Add Subject</a></td>
                            
 
                            ';

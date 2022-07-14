@@ -308,22 +308,48 @@ $('#strand').change(function(){
 
 $('#section').change(function(){
     var gradelevel = $('#gradelevel').val();
-    
+    var strand = $('#strand').val();
+    var section = $('#section').val();
+
     if(gradelevel != '')
     {
 
-        $.ajax({
-        url:"<?php echo base_url(); ?>schedule/getSubject",
-        method:"POST",
-        data:{gradelevel:gradelevel},
-        success:function(data)
+        if(gradelevel == 'Grade 11' || gradelevel == 'Grade 12')
         {
-        $('#subject').html(data);
+        
+        
+
+            $.ajax({
+            url:"<?php echo base_url(); ?>schedule/getSubjectSHS",
+            method:"POST",
+            data:{gradelevel:gradelevel,strand:strand},
+            success:function(data)
+            {
+            $('#subject').html(data);
+
+            }
+
+            });
+
+        
+        }
+
+        else
+        {
+            $.ajax({
+            url:"<?php echo base_url(); ?>schedule/getSubject",
+            method:"POST",
+            data:{gradelevel:gradelevel},
+            success:function(data)
+            {
+            $('#subject').html(data);
+
+            }
+            
+            });
 
         }
-    });
 
-     
     }
 
 

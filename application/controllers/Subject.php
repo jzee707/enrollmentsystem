@@ -335,9 +335,16 @@ function editSHSubject($id)
         $subject = $this->security->xss_clean($this->input->post('subject'));
         $description = $this->security->xss_clean($this->input->post('description'));
         $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
+        $strand = $this->security->xss_clean($this->input->post('strand'));
+
+        if($strand == "")
+        {
+            $strand = 0;
+
+        }
 
 
-        $check = $this->db->get_where('tbl_subject', array('subject' => $subject,'description' => $description,'gradelevel' => $gradelevel), 1);
+        $check = $this->db->get_where('tbl_subject', array('subject' => $subject,'description' => $description,'gradelevel' => $gradelevel,'strandid' => $strand), 1);
 
         if ($check->num_rows() > 0) {
 
@@ -359,6 +366,8 @@ function editSHSubject($id)
         $subject = $this->security->xss_clean($this->input->post('subject'));
         $description = $this->security->xss_clean($this->input->post('description'));
         $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
+        $strand = $this->security->xss_clean($this->input->post('strand'));
+       
        
         $check = $this->db->get_where('tbl_subject', array('subject' => $subject,'description' => $description,'gradelevel' => $gradelevel), 1);
 
