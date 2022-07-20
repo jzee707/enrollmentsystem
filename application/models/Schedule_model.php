@@ -332,6 +332,7 @@ class Schedule_model extends CI_Model {
         $this->db->from('tbl_strand st');
         $this->db->join('tbl_section s','s.strandid=st.id');
         $this->db->where('st.status','Active');
+        $this->db->group_by('st.id');
         
         return $this->db->get();
 
@@ -461,9 +462,10 @@ class Schedule_model extends CI_Model {
         $this->db->from('tbl_subject ');
 
 
-        $likeCriteria = "(gradelevel =(SELECT s.gradelevel FROM tbl_schedule sc INNER JOIN tbl_subject s ON s.id=sc.subjectid WHERE sc.id ='". $id ."') AND status='Active')";
+        $likeCriteria = "(gradelevel =(SELECT s.gradelevel FROM tbl_schedule sc INNER JOIN tbl_subject s ON s.id=sc.subjectid WHERE sc.id ='". $id ."') AND strandid =(SELECT s.strandid FROM tbl_schedule sc INNER JOIN tbl_section s ON s.id=sc.sectionid WHERE sc.id ='". $id ."') AND status='Active')";
 
         $this->db->where($likeCriteria);
+        $this->db->group_by('id');
 		
         return $this->db->get();
 
@@ -475,7 +477,7 @@ class Schedule_model extends CI_Model {
         $this->db->select('id,section');
         $this->db->from('tbl_section');
         
-        $likeCriteria = "(gradelevel =(SELECT s.gradelevel FROM tbl_schedule sc INNER JOIN tbl_section s ON s.id=sc.sectionid WHERE sc.id ='". $id ."') AND status='Active')";
+        $likeCriteria = "(gradelevel =(SELECT s.gradelevel FROM tbl_schedule sc INNER JOIN tbl_section s ON s.id=sc.sectionid WHERE sc.id ='". $id ."') AND strandid =(SELECT s.strandid FROM tbl_schedule sc INNER JOIN tbl_section s ON s.id=sc.sectionid WHERE sc.id ='". $id ."') AND status='Active')";
 
         $this->db->where($likeCriteria);
 		
