@@ -110,7 +110,7 @@ function editSchedule($id)
          if($etype == "Regular")
          {
 
-          $schedule = $this->auth->scheduleListingInfo($section, $schoolyear);
+          $schedule = $this->auth->scheduleListingInfo($section, $schoolyear,$semester);
 
           foreach($schedule as $record)
           {

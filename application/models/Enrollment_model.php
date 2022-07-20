@@ -397,12 +397,13 @@ class Enrollment_model extends CI_Model {
 
     
 
-    function scheduleListingInfo($section,$syid) {
+    function scheduleListingInfo($section,$syid,$semester) {
 
         $this->db->select('id,syid,status');
         $this->db->from('tbl_schedule');
         $this->db->where('sectionid', $section);
         $this->db->where('syid', $syid);
+        $this->db->where('term', $semester);
 
         $query = $this->db->get();
         

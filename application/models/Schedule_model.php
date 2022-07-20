@@ -181,7 +181,11 @@ class Schedule_model extends CI_Model {
 
         $likeCriteria = "(sb.gradelevel  LIKE '".$searchText."%'
         AND sd.status='".$status."'  AND sd.syid='".$schoolyear."'  AND sd.term IN ('".$term."','')
-        OR description  LIKE '".$searchText."%'
+        OR sb.description  LIKE '".$searchText."%'
+        AND sd.status='".$status."' AND sd.syid='".$schoolyear."' AND sd.term IN ('".$term."','')
+        OR sc.section  LIKE '".$searchText."%'
+        AND sd.status='".$status."' AND sd.syid='".$schoolyear."' AND sd.term IN ('".$term."','')
+        OR concat(a.firstname, ' ',a.lastname)  LIKE '".$searchText."%'
         AND sd.status='".$status."' AND sd.syid='".$schoolyear."' AND sd.term IN ('".$term."',''))";
                             
         $this->db->where($likeCriteria);
@@ -204,7 +208,11 @@ class Schedule_model extends CI_Model {
 
         $likeCriteria = "(sb.gradelevel  LIKE '".$searchText."%'
         AND sd.status='".$status."'  AND sd.syid='".$schoolyear."'  AND sd.term IN ('".$term."','')
-        OR description  LIKE '".$searchText."%'
+        OR sb.description  LIKE '".$searchText."%'
+        AND sd.status='".$status."' AND sd.syid='".$schoolyear."' AND sd.term IN ('".$term."','')
+        OR sc.section  LIKE '".$searchText."%'
+        AND sd.status='".$status."' AND sd.syid='".$schoolyear."' AND sd.term IN ('".$term."','')
+        OR concat(a.firstname, ' ',a.lastname)  LIKE '".$searchText."%'
         AND sd.status='".$status."' AND sd.syid='".$schoolyear."' AND sd.term IN ('".$term."',''))";
 
             $this->db->where($likeCriteria);
