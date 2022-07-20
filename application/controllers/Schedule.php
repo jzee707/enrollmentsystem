@@ -352,12 +352,20 @@ function editSchedule($id)
         {
             $schoolyear = $row->id;
         }
+
+        $semester = "";
+    
+        $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+        if (!empty($row1->id))
+        {
+            $semester = $row1->semester;
+        }
            
-        $count = $this->auth->scheduleListingCount($searchText,$status,$schoolyear);
+        $count = $this->auth->scheduleListingCount($searchText,$status,$schoolyear,$semester);
 
         $returns = $this->paginationCompress ( "schedule/scheduleListing/", $count, 10 );
         
-        $data['userRecords'] = $this->auth->scheduleListing($searchText, $status,$schoolyear,$returns["page"], $returns["segment"]);
+        $data['userRecords'] = $this->auth->scheduleListing($searchText, $status,$schoolyear,$semester,$returns["page"], $returns["segment"]);
         
 
             $this->load->view('templates/adminheader', $data);
