@@ -273,7 +273,7 @@ $('#section').change(function(){
             $.ajax({
         url:"<?php echo base_url(); ?>enrollment/load_sched",
         method:"POST",
-        data:{section:section},
+        data:{section:section,gradelevel:gradelevel},
         success:function(data)
         {
         $('#sched_data').html(data);
@@ -344,7 +344,7 @@ $('#etype').change(function(){
         $.ajax({
         url:"<?php echo base_url(); ?>enrollment/load_sched",
         method:"POST",
-        data:{section:section},
+        data:{section:section,gradelevel:gradelevel},
         success:function(data)
         {
         $('#sched_data').html(data);
@@ -362,7 +362,7 @@ $('#etype').change(function(){
         $.ajax({
         url:"<?php echo base_url(); ?>enrollment/load_schedirg",
         method:"POST",
-        data:{section:section,etype:etype},
+        data:{section:section,etype:etype,gradelevel:gradelevel},
         success:function(data)
         {
         $('#sched_data').html(data);
@@ -382,9 +382,46 @@ function load_sched() {
 
     var section = $('#section').val();
     var gradelevel = $('#gradelevel').val();
+    var etype = $('#etype').val();
 
     if(gradelevel == 'Grade 11' || gradelevel == 'Grade 12')
+    {
+
+            if(etype == 'Regular')
+    {
+
+        document.getElementById('addbtn').style.visibility = 'hidden';
+
+        $.ajax({
+        url:"<?php echo base_url(); ?>enrollment/load_sched",
+        method:"POST",
+        data:{section:section,gradelevel:gradelevel},
+        success:function(data)
         {
+        $('#sched_data').html(data);
+
+        }
+    });
+    
+    }
+
+    else
+    {
+
+        document.getElementById('addbtn').style.visibility = 'visible';
+
+        $.ajax({
+        url:"<?php echo base_url(); ?>enrollment/load_schedirg",
+        method:"POST",
+        data:{section:section,etype:etype,gradelevel:gradelevel},
+        success:function(data)
+        {
+        $('#sched_data').html(data);
+
+        }
+    });
+
+    }
         
 
         }
@@ -395,7 +432,7 @@ function load_sched() {
             $.ajax({
         url:"<?php echo base_url(); ?>enrollment/load_sched",
         method:"POST",
-        data:{section:section},
+        data:{section:section,gradelevel:gradelevel},
         success:function(data)
         {
         $('#sched_data').html(data);

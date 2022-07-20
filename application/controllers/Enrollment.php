@@ -20,9 +20,10 @@ function addNewEnrollment()
 {
     $data = array();
 
+    $id = "";
 
     $data['faculty'] = $this->auth->getAdviser();
-    $data['student'] = $this->auth->getStudentList();
+    $data['student'] = $this->auth->getStudentList($id);
     $data['grade'] = $this->auth->getGradeLevel();
 
 
@@ -39,7 +40,7 @@ function editEnrollment($id)
     $data['enrollmentInfo'] = $this->auth->getEnrollmentInfo($id);
     $data['section'] = $this->auth->getSectionEdit($id);
     $data['faculty'] = $this->auth->getAdviser();
-    $data['student'] = $this->auth->getStudentList();
+    $data['student'] = $this->auth->getStudentList($id);
     $data['grade'] = $this->auth->getGradeLevel();
 
 
@@ -496,6 +497,8 @@ function editSchedule($id)
             $schoolyear = $row->id;
         }  
 
+        $semester = "";
+
         $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
         if (!empty($row1->id))
         {
@@ -557,7 +560,8 @@ function editSchedule($id)
 
        function load_sched()
        {
-        $schoolyear =0;
+
+        $schoolyear = 0;
 
         $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
         if (!empty($row->id))
@@ -565,13 +569,15 @@ function editSchedule($id)
             $schoolyear = $row->id;
         }  
 
+        $semester = "";
+
         $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
         if (!empty($row1->id))
         {
             $semester = $row1->semester;
         }
 
-           $result = $this->auth->getScheduleList($this->input->post('section'),$schoolyear,$semester);
+           $result = $this->auth->getScheduleList($this->input->post('gradelevel'),$this->input->post('section'),$schoolyear,$semester);
            $output = '
            
            <h3 align="center">Schedule List</h3>	
@@ -638,7 +644,7 @@ function editSchedule($id)
             $semester = $row1->semester;
         }
 
-           $result = $this->auth->getScheduleList($this->input->post('section'),$schoolyear,$semester);
+           $result = $this->auth->getScheduleList($this->input->post('gradelevel'),$this->input->post('section'),$schoolyear,$semester);
            $output = '
            
            <h3 align="center">Schedule List</h3>	

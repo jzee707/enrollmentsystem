@@ -431,7 +431,7 @@ class Enrollment_model extends CI_Model {
         return $this->db->get();		
     }
 
-    function getStudentList()
+/*     function getStudentList()
 	{
         $this->db->select("id,concat(firstname, ' ',lastname) as name, status");
         $this->db->from('tbl_student');   
@@ -444,9 +444,25 @@ class Enrollment_model extends CI_Model {
 		
         return $this->db->get();
 		
+    } */
+
+    function getStudentList($id)
+	{
+        $this->db->select("id,concat(firstname, ' ',lastname) as name, status");
+        $this->db->from('tbl_student');   
+
+        $likeCriteria = "(id  NOT IN (SELECT studentid FROM tbl_enrollment WHERE status='Active' AND syid=(SELECT id FROM tbl_schoolyear WHERE status='Active') AND term=(SELECT semester FROM tbl_semester WHERE status='Active')) AND status='Active' 
+        OR id =(SELECT studentid FROM tbl_enrollment WHERE id='".$id."' AND status='Active') AND status='Active')";
+
+        $this->db->where($likeCriteria);
+        $this->db->order_by('name','ASC');
+
+		
+        return $this->db->get();
+		
     }
 
-    function getScheduleList($section,$schoolyear,$semester) {
+    function getScheduleList($gradelevel,$section,$schoolyear,$semester) {
 
         $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
         $this->db->from('tbl_schedule sd');
@@ -454,9 +470,23 @@ class Enrollment_model extends CI_Model {
         $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
         $this->db->join('tbl_section sc','sc.id=sd.sectionid');
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
-        $this->db->where('sd.sectionid',$section);
-        $this->db->where('sd.syid',$schoolyear);
-        $this->db->where('sd.term',$semester);
+
+        $likeCriteria;
+
+        if($gradelevel == "Grade 11" || $gradelevel == "Grade 12")
+        {
+            $likeCriteria = "(sb.gradelevel = '".$gradelevel."' AND sd.sectionid='".$section."' AND sd.syid='".$schoolyear."' AND sd.term= '".$semester."')";
+
+        }
+
+        else
+        {
+            $likeCriteria = "(sb.gradelevel = '".$gradelevel."' AND sd.sectionid='".$section."' AND sd.syid='".$schoolyear."' AND sd.term= '".''."')";
+
+
+        }
+
+        $this->db->where($likeCriteria);  
 
         $query = $this->db->get();
         
