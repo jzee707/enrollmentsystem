@@ -445,7 +445,7 @@ class Enrollment_model extends CI_Model {
 		
     }
 
-    function getScheduleList($section,$schoolyear) {
+    function getScheduleList($section,$schoolyear,$semester) {
 
         $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
         $this->db->from('tbl_schedule sd');
@@ -455,14 +455,15 @@ class Enrollment_model extends CI_Model {
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
         $this->db->where('sd.sectionid',$section);
         $this->db->where('sd.syid',$schoolyear);
-        
+        $this->db->where('sd.term',$semester);
+
         $query = $this->db->get();
         
         $result = $query->result();        
         return $result;
     }
 
-    function getAllScheduleList($gradelevel,$strand,$schoolyear) {
+    function getAllScheduleList($gradelevel,$strand,$schoolyear,$semester) {
 
         $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
         $this->db->from('tbl_schedule sd');
@@ -475,13 +476,13 @@ class Enrollment_model extends CI_Model {
 
         if($gradelevel == "Grade 11")
         {
-            $likeCriteria = "(sb.gradelevel = 'Grade 11' AND sb.strandid='".$strand."' AND sd.syid='".$schoolyear."' )";
+            $likeCriteria = "(sb.gradelevel = 'Grade 11' AND sb.strandid='".$strand."' AND sd.syid='".$schoolyear."' AND sd.term= '".$semester."')";
 
         }
 
         else if($gradelevel == "Grade 12")
         {
-            $likeCriteria = "(sb.gradelevel = 'Grade 11' AND sb.strandid='".$strand."' AND sd.syid='".$schoolyear."' OR sb.gradelevel = 'Grade 12' AND sb.strandid='".$strand."' AND sd.syid='".$schoolyear."' )";
+            $likeCriteria = "(sb.gradelevel = 'Grade 11' AND sb.strandid='".$strand."' AND sd.syid='".$schoolyear."'  AND sd.term= '".$semester."' OR sb.gradelevel = 'Grade 12' AND sb.strandid='".$strand."' AND sd.syid='".$schoolyear."'  AND sd.term= '".$semester."')";
 
         }
 

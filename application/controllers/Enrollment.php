@@ -496,7 +496,13 @@ function editSchedule($id)
             $schoolyear = $row->id;
         }  
 
-           $result = $this->auth->getAllScheduleList($this->input->post('gradelevel'),$this->input->post('strand'),$schoolyear);
+        $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+        if (!empty($row1->id))
+        {
+            $semester = $row1->semester;
+        }
+
+           $result = $this->auth->getAllScheduleList($this->input->post('gradelevel'),$this->input->post('strand'),$schoolyear,$semester);
            $output = '
            
            <h3 align="center">Schedule List</h3>	
@@ -559,7 +565,13 @@ function editSchedule($id)
             $schoolyear = $row->id;
         }  
 
-           $result = $this->auth->getScheduleList($this->input->post('section'),$schoolyear);
+        $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+        if (!empty($row1->id))
+        {
+            $semester = $row1->semester;
+        }
+
+           $result = $this->auth->getScheduleList($this->input->post('section'),$schoolyear,$semester);
            $output = '
            
            <h3 align="center">Schedule List</h3>	
@@ -620,7 +632,13 @@ function editSchedule($id)
             $schoolyear = $row->id;
         }  
 
-           $result = $this->auth->getScheduleList($this->input->post('section'),$schoolyear);
+        $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+        if (!empty($row1->id))
+        {
+            $semester = $row1->semester;
+        }
+
+           $result = $this->auth->getScheduleList($this->input->post('section'),$schoolyear,$semester);
            $output = '
            
            <h3 align="center">Schedule List</h3>	
