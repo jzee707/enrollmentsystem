@@ -328,7 +328,7 @@ $('#etype').change(function(){
         $.ajax({
         url:"<?php echo base_url(); ?>enrollment/load_sched",
         method:"POST",
-        data:{section:section},
+        data:{section:section,gradelevel:gradelevel},
         success:function(data)
         {
         $('#sched_data').html(data);
@@ -346,7 +346,7 @@ $('#etype').change(function(){
         $.ajax({
         url:"<?php echo base_url(); ?>enrollment/load_schedirg",
         method:"POST",
-        data:{section:section,etype:etype},
+        data:{section:section,etype:etype,gradelevel:gradelevel},
         success:function(data)
         {
         $('#sched_data').html(data);
