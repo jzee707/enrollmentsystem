@@ -235,7 +235,7 @@ function editFaculty($id)
     function archivefaculty($id)
     {
                         
-                $studentInfo = array('id'=>$id,'status'=>'Inactive',);
+                $studentInfo = array('status'=>'Inactive',);
 
                 $row = $this->db->select("*")->where('id',$id)->get("tbl_faculty")->row();
                 $accountid = $row->accountid;
@@ -249,9 +249,9 @@ function editFaculty($id)
                 
                 if($result == true)
                 {
+                    $this->auth->editAccount($accountInfo, $accountid); 
                     $this->session->set_flashdata('success', 'Faculty Data Archived.');      
-                    $this->auth->editAccount($accountInfo, $accountid);           
-
+                             
                     redirect('faculty');
                    
                 }
@@ -269,7 +269,7 @@ function editFaculty($id)
     function retreievefaculty($id)
     {
                         
-                $studentInfo = array('id'=>$id,'status'=>'Active',);
+                $studentInfo = array('status'=>'Active',);
 
                 $row = $this->db->select("*")->where('id',$id)->get("tbl_faculty")->row();
                 $accountid = $row->accountid;
@@ -282,7 +282,7 @@ function editFaculty($id)
                 
                 if($result == true)
                 {
-                    $this->auth->editFaculty($accountInfo, $id);
+                    $this->auth->editAccount($accountInfo, $accountid);
 
                     $this->session->set_flashdata('success', 'Faculty Data Restored.');                 
 
@@ -303,7 +303,7 @@ function editFaculty($id)
     function dropstudent($id)
     {
                         
-                $studentInfo = array('id'=>$id,'status'=>'Dropped',);
+                $studentInfo = array('status'=>'Dropped',);
                 
                 $result = $this->auth->editEnrollment($studentInfo, $id);
 

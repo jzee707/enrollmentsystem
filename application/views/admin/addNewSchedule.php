@@ -71,7 +71,7 @@
                                                 <div class="form-group">
                                                     <label for="last_name">Subject</label>
                                                     <br>
-                                                    <select name="subject" id="subject" class="form-control">
+                                                    <select name="subject" id="subject" class="form-control select2">
 
                                                     </select>
                                                 </div>
@@ -354,6 +354,9 @@ $('#section').change(function(){
 
 
 });
+
+        document.getElementById('strand').style.visibility = 'hidden';
+        document.getElementById('lblstrand').style.visibility = 'hidden';
 
     
 });

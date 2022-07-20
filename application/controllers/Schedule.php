@@ -35,8 +35,8 @@ function editSchedule($id)
 
     $data['scheduleInfo'] = $this->auth->getScheduleInfo($id);
     $data['faculty'] = $this->auth->getAdviser();
-    $data['subject'] = $this->auth->getSubjectList();
-    $data['section'] = $this->auth->getSectionList();
+    $data['subject'] = $this->auth->getSubjectList($id);
+    $data['section'] = $this->auth->getSectionList($id);
     $data['strand'] = $this->auth->getStrandList();
 
     $this->load->view('templates/adminheader', $data);
@@ -60,9 +60,10 @@ function editSchedule($id)
         $this->form_validation->set_rules('timestart', 'Time Start', 'trim|required');
         $this->form_validation->set_rules('timeend', 'Time End', 'trim|required');
         $this->form_validation->set_rules('status', 'Status', 'trim|required');
+        $this->form_validation->set_rules('term', 'Term', 'trim|callback_checkTerm');
 
  
-        if ($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) { 
             $this->addNewSchedule();
         } else {
             
@@ -307,19 +308,27 @@ function editSchedule($id)
         $searchText = $this->security->xss_clean($this->input->post('searchText'));
 
         
-        $schoolyear =0;
+        $schoolyear = 0;
     
         $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
         if (!empty($row->id))
         {
             $schoolyear = $row->id;
         }
+
+        $semester = "";
+    
+        $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+        if (!empty($row1->id))
+        {
+            $semester = $row1->semester;
+        }
            
-        $count = $this->auth->scheduleListingCount($searchText,$status,$schoolyear);
+        $count = $this->auth->scheduleListingCount($searchText,$status,$schoolyear,$semester);
 
         $returns = $this->paginationCompress ( "schedule/scheduleListing/", $count, 10 );
         
-        $data['userRecords'] = $this->auth->scheduleListing($searchText, $status,$schoolyear,$returns["page"], $returns["segment"]);
+        $data['userRecords'] = $this->auth->scheduleListing($searchText, $status,$schoolyear,$semester,$returns["page"], $returns["segment"]);
         
 
             $this->load->view('templates/adminheader', $data);
@@ -388,7 +397,7 @@ function editSchedule($id)
         if($this->input->post('gradelevel'))
            {
    
-           echo $this->auth->getSubject($this->input->post('gradelevel'),$this->input->post('strand'));
+           echo $this->auth->getSubjectSHS($this->input->post('gradelevel'),$this->input->post('strand'));
            }
    
        }
@@ -418,6 +427,29 @@ function editSchedule($id)
            echo $this->auth->getStrand($this->input->post('gradelevel'));
            }
    
+       }
+
+       function checkTerm() {
+
+
+        $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
+        $term = $this->input->post('term');
+
+
+            if ($gradelevel == "Grade 11" && $term == "" || $gradelevel == "Grade 12" && $term == "") {
+
+                $this->form_validation->set_message('checkTerm', 'Term must be filled.');
+    
+                return FALSE;
+            }
+    
+            else
+            {
+                return TRUE;
+            }
+        
+     
+     
        }
 
 

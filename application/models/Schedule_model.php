@@ -170,30 +170,29 @@ class Schedule_model extends CI_Model {
         return $query->row();
     }
     
-    function scheduleListingCount($searchText = '',$status,$schoolyear)
+    function scheduleListingCount($searchText = '',$status,$schoolyear,$term)
     {
-        $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.timefrom,sd.timeto,sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
+        $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.timefrom,sd.timeto, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_faculty a','a.id=sd.adviserid');
         $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
         $this->db->join('tbl_section sc','sc.id=sd.sectionid');
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
 
-
-            $likeCriteria = "(sb.gradelevel  LIKE '".$searchText."%'
-                            AND sd.status='".$status."'  AND sd.syid='".$schoolyear."'
-                            OR description  LIKE '".$searchText."%'
-                            AND sd.status='".$status."' AND sd.syid='".$schoolyear."')";
+        $likeCriteria = "(sb.gradelevel  LIKE '".$searchText."%'
+        AND sd.status='".$status."'  AND sd.syid='".$schoolyear."'  AND sd.term IN ('".$term."','')
+        OR description  LIKE '".$searchText."%'
+        AND sd.status='".$status."' AND sd.syid='".$schoolyear."' AND sd.term IN ('".$term."',''))";
                             
-       $this->db->where($likeCriteria);
-       $this->db->order_by('sd.id','ASC');
+        $this->db->where($likeCriteria);
+        $this->db->order_by('sd.id','ASC');
 
         $query = $this->db->get();
         
         return $query->num_rows();
     }
 
-    function scheduleListing($searchText = '', $status,$schoolyear,$page, $segment) {
+    function scheduleListing($searchText = '', $status,$schoolyear,$term,$page, $segment) {
 
         $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.timefrom,sd.timeto,sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
         $this->db->from('tbl_schedule sd');
@@ -203,10 +202,10 @@ class Schedule_model extends CI_Model {
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
 
 
-            $likeCriteria = "(sb.gradelevel  LIKE '".$searchText."%'
-                            AND sd.status='".$status."' AND sd.syid='".$schoolyear."'
-                            OR description  LIKE '".$searchText."%'
-                            AND sd.status='".$status."' AND sd.syid='".$schoolyear."')";
+        $likeCriteria = "(sb.gradelevel  LIKE '".$searchText."%'
+        AND sd.status='".$status."'  AND sd.syid='".$schoolyear."'  AND sd.term IN ('".$term."','')
+        OR description  LIKE '".$searchText."%'
+        AND sd.status='".$status."' AND sd.syid='".$schoolyear."' AND sd.term IN ('".$term."',''))";
 
             $this->db->where($likeCriteria);
       
@@ -329,10 +328,11 @@ class Schedule_model extends CI_Model {
 
     function getStrandList()
 	{
-        $this->db->select('id,strandcode');
-        $this->db->from('tbl_strand');
-        $this->db->where('status','Active');
-		
+        $this->db->select('st.id,st.strandcode');
+        $this->db->from('tbl_strand st');
+        $this->db->join('tbl_section s','s.strandid=st.id');
+        $this->db->where('st.status','Active');
+        
         return $this->db->get();
 
 		
@@ -340,10 +340,13 @@ class Schedule_model extends CI_Model {
 
     function getStrand($gradelevel)
 	{
-        $this->db->select('id,strandcode,description');
-        $this->db->from('tbl_strand');
-        $this->db->where('status','Active');
-        $this->db->order_by('strandcode','ASC');
+        $this->db->select('st.id,st.strandcode,st.description');
+        $this->db->from('tbl_strand st');
+        $this->db->join('tbl_section s','s.strandid=st.id');
+        $this->db->where('s.gradelevel', $gradelevel);
+        $this->db->where('s.status','Active');
+        $this->db->group_by('st.id');
+        $this->db->order_by('st.strandcode','ASC');
         $query = $this->db->get();
 
         $output = '<option selected disabled value="">Select Strand</option>';
@@ -383,7 +386,7 @@ class Schedule_model extends CI_Model {
         $this->db->select('id,subject,description');
         $this->db->from('tbl_subject');
         $this->db->where('gradelevel',$gradelevel);
-        $this->db->where('strand',$strand);
+        $this->db->where('strandid',$strand);
         $this->db->where('status','Active');
         $this->db->order_by('subject','ASC');
         $query = $this->db->get();
@@ -452,22 +455,29 @@ class Schedule_model extends CI_Model {
 		
     }
 
-    function getSubjectList()
+    function getSubjectList($id)
 	{
         $this->db->select('id,subject');
-        $this->db->from('tbl_subject');
-        $this->db->where('status','Active');
+        $this->db->from('tbl_subject ');
+
+
+        $likeCriteria = "(gradelevel =(SELECT s.gradelevel FROM tbl_schedule sc INNER JOIN tbl_subject s ON s.id=sc.subjectid WHERE sc.id ='". $id ."') AND status='Active')";
+
+        $this->db->where($likeCriteria);
 		
         return $this->db->get();
 
 		
     }
 
-    function getSectionList()
+    function getSectionList($id)
 	{
         $this->db->select('id,section');
         $this->db->from('tbl_section');
-        $this->db->where('status','Active');
+        
+        $likeCriteria = "(gradelevel =(SELECT s.gradelevel FROM tbl_schedule sc INNER JOIN tbl_section s ON s.id=sc.sectionid WHERE sc.id ='". $id ."') AND status='Active')";
+
+        $this->db->where($likeCriteria);
 		
         return $this->db->get();
 

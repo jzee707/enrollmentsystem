@@ -186,6 +186,15 @@ class Student_model extends CI_Model {
         return TRUE;
     }
 
+
+    function editAccount($studentInfo, $id)
+    {       
+        $this->db->where('id', $id);
+        $this->db->update('tbl_account', $studentInfo);
+              
+        return TRUE;
+    }
+
   function deleteUser($userId, $userInfo)
     {
         $this->db->where('id', $userId);

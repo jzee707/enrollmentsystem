@@ -407,6 +407,9 @@ function load_sched() {
 
 }
 
+        document.getElementById('strand').style.visibility = 'hidden';
+        document.getElementById('lblstrand').style.visibility = 'hidden';
+
 
 document.getElementById("student").value= "<?php echo $enrollmentInfo->studentid ?>";
 document.getElementById("gradelevel").value= "<?php echo $enrollmentInfo->gradelevel ?>";

@@ -93,9 +93,17 @@ function editSchedule($id)
          if (!empty($row->id))
          {
              $schoolyear = $row->id;
-         }           
+         }      
          
-         $chk = $this->auth->addEnrollment($id,$schoolyear,$timeStamp,$etype,$strand,$status);
+         $semester = "";
+    
+        $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+        if (!empty($row1->id))
+        {
+            $semester = $row1->semester;
+        }
+         
+         $chk = $this->auth->addEnrollment($id,$schoolyear,$timeStamp,$etype,$strand,$semester,$status);
 
          $enrollid = $this->db->select("*")->limit(1)->order_by('id',"DESC")->get("tbl_enrollment")->row();
 
@@ -132,37 +140,7 @@ function editSchedule($id)
 
         redirect('enrollment');
 
-         /* $schoolyear = 0;
 
-         $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
-         if (!empty($row->id))
-         {
-             $schoolyear = $row->id;
-         }           
-         
-         $chk = $this->auth->addEnrollment($id,$schoolyear,$timeStamp,$etype,$strand,$status);
-
-         $enrollid = $this->db->select("*")->limit(1)->order_by('id',"DESC")->get("tbl_enrollment")->row();
-
-         $schedule = $this->auth->scheduleListingInfo($section, $schoolyear);
-
-         foreach($schedule as $record)
-         {
-             $this->auth->addSchedule($enrollid->id,$record->id);
-         }
-
-
-         if($chk > 0)
-             {
-                 $this->session->set_flashdata('success', 'Student Enrolled Successfully');
-             }
-             else
-             {
-                 $this->session->set_flashdata('error', 'Student Enrolled failed');
-             }
-
-         redirect('enrollment');
-          */
 
      }
      
@@ -285,8 +263,7 @@ function editSchedule($id)
      
  }
 
-                    
-   
+
     function enrollmentListing()
     {
 
@@ -301,12 +278,20 @@ function editSchedule($id)
         {
             $schoolyear = $row->id;
         }
+
+        $semester = "";
+    
+        $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+        if (!empty($row1->id))
+        {
+            $semester = $row1->semester;
+        }
            
-        $count = $this->auth->enrollmentListingCount($searchText,$status,$schoolyear);
+        $count = $this->auth->enrollmentListingCount($searchText,$status,$schoolyear,$semester);
 
         $returns = $this->paginationCompress ( "enrollment/enrollmentListing/", $count, 10 );
         
-        $data['userRecords'] = $this->auth->enrollmentListing($searchText, $status,$schoolyear,$returns["page"], $returns["segment"]);
+        $data['userRecords'] = $this->auth->enrollmentListing($searchText, $status,$schoolyear,$semester,$returns["page"], $returns["segment"]);
         
 
             $this->load->view('templates/adminheader', $data);
@@ -329,12 +314,20 @@ function editSchedule($id)
         {
             $schoolyear = $row->id;
         }
+
+        $semester = "";
+    
+        $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+        if (!empty($row1->id))
+        {
+            $semester = $row1->semester;
+        }
            
-        $count = $this->auth->enrollmentListingCount($searchText,$status,$schoolyear);
+        $count = $this->auth->enrollmentListingCount($searchText,$status,$schoolyear,$semester);
 
         $returns = $this->paginationCompress ( "enrollment/enrollmentListing/", $count, 10 );
         
-        $data['userRecords'] = $this->auth->enrollmentListing($searchText, $status,$schoolyear,$returns["page"], $returns["segment"]);
+        $data['userRecords'] = $this->auth->enrollmentListing($searchText, $status,$schoolyear,$semester,$returns["page"], $returns["segment"]);
         
 
             $this->load->view('templates/adminheader', $data);
@@ -356,12 +349,20 @@ function editSchedule($id)
         {
             $schoolyear = $row->id;
         }
+
+        $semester = "";
+    
+        $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+        if (!empty($row1->id))
+        {
+            $semester = $row1->semester;
+        }
            
-        $count = $this->auth->enrollmentListingCount($searchText,$status,$schoolyear);
+        $count = $this->auth->enrollmentListingCount($searchText,$status,$schoolyear,$semester);
 
         $returns = $this->paginationCompress ( "enrollment/preenrollmentListing/", $count, 10 );
         
-        $data['userRecords'] = $this->auth->enrollmentListing($searchText, $status,$schoolyear,$returns["page"], $returns["segment"]);
+        $data['userRecords'] = $this->auth->enrollmentListing($searchText, $status,$schoolyear,$semester,$returns["page"], $returns["segment"]);
         
 
             $this->load->view('templates/adminheader', $data);
@@ -487,7 +488,7 @@ function editSchedule($id)
        {
         $schoolyear =0;
         
-        $schedid = $this->security->xss_clean($this->input->post('schedid'));
+        $schedid = $this->input->post('schedid');
 
         $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
         if (!empty($row->id))
@@ -508,6 +509,7 @@ function editSchedule($id)
                     <th>Day</th>
                     <th>Time</th>
                     <th>Teacher</th>  
+                    <th>Grade Level</th> 
                        
                </tr>
            </thead>
@@ -519,24 +521,27 @@ function editSchedule($id)
                {
                    $output .= '
                    <tr>
-                           <td>'.$record->id.'</td>
-                           <td>'.$record->subject.'</td>
-                           <td>'.$record->room.'</td>
-                           <td>'.$record->day.'</td>
-                           <td>'.date("h:i A", strtotime($record->timefrom)) . ' - ' . date("h:i A", strtotime($record->timeto)).'</td>
-                           <td>'.$record->name.'</td>
-                           <td><a class="btn btn-sm btn-info" id="addSched" title="Add Subject">Add Subject</a></td>
-                           
 
-                           ';
+                   <td>'.$record->id.'</td>
+                    <td>'.$record->subject.'</td>
+                    <td>'.$record->room.'</td>
+                    <td>'.$record->day.'</td>
+                    <td>'.date("h:i A", strtotime($record->timefrom)) . ' - ' . date("h:i A", strtotime($record->timeto)).'</td>
+                    <td>'.$record->name.'</td>
+                    <td>'.$record->gradelevel.'</td>
+                    <td><a class="btn btn-sm btn-info" id="addSched" title="Add Subject">Add Subject</a></td>
+
+                    ';
+
+                   
    
-                               $output .= '
-                       
-                       </tr>
-                       ';
-                       
-                   }
+                           $output .= '
+                   
+                   </tr>
+                   ';
+                   
                }
+           }
                    $output .= '
    
                        </tbody>
@@ -645,7 +650,7 @@ function editSchedule($id)
                            <td>'.$record->day.'</td>
                            <td>'.date("h:i A", strtotime($record->timefrom)) . ' - ' . date("h:i A", strtotime($record->timeto)).'</td>
                            <td>'.$record->name.'</td>
-                           <td><a class="btn btn-sm btn-info" onclick="RemoveRow()" title="Remove Subject"><i class="fa fa-trash"></i></a></td>
+                           <td><a class="btn btn-sm btn-info" name="btn-remove" id="btn-remove" title="Remove Subject"><i class="fa fa-trash"></i></a></td>
 
                            ';
    

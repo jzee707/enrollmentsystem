@@ -144,7 +144,15 @@ function preenrollment()
         $schoolyear = $row->id;
     }
 
-    $result = $this->auth->getEnrollmentInfo($id, $schoolyear);
+    $semester = "";
+    
+    $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+    if (!empty($row1->id))
+    {
+        $semester = $row1->semester;
+    }
+
+    $result = $this->auth->getEnrollmentInfo($id, $schoolyear,$semester);
 
     if(!empty($result))
     {
@@ -224,13 +232,21 @@ public function studentaccount() {
         $schoolyear = $row->id;
     }
 
-    $data['studentInfo'] = $this->auth->getEnrollmentInfo($id,$schoolyear);
+    $semester = "";
+    
+    $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+    if (!empty($row1->id))
+    {
+        $semester = $row1->semester;
+    }
 
-    $count = $this->auth->scheduleListingCount($id,$schoolyear);
+    $data['studentInfo'] = $this->auth->getEnrollmentInfo($id,$schoolyear,$semester);
+
+    $count = $this->auth->scheduleListingCount($id,$schoolyear,$semester);
 
         $returns = $this->paginationCompress ( "auth/studentenrollment/", $count, 10 );
         
-        $data['userRecords'] = $this->auth->scheduleListing($id,$schoolyear, $returns["page"], $returns["segment"]);
+        $data['userRecords'] = $this->auth->scheduleListing($id,$schoolyear, $semester,$returns["page"], $returns["segment"]);
     
     $this->load->view('templates/userheader', $data);
     $this->load->view('student/enrollment', $data);
@@ -247,13 +263,24 @@ public function studentrecords() {
 
     $schoolyear =0;
 
+    
+
     $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
     if (!empty($row->id))
     {
         $schoolyear = $row->id;
     }
 
-    $data['studentInfo'] = $this->auth->getEnrollmentInfo($id,$schoolyear);
+    $semester = "";
+    
+    $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+    if (!empty($row1->id))
+    {
+        $semester = $row1->semester;
+    }
+
+
+    $data['studentInfo'] = $this->auth->getEnrollmentInfo($id,$schoolyear,$semester);
 
     $count = $this->auth->recordsListingCount($id,$schoolyear);
 
@@ -378,9 +405,17 @@ function signout()
             if (!empty($row->id))
             {
                 $schoolyear = $row->id;
-            }           
+            }      
             
-            $chk = $this->auth->addPreEnrollment($id,$schoolyear,$timeStamp,$etype,$strand);
+            $semester = "";
+    
+            $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+            if (!empty($row1->id))
+            {
+                $semester = $row1->semester;
+            }
+            
+            $chk = $this->auth->addPreEnrollment($id,$schoolyear,$timeStamp,$etype,$strand,$semester);
 
             $enrollid = $this->db->select("*")->limit(1)->order_by('id',"DESC")->get("tbl_enrollment")->row();
  
@@ -445,7 +480,7 @@ function signout()
     public function getSectionIrreg(){
 
         $query = $this->db->query("SELECT sc.id,sc.section 
-        FROM tbl_section sc INNER JOIN tbl_schedule sd ON sd.sectionid=sc.id WHERE sc.gradelevel='".$this->input->post('gradelevel')."' AND sc.strandid='".$this->input->post('strand')."'  GROUP BY sc.section ORDER BY sc.section ASC LIMIT 1");
+        FROM tbl_section sc INNER JOIN tbl_schedule sd ON sd.sectionid=sc.id WHERE sc.gradelevel='".$this->input->post('gradelevel')."' AND sc.strandid='".$this->input->post('strand')."'  GROUP BY sc.id ORDER BY sc.id ASC LIMIT 1");
 
         $data['record'] = $query->result();
     
@@ -457,7 +492,7 @@ function signout()
         if($this->input->post('gradelevel'))
         {
 
-        echo $this->auth->getSectionStudent($this->input->post('gradelevel'),$this->input->post('strand'));
+        echo $this->auth->getSectionStudentIrreg($this->input->post('gradelevel'),$this->input->post('strand'));
         }
 
     }

@@ -81,7 +81,7 @@
                                     <input type="password" class="form-control border-0" id="password" name="password" placeholder="Password" style="height: 55px;" value="<?php echo $password;?>">
                                 
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" style="height:55px" type="button" id="btnshow" name="btnshow" onclick="tooglePassword()">Show</button>
+                                        <button class="btn btn-outline-secondary" style="height:55px" type="button" id="btnshow" name="btnshow" onclick="tooglePassword()" tabindex="-1">Show</button>
                                     </div>
 
                                 </div>

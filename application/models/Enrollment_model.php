@@ -85,13 +85,14 @@ class Enrollment_model extends CI_Model {
     
 
  
-    public function addEnrollment($id,$syid,$timeStamp,$etype,$strand,$status) {
+    public function addEnrollment($id,$syid,$timeStamp,$etype,$strand,$semester,$status) {
 
         $data = array(
             'studentid' => $id,
             'syid' => $syid,
             'type' => $etype,
             'strandid' => $strand,
+            'term' => $semester,
             'date_requested' => $timeStamp,
             'date_enrolled' => $timeStamp,
             'status' => $status,
@@ -194,9 +195,9 @@ class Enrollment_model extends CI_Model {
         return $query->row();
     }
     
-    function enrollmentListingCount($searchText,$status,$schoolyear)
+    function enrollmentListingCount($searchText,$status,$schoolyear,$term)
     {
-        $this->db->select("e.id,concat(s.firstname, ' ',s.lastname) as student,sc.gradelevel,sc.section,sd.term,sy.schoolyear,s.accountid,st.strandcode,e.date_requested,e.date_enrolled,e.status");
+        $this->db->select("e.id,concat(s.firstname, ' ',s.lastname) as student,sc.gradelevel,sc.section,e.term,sy.schoolyear,s.accountid,st.strandcode,e.date_requested,e.date_enrolled,e.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
         $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
@@ -209,7 +210,7 @@ class Enrollment_model extends CI_Model {
 
 
         $likeCriteria = "(concat(s.firstname, ' ',s.lastname)  LIKE '".$searchText."%'
-        AND e.status='".$status."' AND e.syid='".$schoolyear."')";
+        AND e.status='".$status."' AND e.syid='".$schoolyear."' AND e.term IN ('".$term."',''))";
                             
         $this->db->where($likeCriteria);
         $this->db->group_by('e.id');
@@ -218,9 +219,9 @@ class Enrollment_model extends CI_Model {
         return $query->num_rows();
     }
 
-    function enrollmentListing($searchText, $status,$schoolyear,$page, $segment) {
+    function enrollmentListing($searchText, $status,$schoolyear, $term,$page, $segment) {
 
-        $this->db->select("e.id,concat(s.firstname, ' ',s.lastname) as student,sc.gradelevel,sc.section,sd.term,st.strandcode,sy.schoolyear,s.accountid,e.date_requested,e.date_enrolled,e.status");
+        $this->db->select("e.id,concat(s.firstname, ' ',s.lastname) as student,sc.gradelevel,sc.section,e.term,st.strandcode,sy.schoolyear,s.accountid,e.date_requested,e.date_enrolled,e.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
         $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
@@ -231,7 +232,7 @@ class Enrollment_model extends CI_Model {
 
 
         $likeCriteria = "(concat(s.firstname, ' ',s.lastname)  LIKE '".$searchText."%'
-        AND e.status='".$status."' AND e.syid='".$schoolyear."')";
+        AND e.status='".$status."' AND e.syid='".$schoolyear."' AND e.term IN ('".$term."',''))";
 
         $this->db->where($likeCriteria);
         $this->db->group_by('e.id');
@@ -313,27 +314,34 @@ class Enrollment_model extends CI_Model {
 
     function getSection($gradelevel)
 	{
-        $this->db->select('sc.id,sc.section');
-        $this->db->from('tbl_section sc');
-        $this->db->join('tbl_schedule sd','sd.sectionid=sc.id');
+        $this->db->select("id,section");
 
-        /* $likeCriteria = "(sc.gradelevel = '".$gradelevel."'
-        AND sc.level > (SELECT count(enrollmentid) FROM tbl_enrollsched as es INNER JOIN tbl_schedule s ON s.id=es.scheduleid GROUP BY s.sectionid))"; */
+        $this->db->from('tbl_section');
+
+        /*  $likeCriteria = "(id IN (SELECT sd.sectionid 
+        FROM `tbl_enrollsched` es 
+        LEFT JOIN tbl_schedule sd ON sd.id=es.scheduleid
+        LEFT JOIN tbl_enrollment e ON e.id=es.enrollmentid
+        LEFT JOIN tbl_section s ON s.id=sd.sectionid
+        WHERE e.status='Active' AND s.gradelevel = '".$gradelevel."'
+        GROUP BY sd.sectionid HAVING count(DISTINCT es.enrollmentid) < level ))";  */ 
         
-         $likeCriteria = "(sc.gradelevel = '".$gradelevel."')"; 
+        $likeCriteria = "(gradelevel = '".$gradelevel."')"; 
 
         $this->db->where($likeCriteria);
 
 
-        $this->db->group_by('sc.id');
-        $this->db->order_by('sc.id','ASC');
+        $this->db->group_by('id');
+        $this->db->order_by('id','ASC');
         $query = $this->db->get();
 		
         $output = '<option selected disabled value="">Select Section</option>';
 
         foreach($query->result() as $row)
         {
-         $output .= '<option  value="'.$row->id.'">'.$row->section.'</option>';
+
+                $output .= '<option  value="'.$row->id.'">'.$row->section.'</option>';
+  
         }
         
         return $output;
@@ -427,10 +435,10 @@ class Enrollment_model extends CI_Model {
         $this->db->select("id,concat(firstname, ' ',lastname) as name, status");
         $this->db->from('tbl_student');   
 
-        $likeCriteria = "(id  NOT IN (SELECT studentid FROM tbl_enrollment WHERE status='Active' AND syid=(SELECT id FROM tbl_schoolyear WHERE status='Active'))
-            AND status='Active')";
+        $likeCriteria = "(id  NOT IN (SELECT studentid FROM tbl_enrollment WHERE status='Active' AND syid=(SELECT id FROM tbl_schoolyear WHERE status='Active') AND term=(SELECT semester FROM tbl_semester WHERE status='Active')) AND status='Active')";
 
-            $this->db->where($likeCriteria);
+        $this->db->where($likeCriteria);
+        $this->db->order_by('name','ASC');
 
 		
         return $this->db->get();
@@ -462,10 +470,23 @@ class Enrollment_model extends CI_Model {
         $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
         $this->db->join('tbl_section sc','sc.id=sd.sectionid');
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
-        $this->db->where('sb.gradelevel',$gradelevel);
-        $this->db->where('sb.strandid',$strand);
-        $this->db->where('sd.syid',$schoolyear);
-        
+
+        $likeCriteria;
+
+        if($gradelevel == "Grade 11")
+        {
+            $likeCriteria = "(sb.gradelevel = 'Grade 11' AND sb.strandid='".$strand."' AND sd.syid='".$schoolyear."' )";
+
+        }
+
+        else if($gradelevel == "Grade 12")
+        {
+            $likeCriteria = "(sb.gradelevel = 'Grade 11' AND sb.strandid='".$strand."' AND sd.syid='".$schoolyear."' OR sb.gradelevel = 'Grade 12' AND sb.strandid='".$strand."' AND sd.syid='".$schoolyear."' )";
+
+        }
+
+        $this->db->where($likeCriteria);
+       
         $query = $this->db->get();
         
         $result = $query->result();        

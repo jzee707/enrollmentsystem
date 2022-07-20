@@ -333,7 +333,7 @@ public function registration() {
     function approvedRequest($id)
     {
                         
-                $studentInfo = array('id'=>$id,'status'=>'Active',);
+                $studentInfo = array('status'=>'Active',);
                 
                 $result = $this->auth->editStudent($studentInfo, $id);
 
@@ -362,7 +362,7 @@ public function registration() {
     function declinedRequest($id)
     {
                         
-                $studentInfo = array('id'=>$id,'status'=>'Declined',);
+                $studentInfo = array('status'=>'Declined',);
                 
                 $result = $this->auth->editStudent($studentInfo, $id);
 
@@ -391,19 +391,19 @@ public function registration() {
     function archivestudent($id)
     {
                         
-                $studentInfo = array('id'=>$id,'status'=>'Inactive',);
+                $studentInfo = array('status'=>'Inactive',);
 
                 $row = $this->db->select("*")->where('id',$id)->get("tbl_student")->row();
                 $accountid = $row->accountid;
 
-                $accountInfo = array('id'=>$accountid,'status'=>'Inactive',);
+                $accountInfo = array('status'=>'Inactive',);
                 
                 $result = $this->auth->editStudent($studentInfo, $id);
 
                 
                 if($result == true)
                 {
-                    $this->auth->editFaculty($accountInfo, $accountid);
+                    $this->auth->editAccount($accountInfo, $accountid);
 
                     $this->session->set_flashdata('success', 'Student Data Archived.');                 
 
@@ -424,19 +424,19 @@ public function registration() {
     function retrievestudent($id)
     {
                         
-                $studentInfo = array('id'=>$id,'status'=>'Active',);
+                $studentInfo = array('status'=>'Active',);
                 
                 $row = $this->db->select("*")->where('id',$id)->get("tbl_student")->row();
                 $accountid = $row->accountid;
 
-                $accountInfo = array('id'=>$accountid,'status'=>'Active',);
+                $accountInfo = array('status'=>'Active',);
                 
-                $result = $this->auth->editStudent($studentInfo, $accountid);
+                $result = $this->auth->editStudent($studentInfo, $id);
 
                 
                 if($result == true)
                 {
-                    $this->auth->editStudent($accountInfo, $id);
+                    $this->auth->editAccount($accountInfo, $accountid);
 
                     $this->session->set_flashdata('success', 'Student Data Restored.');                 
 

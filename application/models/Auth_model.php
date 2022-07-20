@@ -75,13 +75,14 @@ class Auth_model extends CI_Model {
 
  
     //create new user
-    public function addPreEnrollment($id,$syid,$timeStamp,$etype,$strand) {
+    public function addPreEnrollment($id,$syid,$timeStamp,$etype,$strand,$semester) {
 
         $data = array(
             'studentid' => $id,
             'syid' => $syid,
             'type' => $etype,
             'strandid' => $strand,
+            'term' => $semester,
             'date_requested' => $timeStamp,
             'status' => 'Requested',
         );
@@ -320,12 +321,15 @@ class Auth_model extends CI_Model {
     }
 
 
-    function getEnrollmentInfo($id,$schoolyear)
+    function getEnrollmentInfo($id,$schoolyear,$semester)
     {
         $this->db->select("id,studentid,syid,status");
         $this->db->from('tbl_enrollment');
-        $this->db->where('studentid', $id);
-        $this->db->where('syid', $schoolyear);
+
+        $likeCriteria = "(studentid='".$id."' AND syid='".$schoolyear."' AND term IN ('".$semester."',''))";
+
+        $this->db->where($likeCriteria);
+
         $query = $this->db->get();
         
         return $query->row();
@@ -362,9 +366,9 @@ class Auth_model extends CI_Model {
         return $result;
     }
 
-    function scheduleListingCount($id,$syid)
+    function scheduleListingCount($id,$syid,$semester)
     {
-        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,es.status");
+        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, e.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,es.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
         $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
@@ -374,6 +378,7 @@ class Auth_model extends CI_Model {
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
         $this->db->where('e.studentid', $id);
         $this->db->where('e.syid', $syid);
+        $this->db->where('e.term', $semester);
         $this->db->where('sd.status', 'Active');
                         
 
@@ -382,9 +387,9 @@ class Auth_model extends CI_Model {
         return $query->num_rows();
     }
 
-    function scheduleListing($id,$syid, $page, $segment) {
+    function scheduleListing($id,$syid, $semester,$page, $segment) {
 
-        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,es.status");
+        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, e.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,es.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
         $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
@@ -394,6 +399,7 @@ class Auth_model extends CI_Model {
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
         $this->db->where('e.studentid', $id);
         $this->db->where('e.syid', $syid);
+        $this->db->where('e.term', $semester);
         $this->db->where('sd.status', 'Active');
       
         $this->db->limit($page, $segment);

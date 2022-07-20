@@ -204,6 +204,7 @@ $('#gradelevel').change(function(){
 
             document.getElementById('strand').style.visibility = 'hidden';
             document.getElementById('lblstrand').style.visibility = 'hidden';
+            document.getElementById('addbtn').style.visibility = 'hidden';
 
             document.getElementById("etype").setAttribute("disabled", "disabled");
             document.getElementById("section").setAttribute("disabled", "disabled");
@@ -375,7 +376,7 @@ $("body").on("click", "#addSched", function(){
             html += '<td>'+day+'</td>';
             html += '<td>'+timesched+'</td>';
             html += '<td>'+name+'</td>';
-            html += '<td ><a class="btn btn-sm btn-info" onclick="RemoveRow()" title="Remove Subject"><i class="fa fa-trash"></i></a></tr>';
+            html += '<td ><a class="btn btn-sm btn-info" name="btn-remove" id="btn-remove" title="Remove Subject"><i class="fa fa-trash"></i></a></tr>';
         
             $('#table_data').append(html);
             $("#modal-view-event-add").modal('hide');
@@ -384,6 +385,14 @@ $("body").on("click", "#addSched", function(){
 
 
         });
+
+        
+$("body").on("click", "#btn-remove", function(){
+
+$(this).parents('tr').remove();
+
+});
+
 
 
 
@@ -400,7 +409,9 @@ jQuery(document).ready(function(){
         var gradelevel = $('#gradelevel').val();   
         var strand = $('#strand').val();   
 
-          $.ajax({
+        
+
+           $.ajax({
         url:"<?php echo base_url(); ?>enrollment/load_allsched",
         method:"POST",
         data:{gradelevel:gradelevel,strand:strand},
@@ -411,7 +422,7 @@ jQuery(document).ready(function(){
          $('#subject_data').html(data);
 
         }
-    });  
+    });   
  
 	});
 	

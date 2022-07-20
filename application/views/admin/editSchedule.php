@@ -66,7 +66,7 @@
                                         <div class="form-group">
                                                 <label for="last_name">Section</label>
                                                 <br>
-                                                <select name="section" id="section" class="form-control">
+                                                <select name="section" id="section" class="form-control select2">
                                                 <?php
                                                                 foreach($section->result_array() as $row)
                                                                 {
@@ -337,7 +337,8 @@ $('#section').change(function(){
 
 });
 
-    
+        
+
 
         document.getElementById("gradelevel").value= "<?php echo $scheduleInfo->gradelevel ?>";
         document.getElementById("section").value= "<?php echo $scheduleInfo->sectionid ?>";
@@ -347,6 +348,22 @@ $('#section').change(function(){
         document.getElementById("adviser").value = "<?php echo $scheduleInfo->adviserid ?>";
         document.getElementById("term").value = "<?php echo $scheduleInfo->term ?>";
         document.getElementById("status").value = "<?php echo $scheduleInfo->status ?>";
+
+        if(document.getElementById("gradelevel").value == "Grade 11" || document.getElementById("gradelevel").value == "Grade 12")
+        {
+            document.getElementById('strand').style.visibility = 'visible';
+            document.getElementById('lblstrand').style.visibility = 'visible';
+
+        }
+
+        else
+        {
+            document.getElementById('strand').style.visibility = 'hidden';
+            document.getElementById('lblstrand').style.visibility = 'hidden';
+
+        }
+
+        
     
 });
 
