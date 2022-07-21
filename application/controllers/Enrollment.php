@@ -48,7 +48,7 @@ function editEnrollment($id)
     $data['section'] = $this->auth->getSectionEdit($id);
     $data['faculty'] = $this->auth->getAdviser();
     $data['student'] = $this->auth->getStudentList($id);
-    $data['grade'] = $this->auth->getGradeLevel();
+    $data['grade'] = $this->auth->getGradeLevel("");
 
 
     $this->load->view('templates/adminheader', $data);
@@ -195,6 +195,23 @@ function editSchedule($id)
                 $schoolyear = $row->id;
             }
 
+            $semester = "";
+
+            if($gradelevel == "Grade 11" || $gradelevel == "Grade 12")
+            {
+                $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+                if (!empty($row1->id))
+                {
+                    $semester = $row1->semester;
+                }
+            }
+
+            else
+            {
+                $semester = "";
+
+            }
+
                                             
             $enrollmentInfo = array('studentid'=>$id,'type'=>$etype,'strandid'=>$strand,'status'=>$status);
 
@@ -202,7 +219,7 @@ function editSchedule($id)
                     
             $result = $this->auth->editEnrollment($enrollmentInfo, $sid);
 
-            $schedule = $this->auth->scheduleListingInfo($section, $schoolyear);
+            $schedule = $this->auth->scheduleListingInfo($section, $schoolyear,$semester,$gradelevel);
 
             foreach($schedule as $record)
             {
