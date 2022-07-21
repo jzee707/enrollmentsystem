@@ -383,11 +383,20 @@ class Enrollment_model extends CI_Model {
         return $output;
     }
 
-    function getGradeLevel()
+    function getGradeLevel($semester)
 	{
         $this->db->select('s.gradelevel');
         $this->db->from('tbl_schedule sc');
         $this->db->join('tbl_section s','sc.sectionid=s.id');
+
+        if($semester == "2nd")
+        {
+            $likeCriteria = "(s.gradelevel ='Grade 11' OR s.gradelevel ='Grade 12')";
+
+        $this->db->where($likeCriteria);
+            
+        }
+
         $this->db->group_by('s.gradelevel');
         $this->db->order_by('s.gradelevel','ASC');
   

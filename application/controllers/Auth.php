@@ -164,7 +164,7 @@ function preenrollment()
     else
     {
 
-        $data['grade'] = $this->auth->getGradeLevel();
+        $data['grade'] = $this->auth->getGradeLevel($semester);
 
         $this->load->view('templates/userheader', $data);
         $this->load->view("student/preenrollment",  $data);

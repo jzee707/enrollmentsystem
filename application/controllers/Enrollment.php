@@ -21,10 +21,17 @@ function addNewEnrollment()
     $data = array();
 
     $id = "";
+    $semester = "";
+
+    $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+            if (!empty($row1->id))
+            {
+                $semester = $row1->semester;
+            }
 
     $data['faculty'] = $this->auth->getAdviser();
     $data['student'] = $this->auth->getStudentList($id);
-    $data['grade'] = $this->auth->getGradeLevel();
+    $data['grade'] = $this->auth->getGradeLevel($semester);
 
 
     $this->load->view('templates/adminheader', $data);
@@ -54,6 +61,7 @@ function editSchedule($id)
 {
     $data = array();
 
+    
     $data['scheduleInfo'] = $this->auth->getScheduleInfo($id);
     $data['faculty'] = $this->auth->getAdviser();
     $data['subject'] = $this->auth->getSubjectList();
