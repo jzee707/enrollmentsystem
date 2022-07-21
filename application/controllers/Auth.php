@@ -408,11 +408,20 @@ function signout()
             }      
             
             $semester = "";
-    
-            $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
-            if (!empty($row1->id))
+
+            if($gradelevel == "Grade 11" || $gradelevel == "Grade 12")
             {
-                $semester = $row1->semester;
+                $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+                if (!empty($row1->id))
+                {
+                    $semester = $row1->semester;
+                }
+            }
+
+            else
+            {
+                $semester = "";
+
             }
             
             $chk = $this->auth->addPreEnrollment($id,$schoolyear,$timeStamp,$etype,$strand,$semester);

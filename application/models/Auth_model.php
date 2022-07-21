@@ -388,11 +388,10 @@ class Auth_model extends CI_Model {
         $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
         $this->db->join('tbl_section sc','sc.id=sd.sectionid');
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
-        $this->db->where('e.studentid', $id);
-        $this->db->where('e.syid', $syid);
-        $this->db->where('e.term', $semester);
-        $this->db->where('sd.status', 'Active');
-                        
+
+        $likeCriteria = "(e.studentid='".$id."' AND e.syid='".$syid."' AND e.term IN ('".$semester."','') AND sd.status='Active')";
+
+        $this->db->where($likeCriteria);
 
         $query = $this->db->get();
         
@@ -409,10 +408,10 @@ class Auth_model extends CI_Model {
         $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
         $this->db->join('tbl_section sc','sc.id=sd.sectionid');
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
-        $this->db->where('e.studentid', $id);
-        $this->db->where('e.syid', $syid);
-        $this->db->where('e.term', $semester);
-        $this->db->where('sd.status', 'Active');
+        
+        $likeCriteria = "(e.studentid='".$id."' AND e.syid='".$syid."' AND e.term IN ('".$semester."','') AND sd.status='Active')";
+
+        $this->db->where($likeCriteria);
       
         $this->db->limit($page, $segment);
         $query = $this->db->get();
