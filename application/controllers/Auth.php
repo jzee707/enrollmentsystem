@@ -422,7 +422,7 @@ function signout()
             if($etype == "Regular")
          {
 
-          $schedule = $this->auth->scheduleListingInfo($section, $schoolyear,$semester);
+          $schedule = $this->auth->scheduleListingInfo($section, $schoolyear,$semester,$gradelevel);
 
           foreach($schedule as $record)
           {
