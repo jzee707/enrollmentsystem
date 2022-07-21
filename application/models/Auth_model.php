@@ -380,7 +380,7 @@ class Auth_model extends CI_Model {
 
     function scheduleListingCount($id,$syid,$semester)
     {
-        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, e.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,es.status");
+        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,es.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
         $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
@@ -401,7 +401,7 @@ class Auth_model extends CI_Model {
 
     function scheduleListing($id,$syid, $semester,$page, $segment) {
 
-        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, e.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,es.status");
+        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,es.status");
         $this->db->from('tbl_schedule sd');
         $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
         $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
