@@ -137,7 +137,7 @@
                         <div class="box-footer">
                             <input type="submit" class="btn btn-primary" value="Submit" />
                             <a class="btn btn-primary" href="<?php echo base_url() ?>enrollment">Cancel</a>
-
+                          
                         </div>
                     </form>
                 </div>

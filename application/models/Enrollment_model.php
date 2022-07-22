@@ -312,9 +312,9 @@ class Enrollment_model extends CI_Model {
 		
     }
 
-    function getSection($gradelevel)
+    function getSection($gradelevel,$schoolyear,$semester)
 	{
-        $this->db->select("id,section");
+        $this->db->select("id,section,level");
 
         $this->db->from('tbl_section');
 
@@ -339,12 +339,29 @@ class Enrollment_model extends CI_Model {
 
         foreach($query->result() as $row)
         {
+            $row1 = $this->db->select("count(DISTINCT e.id) as counter,sd.sectionid")->where('e.status',"Active")->where('e.term',$semester)->where('e.syid',$schoolyear)->where('sd.sectionid',$row->id)->join("tbl_schedule sd","sd.id=es.scheduleid")->join("tbl_enrollment e","e.id=es.enrollmentid")->join("tbl_section s","s.id=sd.sectionid")->get("tbl_enrollsched es")->row();
+        
+            if (!empty($row1->counter))
+            {
+                if (intval($row->level) > intval($row1->counter))
+                {
+                    $output .= '<option  value="'.$row->id.'">'.$row->section.'</option>';
+                   
+                }
+               
+            }
 
+            else
+            {
                 $output .= '<option  value="'.$row->id.'">'.$row->section.'</option>';
+
+            }      
   
         }
         
         return $output;
+
+        
 		
     }
 

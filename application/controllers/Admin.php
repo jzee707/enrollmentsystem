@@ -537,7 +537,6 @@ function signout()
             $this->form_validation->set_rules('gradelevel', 'Grade Level', 'trim|required');
             $this->form_validation->set_rules('section', 'Section', 'trim|required');
             $this->form_validation->set_rules('adviser', 'Adviser', 'trim|required');
-            $this->form_validation->set_rules('strand', 'Strand', 'trim|required');
             $this->form_validation->set_rules('limit', 'Limit', 'trim|required');
              
                     

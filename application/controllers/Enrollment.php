@@ -496,9 +496,96 @@ function editSchedule($id)
        public function getSection(){
         if($this->input->post('gradelevel'))
            {
+            $schoolyear = 0;
+
+            $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+            if (!empty($row->id))
+            {
+                $schoolyear = $row->id;
+            }
+
+            $semester = "";
+
+            if($gradelevel == "Grade 11" || $gradelevel == "Grade 12")
+            {
+                $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+                if (!empty($row1->id))
+                {
+                    $semester = $row1->semester;
+                }
+            }
+
+            else
+            {
+                $semester = "";
+
+            }
+
    
-           echo $this->auth->getSection($this->input->post('gradelevel'));
+           echo $this->auth->getSection($this->input->post('gradelevel'),$schoolyear,$semester);
            }
+   
+       }
+
+       public function gettest(){
+
+        $gradelevel = $this->input->post('gradelevel');
+
+            $schoolyear = 0;
+
+            $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+            if (!empty($row->id))
+            {
+                $schoolyear = $row->id;
+            }
+
+            $semester = "";
+
+            if($gradelevel == "Grade 11" || $gradelevel == "Grade 12")
+            {
+                $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+                if (!empty($row1->id))
+                {
+                    $semester = $row1->semester;
+                }
+            }
+
+            else
+            {
+                $semester = "";
+
+            }
+
+            $query = $this->db->select("id,section,level")->order_by('id','ASC')->group_by('id')->where('gradelevel',$gradelevel)->get("tbl_section");
+		
+      
+        foreach($query->result() as $row)
+        {
+            $row1 = $this->db->select("count(DISTINCT e.id) as counter,sd.sectionid")->where('e.status',"Active")->where('e.term',$semester)->where('e.syid',$schoolyear)->where('sd.sectionid',$row->id)->join("tbl_schedule sd","sd.id=es.scheduleid")->join("tbl_enrollment e","e.id=es.enrollmentid")->join("tbl_section s","s.id=sd.sectionid")->get("tbl_enrollsched es")->row();
+        
+            if (!empty($row1->counter))
+            {
+                if (intval($row->level) >= intval($row1->counter))
+                {
+                   
+
+                    echo $row->id. ' ' . $row->section;
+                   
+                }
+               
+            }
+
+            else
+            {
+                echo $row->id. ' ' . $row->section;
+            }      
+  
+        }
+        
+
+           /*  $row1 = $this->db->select("count(DISTINCT e.id) as counter,sd.sectionid")->where('e.status',"Active")->where('e.term',$semester)->where('e.syid',$schoolyear)->where('sd.sectionid',5)->join("tbl_schedule sd","sd.id=es.scheduleid")->join("tbl_enrollment e","e.id=es.enrollmentid")->join("tbl_section s","s.id=sd.sectionid")->get("tbl_enrollsched es")->row();
+
+            echo  $row1->sectionid . ' ' . $row1->counter ; */
    
        }
 
