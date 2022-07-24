@@ -322,7 +322,7 @@ $('#strand').change(function(){
     {
 
         $.ajax({
-        url:"<?php echo base_url(); ?>schedule/getSectionSHS",
+        url:"<?php echo base_url(); ?>enrollment/getSectionSHS",
         method:"POST",
         data:{gradelevel:gradelevel,strand:strand},
         success:function(data)

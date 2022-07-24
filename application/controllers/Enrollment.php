@@ -532,8 +532,34 @@ function editSchedule($id)
        public function getSectionSHS(){
         if($this->input->post('gradelevel'))
            {
+
+            $schoolyear = 0;
+            $gradelevel = $this->input->post('gradelevel');
+
+            $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+            if (!empty($row->id))
+            {
+                $schoolyear = $row->id;
+            }
+
+            $semester = "";
+
+            if($gradelevel == "Grade 11" || $gradelevel == "Grade 12")
+            {
+                $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+                if (!empty($row1->id))
+                {
+                    $semester = $row1->semester;
+                }
+            }
+
+            else
+            {
+                $semester = "";
+
+            }
    
-           echo $this->auth->getSectionSHS($this->input->post('gradelevel'),$this->input->post('strand'));
+           echo $this->auth->getSectionSHS($this->input->post('gradelevel'),$schoolyear,$semester,$this->input->post('strand'));
            }
    
        }

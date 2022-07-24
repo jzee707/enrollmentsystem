@@ -329,7 +329,49 @@ class Auth_model extends CI_Model {
 
     function getSectionStudentIrreg($gradelevel,$strand)
 	{
-        $this->db->select('sc.id,sc.section');
+
+        $this->db->select("id,section,level");
+        $this->db->from('tbl_section');
+        
+        $likeCriteria = "(gradelevel = '".$gradelevel."' AND strandid = '".$strand."')"; 
+
+        $this->db->where($likeCriteria);
+
+        $this->db->group_by('id');
+        $this->db->order_by('id','ASC');
+        $query = $this->db->get();
+		
+        $output = '<option selected disabled value="">Select Section</option>';
+
+        foreach($query->result() as $row)
+        {
+            $row1 = $this->db->select("count(DISTINCT e.id) as counter,sd.sectionid")->where('e.status',"Active")->where('e.term',$semester)->where('e.syid',$schoolyear)->where('sd.sectionid',$row->id)->join("tbl_schedule sd","sd.id=es.scheduleid")->join("tbl_enrollment e","e.id=es.enrollmentid")->join("tbl_section s","s.id=sd.sectionid")->get("tbl_enrollsched es")->row();
+        
+            if (!empty($row1->counter))
+            {
+                if (intval($row->level) > intval($row1->counter))
+                {
+                    $output .= '<option  selected value="'.$row->id.'">'.$row->section.'</option>';
+
+                    break;
+                   
+                }
+               
+            }
+
+            else
+            {
+                $output .= '<option  selected value="'.$row->id.'">'.$row->section.'</option>';
+
+                break;
+
+            }      
+  
+        }
+        
+        return $output;
+
+       /*  $this->db->select('sc.id,sc.section');
         $this->db->from('tbl_section sc');
         $this->db->join('tbl_schedule sd','sd.sectionid=sc.id');
 		$this->db->where('sc.gradelevel',$gradelevel);
@@ -347,7 +389,7 @@ class Auth_model extends CI_Model {
          $output .= '<option selected value="'.$row->id.'">'.$row->section.'</option>';
         }
         
-        return $output;
+        return $output; */
 		
     }
 

@@ -288,7 +288,7 @@ $('#strand').change(function(){
             data:{gradelevel:gradelevel,strand:strand},
             success:function(data)
             {
-                $('#sectionid').val(data.record[0].id);           
+                $('#sectionid').val(data.record);           
   
             }
 
