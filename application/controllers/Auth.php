@@ -468,20 +468,113 @@ function signout()
 
     public function getSection(){
 
-        $query = $this->db->query("SELECT sc.id,sc.section 
-        FROM tbl_section sc INNER JOIN tbl_schedule sd ON sd.sectionid=sc.id WHERE sc.gradelevel='".$this->input->post('gradelevel')."' GROUP BY sc.id ORDER BY sc.id ASC LIMIT 1");
+        $schoolyear = 0;
+        $gradelevel = $this->input->post('gradelevel');
 
-        $data['record'] = $query->result();
-    
-        echo json_encode($data);
+        $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+        if (!empty($row->id))
+        {
+            $schoolyear = $row->id;
+        }
+
+        $semester = "";
+
+        if($gradelevel == "Grade 11" || $gradelevel == "Grade 12")
+        {
+            $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+            if (!empty($row1->id))
+            {
+                $semester = $row1->semester;
+            }
+        }
+
+        else
+        {
+            $semester = "";
+
+        }
+
+        /* $query = $this->db->query("SELECT sc.id,sc.section 
+        FROM tbl_section sc INNER JOIN tbl_schedule sd ON sd.sectionid=sc.id WHERE sc.gradelevel='".$gradelevel."' GROUP BY sc.id ORDER BY sc.id"); */
+
+            $this->db->select("id,section,level");
+            $this->db->from('tbl_section');
+
+            $likeCriteria = "(gradelevel = '".$gradelevel."')"; 
+
+            $this->db->where($likeCriteria);
+
+
+            $this->db->group_by('id');
+            $this->db->order_by('id','ASC');
+            $query = $this->db->get();
+
+            foreach($query->result() as $row)
+            {
+                $row1 = $this->db->select("count(DISTINCT e.id) as counter,sd.sectionid")->where('e.status',"Active")->where('e.term',$semester)->where('e.syid',$schoolyear)->where('sd.sectionid',$row->id)->join("tbl_schedule sd","sd.id=es.scheduleid")->join("tbl_enrollment e","e.id=es.enrollmentid")->join("tbl_section s","s.id=sd.sectionid")->get("tbl_enrollsched es")->row();
+
+                if (!empty($row1->counter))
+                {
+                    if (intval($row->level) > intval($row1->counter))
+                    {
+                  
+                        $data['record'] = $row->id;
+                    
+                        echo json_encode($data);
+
+                        break;
+                    
+                    }
+                
+                }
+
+                else
+                {
+
+                    $data['record'] = $row->id;
+                
+                    echo json_encode($data);
+
+                    break;
+
+                }      
+
+            }
    
     }
 
-       public function getSectionStudent(){
+    public function getSectionStudent(){
         if($this->input->post('gradelevel'))
         {
 
-        echo $this->auth->getSectionStudent($this->input->post('gradelevel'));
+            $schoolyear = 0;
+            $gradelevel = $this->input->post('gradelevel');
+
+            $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+            if (!empty($row->id))
+            {
+                $schoolyear = $row->id;
+            }
+
+            $semester = "";
+
+            if($gradelevel == "Grade 11" || $gradelevel == "Grade 12")
+            {
+                $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+                if (!empty($row1->id))
+                {
+                    $semester = $row1->semester;
+                }
+            }
+
+            else
+            {
+                $semester = "";
+
+            }
+
+
+        echo $this->auth->getSectionStudent($this->input->post('gradelevel'),$schoolyear,$semester);
         }
 
     }

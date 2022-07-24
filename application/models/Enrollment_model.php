@@ -317,14 +317,6 @@ class Enrollment_model extends CI_Model {
         $this->db->select("id,section,level");
 
         $this->db->from('tbl_section');
-
-        /*  $likeCriteria = "(id IN (SELECT sd.sectionid 
-        FROM `tbl_enrollsched` es 
-        LEFT JOIN tbl_schedule sd ON sd.id=es.scheduleid
-        LEFT JOIN tbl_enrollment e ON e.id=es.enrollmentid
-        LEFT JOIN tbl_section s ON s.id=sd.sectionid
-        WHERE e.status='Active' AND s.gradelevel = '".$gradelevel."'
-        GROUP BY sd.sectionid HAVING count(DISTINCT es.enrollmentid) < level ))";  */ 
         
         $likeCriteria = "(gradelevel = '".$gradelevel."')"; 
 

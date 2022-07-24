@@ -219,7 +219,7 @@ $('#gradelevel').change(function(){
             data:{gradelevel:gradelevel},
             success:function(data)
             {
-                $('#sectionid').val(data.record[0].id);           
+                $('#sectionid').val(data.record);         
   
             }
 
