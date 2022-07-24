@@ -3,8 +3,6 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-    include('phpqrcode/qrlib.php');
-
    
 class Schedule_model extends CI_Model {
     

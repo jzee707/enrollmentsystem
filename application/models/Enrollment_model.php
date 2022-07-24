@@ -3,9 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-    include('phpqrcode/qrlib.php');
 
-   
 class Enrollment_model extends CI_Model {
     
     function __construct(){
