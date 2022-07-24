@@ -624,18 +624,25 @@ function signout()
 
                     if(!empty($student))
                     {
-                        if($student->status=="Requested")
+
+                    if($student->status=="Requested")
                     {
                         redirect('registrationrequest');
                         //$this->registration($student->id);
                     
                     }
 
-                    else
+                    else if($student->status=="Active")
                     {
                         redirect('studentdashboard');
 
-                    }                      
+                    }  
+                    
+                    else
+                    {
+                        redirect('registration');
+
+                    }
                     
                     }
 
