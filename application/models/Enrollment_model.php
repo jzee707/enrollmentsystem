@@ -546,18 +546,33 @@ class Enrollment_model extends CI_Model {
 
         $likeCriteria;
 
-        if($gradelevel == "Grade 11" || $gradelevel == "Grade 12")
+        if($gradelevel == "Grade 11" || $semester == "1st")
         {
             $likeCriteria = "(sb.gradelevel = '".$gradelevel."' AND sd.sectionid='".$section."' AND sd.syid='".$schoolyear."' AND sd.term= '".$semester."')";
 
         }
 
-        else
+        else if($gradelevel == "Grade 11" || $semester == "2nd")
         {
-            $likeCriteria = "(sb.gradelevel = '".$gradelevel."' AND sd.sectionid='".$section."' AND sd.syid='".$schoolyear."' AND sd.term= '".''."')";
+            $likeCriteria = "(sb.gradelevel = '".$gradelevel."' AND sd.sectionid='".$section."' AND sd.syid='".     $schoolyear."' AND sd.term IN ('".'1st'."','".'2nd'."'))";
 
 
         }
+
+        else if($gradelevel == "Grade 12" || $semester == "1nd")
+        {
+            $likeCriteria = "(sb.gradelevel = '".'Grade 11'."' AND sd.sectionid='".$section."' AND sd.syid='".     $schoolyear."' AND sd.term = '".'2nd'."' 
+            OR sb.gradelevel = '".'Grade 12'."' AND sd.sectionid='".$section."' AND sd.syid='".     $schoolyear."' AND sd.term = '".$semester."' )";
+
+
+        }
+
+        else if($gradelevel == "Grade 12" || $semester == "2nd")
+        {
+            $likeCriteria = "(sb.gradelevel = '".$gradelevel."' AND sd.sectionid='".$section."' AND sd.syid='".     $schoolyear."' AND sd.term IN ('".'1st'."','".'2nd'."'))";
+
+
+        } 
 
         $this->db->where($likeCriteria);  
 

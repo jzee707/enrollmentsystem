@@ -716,7 +716,7 @@ function editSchedule($id)
        function load_schedirg()
        {
 
-        $etype = $this->input->post('gradelevel');
+        $etype = $this->input->post('etype');
 
         $schoolyear =0;
 
