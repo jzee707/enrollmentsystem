@@ -361,13 +361,49 @@ function editSchedule($id)
            
         $count = $this->auth->enrollmentListingCount($searchText,$status,$schoolyear,$semester);
 
-        $returns = $this->paginationCompress ( "enrollment/enrollmentListing/", $count, 10 );
+        $returns = $this->paginationCompress ( "enrollment/enrollmentArchivedListing/", $count, 10 );
         
         $data['userRecords'] = $this->auth->enrollmentListing($searchText, $status,$schoolyear,$semester,$returns["page"], $returns["segment"]);
         
 
             $this->load->view('templates/adminheader', $data);
             $this->load->view("admin/archivedenrollment",  $data);
+            $this->load->view('templates/adminfooter', $data);
+
+    }
+
+    function preenrollmentArchivedListing()
+    {
+
+        $searchText = $this->security->xss_clean($this->input->post('searchText'));
+
+        $status ="Declined";
+
+        $schoolyear =0;
+    
+        $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+        if (!empty($row->id))
+        {
+            $schoolyear = $row->id;
+        }
+
+        $semester = "";
+    
+        $row1 = $this->db->select("*")->where('status',"Active")->get("tbl_semester")->row();
+        if (!empty($row1->id))
+        {
+            $semester = $row1->semester;
+        }
+           
+        $count = $this->auth->enrollmentListingCount($searchText,$status,$schoolyear,$semester);
+
+        $returns = $this->paginationCompress ( "enrollment/preenrollmentArchivedListing/", $count, 10 );
+        
+        $data['userRecords'] = $this->auth->enrollmentListing($searchText, $status,$schoolyear,$semester,$returns["page"], $returns["segment"]);
+        
+
+            $this->load->view('templates/adminheader', $data);
+            $this->load->view("admin/archivedpreenrollment",  $data);
             $this->load->view('templates/adminfooter', $data);
 
     }
@@ -444,13 +480,38 @@ function editSchedule($id)
                 
                 $result = $this->auth->editEnrollment($studentInfo, $id);
 
-                $student = $this->auth->getStudentInfo($id);
                 
                 if($result == true)
                 {
                     $this->session->set_flashdata('success', 'Student Data Updated.');                 
 
                     $this->auth->SendEmailRegistrationDec($student->firstname,$student->lastname,$student->email);
+
+                    redirect('enrollment');
+                   
+                }
+
+                else
+                {
+                    $this->session->set_flashdata('error', 'User updation failed');
+
+                    $this->editStudent($id);
+              
+                }
+        
+    }
+
+    function restoreRequest($id)
+    {
+                        
+                $studentInfo = array('id'=>$id,'status'=>'Requested',);
+                
+                $result = $this->auth->editEnrollment($studentInfo, $id);
+
+                
+                if($result == true)
+                {
+                    $this->session->set_flashdata('success', 'Enrollment Data Updated.');                 
 
                     redirect('enrollment');
                    

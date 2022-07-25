@@ -162,6 +162,8 @@
                 <li><a href="<?php echo base_url(); ?>archivedfaculty"><i class="fa fa-users"></i>Faculty</a></li>
                 <li><a href="<?php echo base_url(); ?>archivedschedule"><i class="fa fa-users"></i>Schedule</a></li>
                 <li><a href="<?php echo base_url(); ?>archivedenrollment"><i class="fa fa-users"></i>Enrollment</a></li>
+                <li><a href="<?php echo base_url(); ?>archivedpreregistration"><i class="fa fa-users"></i>Pre-Registration</a></li>
+                <li><a href="<?php echo base_url(); ?>archivedpreenrollment"><i class="fa fa-users"></i>Pre-Enrollment</a></li>
               </ul>
             </li>
 

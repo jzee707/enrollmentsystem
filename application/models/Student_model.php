@@ -219,13 +219,15 @@ class Student_model extends CI_Model {
         $this->db->select("id,idno,lrn,CONCAT(firstname, ' ',lastname) name,firstname,lastname,middlename,suffix,birthdate,gender,address,contactno,studenttype,status");
         $this->db->from('tbl_student');
         
-        $likeCriteria = "(CONCAT(firstname, ' ',lastname)  LIKE '".$searchText."%'
-        AND status='".$status."'
-        OR CONCAT(lastname, ' ',firstname)  LIKE '".$searchText."%'
-        AND status='".$status."'
-        OR lrn LIKE '".$searchText."%'
-        AND status='".$status."' OR idno LIKE '".$searchText."%'
-        AND status='".$status."')";
+
+            $likeCriteria = "(CONCAT(firstname, ' ',lastname)  LIKE '".$searchText."%'
+            AND status='".$status."'
+            OR CONCAT(lastname, ' ',firstname)  LIKE '".$searchText."%'
+            AND status='".$status."'
+            OR lrn LIKE '".$searchText."%'
+            AND status='".$status."' OR idno LIKE '".$searchText."%'
+            AND status='".$status."')";
+
 
             $this->db->where($likeCriteria);
        $query = $this->db->order_by('id','ASC');
@@ -239,7 +241,7 @@ class Student_model extends CI_Model {
 
         $this->db->select("id,idno,lrn,CONCAT(firstname, ' ',lastname) name,firstname,lastname,middlename,suffix,birthdate,gender,address,contactno,studenttype,status");
         $this->db->from('tbl_student');
-        
+
         $likeCriteria = "(CONCAT(firstname, ' ',lastname)  LIKE '".$searchText."%'
         AND status='".$status."'
         OR CONCAT(lastname, ' ',firstname)  LIKE '".$searchText."%'
@@ -247,8 +249,10 @@ class Student_model extends CI_Model {
         OR lrn LIKE '".$searchText."%'
         AND status='".$status."' OR idno LIKE '".$searchText."%'
         AND status='".$status."')";
+        
+       
 
-            $this->db->where($likeCriteria);
+        $this->db->where($likeCriteria);
        
         
 

@@ -11,10 +11,15 @@
                         <a class="btn btn-outline-light btn-social" href="https://www.facebook.com/westerncollegesinc"><i class="fab fa-facebook-f"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-6">
+                <div class="col-lg-3 col-md-3">
                     <h4 class="text-light mb-4">Opening Hours</h4>
                     <h6 class="text-light">Monday - Friday:</h6>
                     <p class="mb-4">08.00 AM - 05.00 PM</p>
+                </div>
+
+                <div class="col-lg-3 col-md-3">
+                <h4 class="text-light mb-4">Create your account.<a href="<?php echo base_url(); ?>signup"> Here</a></h4>
+                <a href="<?php echo base_url(); ?>login" class="btn btn-primary">Log In<i class="fa fa-arrow-right ms-3"></i></a>           
                 </div>
 
             </div>

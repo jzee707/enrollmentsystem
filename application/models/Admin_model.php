@@ -101,7 +101,7 @@ class Admin_model extends CI_Model {
         return TRUE;
     }
 
-    function InactiveSem($strandInfo)
+    function InactiveSem($strandInfo,$id)
     {       
         $this->db->where('id<>', $id);
         $this->db->update('tbl_semester', $strandInfo);
@@ -109,7 +109,7 @@ class Admin_model extends CI_Model {
         return TRUE;
     }
 
-    function InactiveSchoolyear($strandInfo)
+    function InactiveSchoolyear($strandInfo,$id)
     {       
         $this->db->where('id<>', $id);
         $this->db->update('tbl_schoolyear', $strandInfo);

@@ -85,6 +85,11 @@ $route['archivedenrollment'] = 'enrollment/enrollmentArchivedListing';
 $route['archivedenrollment/(:any)'] = 'enrollment/archiveenrollment/$1';
 $route['retreieveenrollment/(:any)'] = 'enrollment/retreieveenrollment/$1';
 
+$route['archivedpreregistration'] = 'student/registrationArchivedListing';
+
+$route['archivedpreenrollment'] = 'enrollment/preenrollmentArchivedListing';
+
+
 $route['login'] = 'admin/login';
 $route['signup'] = 'auth/signup';
 $route['about'] = 'auth/about';

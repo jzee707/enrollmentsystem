@@ -423,14 +423,27 @@ public function registration() {
 
     function retrievestudent($id)
     {
-                        
-                $studentInfo = array('status'=>'Active',);
-                
+                                           
                 $row = $this->db->select("*")->where('id',$id)->get("tbl_student")->row();
                 $accountid = $row->accountid;
+                $status = $row->status;
+
+                $studentInfo;
+
+                if($status == "Inactive")
+                {
+                    $studentInfo = array('status'=>'Active',);
+                    
+                }
+
+                else if($status == "Declined")
+                {
+                    $studentInfo = array('status'=>'Requested',);
+
+                }
 
                 $accountInfo = array('status'=>'Active',);
-                
+
                 $result = $this->auth->editStudent($studentInfo, $id);
 
                 
@@ -503,13 +516,32 @@ public function registration() {
            
         $count = $this->auth->studentsListingCount($searchText,$status); 
 
-        $returns = $this->paginationCompress ( "student/studentListing/", $count, 10);
+        $returns = $this->paginationCompress ( "student/studentArchivedListing/", $count, 10);
         
         $data['userRecords'] = $this->auth->studentListing($searchText, $returns["page"], $returns["segment"],$status);
         
 
             $this->load->view('templates/adminheader', $data);
             $this->load->view("admin/archivedstudent",  $data);
+            $this->load->view('templates/adminfooter', $data);
+
+    }
+
+    function registrationArchivedListing()
+    {
+        $status = 'Declined';
+
+        $searchText = $this->security->xss_clean($this->input->post('searchText'));
+           
+        $count = $this->auth->studentsListingCount($searchText,$status); 
+
+        $returns = $this->paginationCompress ( "student/registrationArchivedListing/", $count, 10);
+        
+        $data['userRecords'] = $this->auth->studentListing($searchText, $returns["page"], $returns["segment"],$status);
+        
+
+            $this->load->view('templates/adminheader', $data);
+            $this->load->view("admin/archivedpreregistration",  $data);
             $this->load->view('templates/adminfooter', $data);
 
     }
