@@ -325,7 +325,7 @@ class Auth_model extends CI_Model {
 		
     }
 
-    function getSectionStudentIrreg($gradelevel,$strand)
+    function getSectionStudentIrreg($gradelevel,$schoolyear,$semester,$strand)
 	{
 
         $this->db->select("id,section,level");

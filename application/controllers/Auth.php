@@ -688,7 +688,7 @@ function signout()
 
             }
 
-        echo $this->auth->getSectionStudentIrreg($this->input->post('gradelevel'),$this->input->post('strand'));
+        echo $this->auth->getSectionStudentIrreg($this->input->post('gradelevel'),$schoolyear,$semester,$this->input->post('strand'));
         }
 
     }
