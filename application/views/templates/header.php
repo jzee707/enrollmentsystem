@@ -57,8 +57,26 @@
                 <a href="<?php echo base_url(); ?>about" class="nav-item nav-link">About</a>
                 <a href="<?php echo base_url(); ?>admission" class="nav-item nav-link">Admission</a>
                 <a href="<?php echo base_url(); ?>academics" class="nav-item nav-link">Academics</a>
+                <a href="<?php echo base_url(); ?>login" class="nav-item nav-link" id="mobile">Log In</a>
+                <a href="<?php echo base_url(); ?>login" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block" id="pc">Log In<i class="fa fa-arrow-right ms-3"></i></a>           
+                
+                
+                <script type="text/javascript">
+                var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                var element = document.getElementById('text');
+                if (isMobile) {
+                    document. getElementById("mobile"). hidden=false;
+                    document. getElementById("pc"). hidden=true;
+                } else {
+                    document. getElementById("pc"). hidden=false;
+                    document. getElementById("mobile"). hidden=true;
+                }
+            </script>
+
             </div>
-            <a href="<?php echo base_url(); ?>login" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Log In<i class="fa fa-arrow-right ms-3"></i></a>
+
         </div>
     </nav>
     <!-- Navbar End -->
+
+   
