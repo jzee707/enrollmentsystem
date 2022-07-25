@@ -480,6 +480,7 @@ function editSchedule($id)
                 
                 $result = $this->auth->editEnrollment($studentInfo, $id);
 
+                $student = $this->auth->getStudentInfo($id);
                 
                 if($result == true)
                 {
@@ -508,6 +509,7 @@ function editSchedule($id)
                 
                 $result = $this->auth->editEnrollment($studentInfo, $id);
 
+                $student = $this->auth->getStudentInfo($id);
                 
                 if($result == true)
                 {
