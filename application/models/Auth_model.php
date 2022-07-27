@@ -600,7 +600,7 @@ class Auth_model extends CI_Model {
 
     function getTotalFaculty($id)
     {
-        $this->db->select("(SELECT count(s.id) from tbl_schedule s INNER JOIN tbl_schoolyear sy ON sy.id=s.syid WHERE s.status='Active' AND sy.status='Active' AND s.adviserid='" . $id ."') as subject,(SELECT count(es.id) from tbl_enrollsched es INNER JOIN tbl_enrollment e ON e.id=es.enrollmentid INNER JOIN tbl_schoolyear sy ON sy.id=e.syid INNER JOIN tbl_schedule s ON s.id=es.scheduleid WHERE es.status='Dropped' AND sy.status='Active' AND s.adviserid='" . $id ."') as dropped,(SELECT schoolyear FROM tbl_schoolyear WHERE status='Active') as schoolyear,(SELECT semester FROM tbl_semester WHERE status='Active') as semester");
+        $this->db->select("(SELECT count(s.id) from tbl_schedule s INNER JOIN tbl_schoolyear sy ON sy.id=s.syid WHERE s.status='Active' AND s.term IN ((SELECT semester FROM tbl_semester WHERE status='Active'),'') AND sy.status='Active' AND s.adviserid='" . $id ."') as subject,(SELECT count(es.id) from tbl_enrollsched es INNER JOIN tbl_enrollment e ON e.id=es.enrollmentid INNER JOIN tbl_schoolyear sy ON sy.id=e.syid INNER JOIN tbl_schedule s ON s.id=es.scheduleid WHERE es.status='Dropped' AND sy.status='Active'  AND e.term IN ((SELECT semester FROM tbl_semester WHERE status='Active'),'') AND s.adviserid='" . $id ."') as dropped,(SELECT schoolyear FROM tbl_schoolyear WHERE status='Active') as schoolyear,(SELECT semester FROM tbl_semester WHERE status='Active') as semester");
         $this->db->from('tbl_student');
         $query = $this->db->get();
         

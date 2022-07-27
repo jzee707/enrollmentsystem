@@ -257,21 +257,21 @@ class Faculty_model extends CI_Model {
 
     function scheduleListingCount($id,$syid,$searchText)
     {
-        $this->db->select("es.scheduleid as id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time, sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,sd.status");
+        $this->db->select("sd.id as id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time, sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,sd.status");
         $this->db->from('tbl_schedule sd');
-        $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
-        $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
         $this->db->join('tbl_faculty a','a.id=sd.adviserid');
         $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
         $this->db->join('tbl_section sc','sc.id=sd.sectionid');
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
         $this->db->join('tbl_strand st','st.id=sc.strandid','left');
-
-        $likeCriteria = "(sd.adviserid ='".$id."'  AND e.syid='".$syid."' AND sd.status='".'Active'."' AND sb.gradelevel LIKE '".$searchText."%' OR sd.adviserid ='".$id."'  AND e.syid='".$syid."' AND sd.status='".'Active'."' AND sb.subject LIKE '".$searchText."%' OR sd.adviserid ='".$id."'  AND e.syid='".$syid."' AND sd.status='".'Active'."' AND sc.section LIKE '".$searchText."%')";
+       
+        $likeCriteria = "(sd.adviserid ='".$id."'  AND sd.syid='".$syid."' AND sd.status='".'Active'."' AND sb.gradelevel LIKE '".$searchText."%' AND sd.term IN ((SELECT semester FROM tbl_semester WHERE status='Active'),'')
+        OR sd.adviserid ='".$id."'  AND sd.syid='".$syid."' AND sd.status='".'Active'."' AND sb.subject LIKE '".$searchText."%' AND sd.term IN ((SELECT semester FROM tbl_semester WHERE status='Active'),'')
+        OR sd.adviserid ='".$id."'  AND sd.syid='".$syid."' AND sd.status='".'Active'."' AND sc.section LIKE '".$searchText."%' AND sd.term IN ((SELECT semester FROM tbl_semester WHERE status='Active'),''))";
 
         $this->db->where($likeCriteria);
-        $this->db->group_by('es.scheduleid');
-        $this->db->order_by('es.scheduleid','ASC');
+        $this->db->group_by('sd.id');
+        $this->db->order_by('sd.id','ASC');
 
         $query = $this->db->get();
         
@@ -280,21 +280,21 @@ class Faculty_model extends CI_Model {
 
     function scheduleListing($id,$syid, $searchText,$page, $segment) {
 
-        $this->db->select("es.scheduleid as id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,sd.status");
+        $this->db->select("sd.id as id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time,sd.timefrom,sd.timeto, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,sd.status");
         $this->db->from('tbl_schedule sd');
-        $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
-        $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
         $this->db->join('tbl_faculty a','a.id=sd.adviserid');
         $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
         $this->db->join('tbl_section sc','sc.id=sd.sectionid');
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
         $this->db->join('tbl_strand st','st.id=sc.strandid','left');
        
-        $likeCriteria = "(sd.adviserid ='".$id."'  AND e.syid='".$syid."' AND sd.status='".'Active'."' AND sb.gradelevel LIKE '".$searchText."%' OR sd.adviserid ='".$id."'  AND e.syid='".$syid."' AND sd.status='".'Active'."' AND sb.subject LIKE '".$searchText."%' OR sd.adviserid ='".$id."'  AND e.syid='".$syid."' AND sd.status='".'Active'."' AND sc.section LIKE '".$searchText."%')";
+        $likeCriteria = "(sd.adviserid ='".$id."'  AND sd.syid='".$syid."' AND sd.status='".'Active'."' AND sb.gradelevel LIKE '".$searchText."%' AND sd.term IN ((SELECT semester FROM tbl_semester WHERE status='Active'),'')
+        OR sd.adviserid ='".$id."'  AND sd.syid='".$syid."' AND sd.status='".'Active'."' AND sb.subject LIKE '".$searchText."%' AND sd.term IN ((SELECT semester FROM tbl_semester WHERE status='Active'),'')
+        OR sd.adviserid ='".$id."'  AND sd.syid='".$syid."' AND sd.status='".'Active'."' AND sc.section LIKE '".$searchText."%' AND sd.term IN ((SELECT semester FROM tbl_semester WHERE status='Active'),''))";
 
         $this->db->where($likeCriteria);           
-        $this->db->group_by('es.scheduleid');
-        $this->db->order_by('es.scheduleid','ASC');
+        $this->db->group_by('sd.id');
+        $this->db->order_by('sd.id','ASC');
         $this->db->limit($page, $segment);
         $query = $this->db->get();
         
@@ -304,18 +304,16 @@ class Faculty_model extends CI_Model {
 
     function recordListingCount($id,$syid)
     {
-        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time, sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
+        $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time, sd.timefrom,sd.timeto, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,sd.status");
         $this->db->from('tbl_schedule sd');
-        $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
-        $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
-        $this->db->join('tbl_faculty a','a.id=sd.adviserid');
         $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
         $this->db->join('tbl_section sc','sc.id=sd.sectionid');
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
         $this->db->join('tbl_strand st','st.id=sc.strandid','left');
-        $this->db->where('sd.adviserid', $id);
-        $this->db->where('e.syid<>', $syid);
-                
+
+        $likeCriteria = "(sd.adviserid ='".$id."'  AND sd.syid<>'".$syid."' AND sd.status='".'Active'."'  AND sd.term IN ((SELECT semester FROM tbl_semester WHERE status='Active'),''))";
+
+        $this->db->where($likeCriteria); 
 
         $query = $this->db->get();
         
@@ -324,17 +322,17 @@ class Faculty_model extends CI_Model {
 
     function recordListing($id,$syid, $page, $segment) {
 
-        $this->db->select("es.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time, sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
+        $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' ',sd.timeto) as time, sd.timefrom,sd.timeto, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,sd.status");
         $this->db->from('tbl_schedule sd');
-        $this->db->join('tbl_enrollsched es','es.scheduleid=sd.id');
-        $this->db->join('tbl_enrollment e','e.id=es.enrollmentid');
-        $this->db->join('tbl_faculty a','a.id=sd.adviserid');
         $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
         $this->db->join('tbl_section sc','sc.id=sd.sectionid');
         $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
         $this->db->join('tbl_strand st','st.id=sc.strandid','left');
-        $this->db->where('sd.adviserid', $id);
-        $this->db->where('e.syid<>', $syid);
+
+        $likeCriteria = "(sd.adviserid ='".$id."'  AND sd.syid<>'".$syid."' AND sd.status='".'Active'."'  AND sd.term IN ((SELECT semester FROM tbl_semester WHERE status='Active'),''))";
+
+        $this->db->where($likeCriteria); 
+
         
         
         $this->db->limit($page, $segment);
