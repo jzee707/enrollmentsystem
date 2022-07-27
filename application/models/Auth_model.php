@@ -111,6 +111,24 @@ class Auth_model extends CI_Model {
         }
     }
     
+    public function addForgotPassword($id,$link,$timeStamp) {
+
+        $data = array(
+            'accountid' => $id,
+            'link' => $link,
+            'date' => $timeStamp,
+            'status' => 'Active',
+        );
+
+        $this->db->insert('tbl_forgotpassword', $data);
+        if (!empty($this->db->insert_id()) && $this->db->insert_id() > 0) {
+            return TRUE;
+            
+        } else {
+            return FALSE;
+        }
+    }
+
     function editStrand($strandInfo, $id)
     {       
         $this->db->where('id', $id);
@@ -202,6 +220,22 @@ class Auth_model extends CI_Model {
     {       
         $this->db->where('id', $id);
         $this->db->update('tbl_section', $strandInfo);
+              
+        return TRUE;
+    }
+
+    function changepassword($strandInfo, $id)
+    {       
+        $this->db->where('id', $id);
+        $this->db->update('tbl_account', $strandInfo);
+              
+        return TRUE;
+    }
+
+    function fpEdit($strandInfo, $id)
+    {       
+        $this->db->where('accountid', $id);
+        $this->db->update('tbl_forgotpassword', $strandInfo);
               
         return TRUE;
     }
@@ -725,6 +759,45 @@ class Auth_model extends CI_Model {
         return $this->db->get();
 
 		
+    }
+
+    public function SendEmailFP($email,$link) {   
+        
+        $subject = "Forgot Password";
+        $message = "
+        <p>Good Day!</p>
+         
+        <p>Thank you for submitting a request for password reset! </p>
+
+        <p>Click this link to reset your password " . base_url() . "auth/".$link ." </p>
+
+        <p>Keep Safe,</p>
+
+        <p>Western Colleges Inc.</p>";
+		
+	
+        $this->load->config('email');
+        $this->load->library('email');
+
+		$this->email->set_newline("\r\n");
+
+        $this->email->from('wcihighschool2022@gmail.com');
+        $this->email->to($email);
+        $this->email->subject($subject);
+		$this->email->message($message); 
+
+
+		 if($this->email->send()){
+
+
+		}
+
+		else{
+   		show_error($this->email->print_debugger());
+		
+        } 
+        
+   
     }
 
     

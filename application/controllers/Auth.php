@@ -56,6 +56,41 @@ public function academics() {
 
 }
 
+public function forgotpassword() {     
+         
+    $data = array();
+    
+    $this->load->view('templates/header', $data);
+    $this->load->view('auth/forgotpassword', $data);
+    $this->load->view('templates/footer', $data);
+
+}
+
+public function auth($link) {     
+         
+    $data = array();
+
+    $row = $this->db->select("*")->where('link',$link)->get("tbl_forgotpassword")->row();
+
+    if($row->status == "Active")
+    {
+        $data['link']= $this->db->select("*")->where('link',$link)->get("tbl_forgotpassword")->row();
+    
+        $this->load->view('templates/header', $data);
+        $this->load->view('auth/resetpassword', $data);
+        $this->load->view('templates/footer', $data);
+    }
+    else
+    {
+        $this->session->set_flashdata('error', 'The link was expired or used. Please try again.');
+
+        redirect('forgotpassword');
+    }
+
+    
+
+}
+
 public function signup() {     
          
     $data = array();
@@ -466,6 +501,122 @@ function signout()
         
     }
 
+    function sendlinkEmail()
+    {
+               
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|callback_checkEmailFP');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->forgotpassword();
+        } else {
+            
+            $email = $this->security->xss_clean($this->input->post('email'));
+
+            $rndkey = $this->generateRandomString();
+
+            $row = $this->db->select("*")->where('email',$email)->get("tbl_account")->row();
+            $id = $row->id;
+
+            $row1 = $this->db->select("count(id) as id")->get("tbl_forgotpassword")->row();
+            $count = 0;
+            
+            if(!empty($row1->id))
+            {
+                $count  = intval($row1->id) +1;
+
+            }
+
+            else
+            {
+                $count = 1;
+
+            }
+           
+
+            $link = sha1($this->security->xss_clean($id . ''. $count . ''. $rndkey));
+
+            $timeStamp = date('Y-m-d');
+
+            $strandInfo = array('status'=>'Inactive');
+                
+            $result = $this->auth->fpEdit($strandInfo, $id);
+            
+            
+            $chk = $this->auth->addForgotPassword($id,$link,$timeStamp);
+
+            if($chk > 0)
+            {
+                $this->auth->SendEmailFP($email,$link);            
+
+                $this->session->set_flashdata('success', 'Request Sent Successfully. Check your email address.');
+            }
+            else
+            {
+                $this->session->set_flashdata('error', 'Strand creation failed');
+            }
+
+            redirect('forgotpassword');
+
+        }
+        
+    }
+
+    function generateRandomString($length =4) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    function resetpassword($link)
+    {
+                        
+            $this->form_validation->set_rules('password', 'New Password', 'trim|required');
+            $this->form_validation->set_rules('copassword', 'Confirm Password', 'trim|required|callback_checkPassword');             
+                    
+      
+            if($this->form_validation->run() == FALSE)
+            {
+                
+                $this->auth($link);
+
+            }
+            else
+            {
+                $id = $this->security->xss_clean($this->input->post('sid'));
+                $password = $this->security->xss_clean($this->input->post('password'));
+                $copassword = $this->security->xss_clean($this->input->post('copassword'));
+                
+                $strandInfo = array('password'=>$password);
+                
+                $result = $this->auth->changepassword($strandInfo, $id);
+                
+                if($result == true)
+                {
+                    $strandInfo = array('status'=>'Inactive');
+                
+                    $result = $this->auth->fpEdit($strandInfo, $id);
+
+                    $this->session->set_flashdata('success', 'Password was Updated.');
+
+                    redirect('login');
+                   
+                }
+
+                else
+                {
+                    $this->session->set_flashdata('error', 'Password updation failed');
+
+                    $this->forgotpassword();
+              
+                }
+                                            
+            }       
+    }
+
     public function getSection(){
 
         $schoolyear = 0;
@@ -542,6 +693,7 @@ function signout()
             }
    
     }
+    
 
     public function getSectionStudent(){
         if($this->input->post('gradelevel'))
@@ -863,6 +1015,27 @@ function signout()
      
        } 
 
+       function checkEmailFP() {
+
+        $email = $this->security->xss_clean($this->input->post('email'));
+
+        $check = $this->db->get_where('tbl_account', array('email' => $email,'status' => 'Active'), 1);
+
+        if (empty($check)) {
+
+            $this->form_validation->set_message('checkEmailFP', "Email didn't exists.");
+
+            return FALSE;
+        }
+
+        else
+        {
+            return TRUE;
+        }
+     
+     
+       } 
+
        function checkPassword() {
 
         $password = $this->security->xss_clean($this->input->post('password'));
@@ -882,6 +1055,8 @@ function signout()
      
      
        } 
+
+
 
     
     function paginationCompress($link, $count, $perPage = 10, $segment = 3) {
