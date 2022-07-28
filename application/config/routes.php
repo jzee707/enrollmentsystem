@@ -98,7 +98,7 @@ $route['academics'] = 'auth/academics';
 $route['registration'] = 'auth/registration';
 $route['forgotpassword'] = 'auth/forgotpassword';
 $route['sendlinkEmail'] = 'auth/sendlinkEmail';
-$route['auth/(:any)'] = 'auth/auth/$1';
+$route['authentication/(:any)'] = 'auth/authentication/$1';
 $route['resetpassword/(:any)'] = 'auth/resetpassword/$1';
 $route['addAccount'] = 'auth/addAccount';
 

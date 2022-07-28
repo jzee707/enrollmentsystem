@@ -247,7 +247,8 @@ class Student_model extends CI_Model {
         OR CONCAT(lastname, ' ',firstname)  LIKE '".$searchText."%'
         AND status='".$status."'
         OR lrn LIKE '".$searchText."%'
-        AND status='".$status."' OR idno LIKE '".$searchText."%'
+        AND status='".$status."' 
+        OR idno LIKE '".$searchText."%'
         AND status='".$status."')";
         
        

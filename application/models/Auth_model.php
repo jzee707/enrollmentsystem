@@ -769,7 +769,7 @@ class Auth_model extends CI_Model {
          
         <p>Thank you for submitting a request for password reset! </p>
 
-        <p>Click this link to reset your password " . base_url() . "auth/".$link ." </p>
+        <p>Click this link to reset your password " . base_url() . "authentication/".$link ." </p>
 
         <p>Keep Safe,</p>
 

@@ -66,7 +66,7 @@ public function forgotpassword() {
 
 }
 
-public function auth($link) {     
+public function authentication($link) {     
          
     $data = array();
 

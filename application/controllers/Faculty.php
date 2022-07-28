@@ -446,7 +446,7 @@ function editFaculty($id)
     
         $count = $this->auth->recordListingCount($id,$schoolyear);
     
-        $returns = $this->paginationCompress ( "faculty/myrecords/", $count, 10 );
+        $returns = $this->paginationCompress ( "faculty/myrecord/", $count, 10 );
             
         $data['userRecords'] = $this->auth->recordListing($id,$schoolyear, $returns["page"], $returns["segment"]);
         
