@@ -84,7 +84,7 @@
                                     </div>
                                     <div class="col-6">
                                         
-                                        <p class="mb-4" style="text-align:right"><a href="<?php print site_url();?>forgotpassword" style="color:white">Forgot Password</a></p>
+                                        <p class="mb-4" style="text-align:right"><a href="<?php print site_url();?>forgotpassword" style="color:white">Forgot Password?</a></p>
                                     </div>
                                 </div>                               
                             
