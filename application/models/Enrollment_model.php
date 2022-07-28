@@ -570,7 +570,14 @@ class Enrollment_model extends CI_Model {
             $likeCriteria = "(sb.gradelevel = '".$gradelevel."' AND sd.sectionid='".$section."' AND sd.syid='".     $schoolyear."' AND sd.term IN ('".'1st'."','".'2nd'."'))";
 
 
-        } 
+        }
+
+        else if($gradelevel != "Grade 11" ||  $gradelevel != "Grade 12")
+        {
+            $likeCriteria = "(sb.gradelevel = '".$gradelevel."' AND sd.sectionid='".$section."' AND sd.syid='".$schoolyear."' AND sd.term = '".''."')";
+
+        }
+         
 
         $this->db->where($likeCriteria);  
 
