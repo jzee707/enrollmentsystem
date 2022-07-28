@@ -100,6 +100,7 @@ $route['forgotpassword'] = 'auth/forgotpassword';
 $route['sendlinkEmail'] = 'auth/sendlinkEmail';
 $route['auth/(:any)'] = 'auth/auth/$1';
 $route['resetpassword/(:any)'] = 'auth/resetpassword/$1';
+$route['addAccount'] = 'auth/addAccount';
 
 $route['studentdashboard'] = 'auth/studentdashboard';
 $route['studentaccount'] = 'auth/studentaccount';

@@ -56,7 +56,7 @@
                         <?php } ?>
 
 
-                        <form action="<?php print site_url();?>auth/addAccount" method="post">
+                        <form action="<?php print site_url();?>addAccount" method="post">
                             
 
                             <div class="form-group">
