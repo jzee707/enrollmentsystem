@@ -294,7 +294,7 @@ public function studentrecords() {
     $data = array();
 
     $row = $this->db->select("*")->where('accountid',$this->session->userdata('id'))->get("tbl_student")->row();
-        $id = $row->id;
+    $id = $row->id;
 
     $schoolyear =0;
 
@@ -344,7 +344,10 @@ public function studentdashboard() {
     else
     {
         $usertype = $this->session->userdata('usertype');
-        $id = $this->session->userdata('id');
+
+
+        $row = $this->db->select("*")->where('accountid',$this->session->userdata('id'))->get("tbl_student")->row();
+        $id = $row->id;
 
         if($usertype == "Student"){
 
@@ -377,7 +380,9 @@ public function teacherdashboard() {
     else
     {
         $usertype = $this->session->userdata('usertype');
-        $id = $this->session->userdata('id');
+       
+        $row = $this->db->select("*")->where('accountid',$this->session->userdata('id'))->get("tbl_faculty")->row();
+        $id = $row->id;
 
         if($usertype == "Teacher"){
 
