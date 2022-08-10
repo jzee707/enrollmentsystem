@@ -36,7 +36,7 @@
             <div class="col-xs-12">
               <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Strand List</h3>
+                    <h3 class="box-title">Strand Archived List</h3>
                     <div class="box-tools">
 
                         <form action="<?php echo base_url() ?>strand" method="POST" id="searchList">
@@ -72,8 +72,7 @@
 
                         <td class="text-center">
                        
-                            <a class="btn btn-sm btn-info" href="<?php echo base_url().'editStrand/'.$record->id; ?>" title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a class="btn btn-sm btn-danger" href="<?php echo base_url().'/'.$record->id; ?>" title="Archive"><i class="fa fa-trash"></i></a> 
+                        <a class="btn btn-sm btn-info" href="<?php echo base_url().'retrievestrand/'.$record->id; ?>" title="Restore"><i class="fa fa-check"></i></a>
                         </td>
                     </tr>
                     <?php

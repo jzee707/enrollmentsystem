@@ -151,7 +151,7 @@
             
             <li class="treeview active">
               <a href="#">
-                <i></i> <span>ARCHIVED FILES</span>
+                <i></i> <span>ARCHIVED DATA</span>
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
                 </span>
@@ -161,6 +161,7 @@
                 <li><a href="<?php echo base_url(); ?>archivedstudent"><i class="fa fa-users"></i>Student</a></li>
                 <li><a href="<?php echo base_url(); ?>archivedfaculty"><i class="fa fa-users"></i>Faculty</a></li>
                 <li><a href="<?php echo base_url(); ?>archivedschedule"><i class="fa fa-users"></i>Schedule</a></li>
+                <li><a href="<?php echo base_url(); ?>archivedstrand"><i class="fa fa-users"></i>Strand</a></li>
                 <li><a href="<?php echo base_url(); ?>archivedenrollment"><i class="fa fa-users"></i>Enrollment</a></li>
                 <li><a href="<?php echo base_url(); ?>archivedpreregistration"><i class="fa fa-users"></i>Pre-Registration</a></li>
                 <li><a href="<?php echo base_url(); ?>archivedpreenrollment"><i class="fa fa-users"></i>Pre-Enrollment</a></li>

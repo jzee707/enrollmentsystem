@@ -44,7 +44,7 @@
                                 <div class="col-md-6">                                
                                     <div class="form-group">
                                         <label for="first_name">ID No.</label>
-                                        <input type="number" class="form-control" id="idno" name="idno" value="<?php echo $studentInfo->idno;?>" maxlength="128" required>
+                                        <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="idno" name="idno" value="<?php echo $studentInfo->idno;?>" maxlength="128" required>
                                         <input type="hidden" class="form-control" id="sid" name="sid" value="<?php echo $studentInfo->id;?>" maxlength="128" required>
                                     </div>
                                     
@@ -212,7 +212,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="contact_no">Contact No.</label>
-                                        <input type="number" class="form-control" id="contactno"  name="contactno" value="<?php echo $studentInfo->contactno;?>" maxlength="11">
+                                        <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="contactno"  name="contactno" value="<?php echo $studentInfo->contactno;?>" maxlength="11">
                                     </div>
                                 </div>  
                             </div>
@@ -333,7 +333,7 @@ $('#city').change(function(){
 
         document.getElementById("gender").value= "<?php echo $studentInfo->gender ?>";
         document.getElementById("studenttype").value= "<?php echo $studentInfo->studenttype ?>";
-        ocument.getElementById("status").value= "<?php echo $studentInfo->status ?>";
+        document.getElementById("status").value= "<?php echo $studentInfo->status ?>";
 
        
 

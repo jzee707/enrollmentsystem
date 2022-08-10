@@ -266,7 +266,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="contact_no">Contact No.</label>
-                                        <input type="text" class="form-control" id="contactno"  name="contactno" value="<?php echo $studentInfo->contactno;?>" maxlength="121" disabled>
+                                        <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="contactno"  name="contactno" value="<?php echo $studentInfo->contactno;?>" maxlength="121" disabled>
                                     </div>
                                 </div>  
                             </div>
