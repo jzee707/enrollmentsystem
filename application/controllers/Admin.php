@@ -806,15 +806,38 @@ function signout()
 
         $searchText = $this->security->xss_clean($this->input->post('searchText'));
            
-        $count = $this->auth->strandListingCount($searchText);
+        $status ="Active";
 
+        $count = $this->auth->strandListingCount($searchText,$status);
+
+    
         $returns = $this->paginationCompress ("admin/strandListing/", $count, 10 );
         
-        $data['userRecords'] = $this->auth->strandListing($searchText, $returns["page"], $returns["segment"]);
+        $data['userRecords'] = $this->auth->strandListing($searchText, $status,$returns["page"], $returns["segment"]);
         
 
             $this->load->view('templates/adminheader', $data);
             $this->load->view("admin/strand",  $data);
+            $this->load->view('templates/adminfooter', $data);
+
+    }
+
+    function strandArchivedListing()
+    {
+
+        $searchText = $this->security->xss_clean($this->input->post('searchText'));
+
+        $status ="Inactive";
+           
+        $count = $this->auth->strandListingCount($searchText,$status);
+
+        $returns = $this->paginationCompress ("admin/strandArchivedListing/", $count, 10 );
+        
+        $data['userRecords'] = $this->auth->strandListing($searchText, $status,$returns["page"], $returns["segment"]);
+        
+
+            $this->load->view('templates/adminheader', $data);
+            $this->load->view("admin/archivedstrand",  $data);
             $this->load->view('templates/adminfooter', $data);
 
     }
@@ -869,6 +892,58 @@ function signout()
             $this->load->view("admin/semester",  $data);
             $this->load->view('templates/adminfooter', $data);
 
+    }
+
+    function archivestrand($id)
+    {
+                        
+                $studentInfo = array('id'=>$id,'status'=>'Inactive',);
+                
+                $result = $this->auth->editStrand($studentInfo, $id);
+
+                
+                if($result == true)
+                {
+                    $this->session->set_flashdata('success', 'Strand Data Archived.');                 
+
+                    redirect('strand');
+                   
+                }
+
+                else
+                {
+                    $this->session->set_flashdata('error', 'User updation failed');
+
+                    redirect('strand');
+              
+                }
+        
+    }
+
+    function retrievestrand($id)
+    {
+                        
+                $studentInfo = array('id'=>$id,'status'=>'Active',);
+                
+                $result = $this->auth->editStrand($studentInfo, $id);
+
+                
+                if($result == true)
+                {
+                    $this->session->set_flashdata('success', 'Strand Data Retrieved.');                 
+
+                    redirect('archivedstrand');
+                   
+                }
+
+                else
+                {
+                    $this->session->set_flashdata('error', 'User updation failed');
+
+                    redirect('archivedstrand');
+              
+                }
+        
     }
 
     public function getCity(){

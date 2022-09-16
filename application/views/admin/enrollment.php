@@ -83,9 +83,11 @@
                         <td><?php echo $record->date_enrolled ?></td>
                         <td><?php echo $record->status ?></td>
                         <td class="text-center">
-                       
+
+                            <a class="btn btn-sm btn-info detailsAppt" href="#" data-id="<?php echo $record->id; ?>" title="View"><i class="fa fa-eye"></i></a>
                             <a class="btn btn-sm btn-info" href="<?php echo base_url().'editEnrollment/'.$record->id; ?>" title="Edit"><i class="fa fa-pencil"></i></a>
                             <a class="btn btn-sm btn-danger" href="<?php echo base_url().'archivedenrollment/'.$record->id; ?>" title="Archive"><i class="fa fa-trash"></i></a> 
+                        
                         </td>
                     </tr>
                     <?php
@@ -94,6 +96,64 @@
                     ?>
  
                   </table>
+
+                  <!-- Medium modal -->
+				<div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+
+										<div class="modal-header">
+											<h5 class="modal-title" style="font-size:18px;font-weight:bold;" id="myLargeModalLabel">Enrollment Details</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										</div>
+
+
+										<div class="modal-body">
+
+                                                    <div class="row" style="text-align:right;">
+
+                                                    <label style="font-size:15px;font-weight:normal;" >School Year: </label>
+                                                    <label style="font-size:15px;font-weight:normal;" >Jov </label>
+
+                                                    </div>
+
+                                                     <div class="row" style="text-align:right;">
+
+                                                    <label style="font-size:15px;font-weight:normal;" >Term: </label>
+                                                    <label style="font-size:15px;font-weight:normal;" >Jov </label>
+
+                                                    </div>
+
+                                                    <label style="font-size:15px;font-weight:normal;" >Name: </label>
+                                                    <label style="font-size:15px;font-weight:normal;" >Jov </label>
+                                                          
+                                                    <br>
+
+                                                    <label style="font-size:15px;font-weight:normal;" >Grade Level: </label>
+                                                    <label style="font-size:15px;font-weight:normal;" >Jov </label>
+
+                                                    <br>
+
+                                                    <label style="font-size:15px;font-weight:normal;" >Section: </label>
+                                                    <label style="font-size:15px;font-weight:normal;" >Jov </label>
+
+                                                    <br>
+
+                                                    <label style="font-size:15px;font-weight:normal;" >Strand: </label>
+                                                    <label style="font-size:15px;font-weight:normal;" >Jov </label>
+  
+                                                
+
+										</div>
+
+
+										<div class="modal-footer">
+										    <button type="submit" name="download-appointment" id="download-appointment" class="btn btn-primary" >Print</button>
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+										</div>
+									</div>
+								</div>
+							</div>
                   
                 </div><!-- /.box-body -->
                 <div class="box-footer clearfix">
@@ -105,5 +165,17 @@
     </section>
 </div>
 
+<script>
+jQuery(document).ready(function(){
+	
+	jQuery(document).on("click", ".detailsAppt", function(){
+
+		$("#success-modal").modal('show');
+
+	});
+		
+	
+});
+</script>
 
 

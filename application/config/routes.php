@@ -70,7 +70,7 @@ $route['changepassword'] = 'admin/changepassword';
 $route['account'] = 'admin/account';
 
 $route['archivedstudent'] = 'student/studentArchivedListing';
-$route['retrievestudent/(:any)'] = 'student/retrievestudent/$1';
+$route['retrievestudent/(:any)'] = 'student/retrievestudent/$1';    
 $route['archivestudent/(:any)'] = 'student/archivestudent/$1';
 
 $route['archivedfaculty'] = 'faculty/facultyArchivedListing';
@@ -89,6 +89,9 @@ $route['archivedpreregistration'] = 'student/registrationArchivedListing';
 
 $route['archivedpreenrollment'] = 'enrollment/preenrollmentArchivedListing';
 
+$route['archivedstrand'] = 'admin/strandArchivedListing';
+$route['archivestrand/(:any)'] = 'admin/archivestrand/$1';
+$route['retrievestrand/(:any)'] = 'admin/retrievestrand/$1';
 
 $route['login'] = 'admin/login';
 $route['signup'] = 'auth/signup';

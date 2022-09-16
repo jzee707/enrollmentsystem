@@ -82,6 +82,8 @@
                         <td><?php echo $record->date_enrolled ?></td>
                         <td><?php echo $record->status ?></td>
                         <td class="text-center">
+
+                            <a class="btn btn-sm btn-info" href="<?php echo base_url().'editEnrollment/'.$record->id; ?>" title="View"><i class="fa fa-eye"></i></a>
                             <a class="btn btn-sm btn-info"href="<?php echo base_url().'enrollment/approvedRequest/'.$record->id; ?>" data-id="<?php echo $record->id; ?>" title="Approve"><i class="fa fa-check"></i></a> 
                             <a class="btn btn-sm btn-info"href="<?php echo base_url().'enrollment/declinedRequest/'.$record->id; ?>" data-id="<?php echo $record->id; ?>" title="Decline"><i class="fa fa-close"></i></a> 
                            

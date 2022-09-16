@@ -73,7 +73,7 @@
                         <td class="text-center">
                        
                             <a class="btn btn-sm btn-info" href="<?php echo base_url().'editStrand/'.$record->id; ?>" title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a class="btn btn-sm btn-danger" href="<?php echo base_url().'/'.$record->id; ?>" title="Archive"><i class="fa fa-trash"></i></a> 
+                            <a class="btn btn-sm btn-danger" href="<?php echo base_url().'archivestrand/'.$record->id; ?>" title="Archive"><i class="fa fa-trash"></i></a> 
                         </td>
                     </tr>
                     <?php

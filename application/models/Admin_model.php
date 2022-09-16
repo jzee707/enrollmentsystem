@@ -281,7 +281,7 @@ class Admin_model extends CI_Model {
         return $query->row();
     }
     
-        function strandListingCount($searchText = '')
+        function strandListingCount($searchText = '',$status)
     {
         $this->db->select('id,strandcode,description,status');
         $this->db->from('tbl_strand');
@@ -290,7 +290,7 @@ class Admin_model extends CI_Model {
             $likeCriteria = "(description LIKE '".$searchText."%'
                             AND status='".'Active'."'
                             OR strandcode  LIKE '".$searchText."%'
-                            AND status='".'Active'."')";
+                            AND status='".$status."')";
                             
        $this->db->where($likeCriteria);
 
@@ -299,15 +299,15 @@ class Admin_model extends CI_Model {
         return $query->num_rows();
     }
 
-    function strandListing($searchText = '', $page, $segment) {
+    function strandListing($searchText = '', $status,$page, $segment) {
 
         $this->db->select('id,strandcode,description,status');
         $this->db->from('tbl_strand');
         
         $likeCriteria = "(description LIKE '".$searchText."%'
-                            AND status='".'Active'."'
+                            AND status='".$status."'
                             OR strandcode  LIKE '".$searchText."%'
-                            AND status='".'Active'."')";
+                            AND status='".$status."')";
 
             $this->db->where($likeCriteria);
            
