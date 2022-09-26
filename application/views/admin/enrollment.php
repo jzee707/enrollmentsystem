@@ -108,43 +108,14 @@
 										</div>
 
 
-										<div class="modal-body">
+										<div class="modal-body" id="sched_data">
 
-                                                    <div class="row" style="text-align:right;">
-
-                                                    <label style="font-size:15px;font-weight:normal;" >School Year: </label>
-                                                    <label style="font-size:15px;font-weight:normal;" >Jov </label>
-
-                                                    </div>
-
-                                                     <div class="row" style="text-align:right;">
-
-                                                    <label style="font-size:15px;font-weight:normal;" >Term: </label>
-                                                    <label style="font-size:15px;font-weight:normal;" >Jov </label>
-
-                                                    </div>
-
-                                                    <label style="font-size:15px;font-weight:normal;" >Name: </label>
-                                                    <label style="font-size:15px;font-weight:normal;" >Jov </label>
-                                                          
-                                                    <br>
-
-                                                    <label style="font-size:15px;font-weight:normal;" >Grade Level: </label>
-                                                    <label style="font-size:15px;font-weight:normal;" >Jov </label>
-
-                                                    <br>
-
-                                                    <label style="font-size:15px;font-weight:normal;" >Section: </label>
-                                                    <label style="font-size:15px;font-weight:normal;" >Jov </label>
-
-                                                    <br>
-
-                                                    <label style="font-size:15px;font-weight:normal;" >Strand: </label>
-                                                    <label style="font-size:15px;font-weight:normal;" >Jov </label>
-  
+                                                    
                                                 
 
 										</div>
+
+                                        
 
 
 										<div class="modal-footer">
@@ -167,12 +138,32 @@
 
 <script>
 jQuery(document).ready(function(){
+
+   
 	
 	jQuery(document).on("click", ".detailsAppt", function(){
 
-		$("#success-modal").modal('show');
+        var id = $(this).data("id");
+
+        $.ajax({
+        url:"<?php echo base_url(); ?>enrollment/load_enrollmentdata",
+        method:"POST",
+        data:{id:id},
+        success:function(data)
+        {
+
+        $("#success-modal").modal('show');
+        $('#sched_data').html(data);
+
+        }
+    });
+
+		
 
 	});
+    
+
+    
 		
 	
 });

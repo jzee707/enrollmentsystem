@@ -843,6 +843,91 @@ function editSchedule($id)
            echo $output;
        }
 
+       function load_enrollmentdata()
+       {
+
+           $result = $this->auth->getScheduleListED($this->input->post('id'));
+           $studentdata = $this->auth->getEnrollmentInfo($this->input->post('id'));
+           $output = '
+
+                                                    <div class="row" style="text-align:right;">
+
+                                                    <label style="font-size:15px;font-weight:normal;" >School Year: </label>
+                                                    <label style="font-size:15px;font-weight:normal;" >'.$studentdata->schoolyear.' </label>
+
+                                                    </div>
+
+                                                     <div class="row" style="text-align:right;">
+
+                                                    <label style="font-size:15px;font-weight:normal;" >Term: </label>
+                                                    <label style="font-size:15px;font-weight:normal;" >'.$studentdata->term.'</label>
+
+                                                    </div>
+
+                                                    <label style="font-size:15px;font-weight:normal;" >Name: </label>
+                                                    <label style="font-size:15px;font-weight:normal;" >'.$studentdata->student.'</label>
+                                                          
+                                                    <br>
+
+                                                    <label style="font-size:15px;font-weight:normal;" >Grade Level: </label>
+                                                    <label style="font-size:15px;font-weight:normal;" >'.$studentdata->gradelevel.'</label>
+
+                                                    <br>
+
+                                                    <label style="font-size:15px;font-weight:normal;" >Section: </label>
+                                                    <label style="font-size:15px;font-weight:normal;" >'.$studentdata->section.'</label>
+
+                                                    <br>
+
+                                                    <label style="font-size:15px;font-weight:normal;" >Strand: </label>
+                                                    <label style="font-size:15px;font-weight:normal;" >'.$studentdata->strandcode.'</label>
+  
+           
+           <h3 align="center">Schedule List</h3>	
+           <table class="table table-hover">
+           <thead>
+               <tr>
+                    <th>ID</th>                     
+                    <th>Subject</th>
+                    <th>Room</th>
+                    <th>Day</th>
+                    <th>Time</th>
+                    <th>Teacher</th>  
+                       
+               </tr>
+           </thead>
+           <tbody>
+           ';
+           if(!empty($result))
+           {
+               foreach($result as $record)
+               {
+                   $output .= '
+                   <tr>
+                           <td>'.$record->id.'</td>
+                           <td>'.$record->subject.'</td>
+                           <td>'.$record->room.'</td>
+                           <td>'.$record->day.'</td>
+                           <td>'.date("h:i A", strtotime($record->timefrom)) . ' - ' . date("h:i A", strtotime($record->timeto)).'</td>
+                           <td>'.$record->name.'</td>
+                          
+
+                           ';
+   
+                               $output .= '
+                       
+                       </tr>
+                       ';
+                       
+                   }
+               }
+                   $output .= '
+   
+                       </tbody>
+                       </table>';
+           echo $output;
+       }
+
        
 
     
