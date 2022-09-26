@@ -83,6 +83,7 @@
                         <td><?php echo $record->status ?></td>
                         <td class="text-center">
 
+                            <a class="btn btn-sm btn-info detailsAppt" href="#" data-id="<?php echo $record->id; ?>" title="View"><i class="fa fa-eye"></i></a>
                             <a class="btn btn-sm btn-info" href="<?php echo base_url().'editEnrollment/'.$record->id; ?>" title="View"><i class="fa fa-eye"></i></a>
                             <a class="btn btn-sm btn-info"href="<?php echo base_url().'enrollment/approvedRequest/'.$record->id; ?>" data-id="<?php echo $record->id; ?>" title="Approve"><i class="fa fa-check"></i></a> 
                             <a class="btn btn-sm btn-info"href="<?php echo base_url().'enrollment/declinedRequest/'.$record->id; ?>" data-id="<?php echo $record->id; ?>" title="Decline"><i class="fa fa-close"></i></a> 
@@ -95,6 +96,35 @@
                     ?>
  
                   </table>
+
+                   <!-- Medium modal -->
+				      <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+
+										<div class="modal-header">
+											<h5 class="modal-title" style="font-size:18px;font-weight:bold;" id="myLargeModalLabel">Enrollment Details</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										</div>
+
+
+										<div class="modal-body" id="sched_data">
+
+                                                    
+                                                
+
+										</div>
+
+                                        
+
+
+										<div class="modal-footer">
+										    <button type="submit" name="download-appointment" id="download-appointment" class="btn btn-primary" >Print</button>
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+										</div>
+									</div>
+								</div>
+							</div>
                   
                 </div><!-- /.box-body -->
                 <div class="box-footer clearfix">
@@ -108,3 +138,34 @@
 
 
 
+<script>
+jQuery(document).ready(function(){
+
+   
+	jQuery(document).on("click", ".detailsAppt", function(){
+
+        var id = $(this).data("id");
+
+        $.ajax({
+        url:"<?php echo base_url(); ?>enrollment/load_enrollmentdata",
+        method:"POST",
+        data:{id:id},
+        success:function(data)
+        {
+
+        $("#success-modal").modal('show');
+        $('#sched_data').html(data);
+
+        }
+    });
+
+		
+
+	});
+    
+
+    
+		
+	
+});
+</script>
