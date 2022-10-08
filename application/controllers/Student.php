@@ -466,6 +466,19 @@ public function registration() {
                 }
         
     }
+
+    public function getStudentData() {
+
+        $id = $this->security->xss_clean($this->input->post('id'));
+
+        $query = $this->db->query("SELECT s.id,s.idno,s.lrn,CONCAT(s.firstname, ' ',s.lastname) name,s.firstname,s.lastname,s.middlename,s.suffix,s.birthdate,s.gender,s.addid,s.address,a.province,a.city,a.barangay,s.religion,s.nationality,ac.email,s.contactno,s.mother,s.father,s.guardian,s.studenttype,s.status
+        FROM tbl_student s INNER JOIN tbl_address a ON a.id=s.addid INNER JOIN tbl_account ac ON ac.id=s.accountid WHERE s.id='".$id."'");
+        $data['record'] = $query->result();
+    
+        echo json_encode($data);
+
+    
+    }
                     
     
 

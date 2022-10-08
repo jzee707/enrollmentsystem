@@ -82,6 +82,8 @@
                         <td><?php echo $record->studenttype ?></td>
                         <td><?php echo $record->status ?></td>
                         <td class="text-center">
+
+                            <a class="btn btn-sm btn-info detailsAppt" href="#" data-id="<?php echo $record->id; ?>" title="View"><i class="fa fa-eye"></i></a>
                             <a class="btn btn-sm btn-info"href="<?php echo base_url().'student/approvedRequest/'.$record->id; ?>" data-id="<?php echo $record->id; ?>" title="Approve"><i class="fa fa-check"></i></a> 
                             <a class="btn btn-sm btn-info"href="<?php echo base_url().'student/declinedRequest/'.$record->id; ?>" data-id="<?php echo $record->id; ?>" title="Decline"><i class="fa fa-close"></i></a> 
                            
@@ -93,6 +95,203 @@
                     ?>
  
                   </table>
+
+                  <!-- Medium modal -->
+				      <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+
+										<div class="modal-header">
+											<h5 class="modal-title" style="font-size:18px;font-weight:bold;" id="myLargeModalLabel">Student Details</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										</div>
+
+
+										<div class="modal-body" id="infodata">
+
+                                            <div class="row">
+                                                <div class="col-md-3">                                
+                                                    <div class="form-group">
+                                                    <label for="last_name">Student Type</label>
+                                                        <input type="text" class="form-control"id="studenttype" name="studenttype" readonly maxlength="128">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">                                
+                                                    <div class="form-group">
+                                                        <label for="first_name">ID No.</label>
+                                                        <input type="text" id="idno" name="idno">
+                                                        <input type="hidden" class="form-control" id="sid" name="sid" readonly maxlength="128" >
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="last_name">LRN</label>
+                                                        <input type="number" class="form-control" id="lrn" name="lrn"  readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">                                
+                                                    <div class="form-group">
+                                                        <label for="first_name">First Name</label>
+                                                        <input type="text" class="form-control" id="firstname" name="firstname"  maxlength="128" readonly>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="last_name">Middle Name</label>
+                                                        <input type="text" class="form-control"id="middlename" name="middlename"  readonly maxlength="128">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">                                
+                                                    <div class="form-group">
+                                                        <label for="first_name">Last Name</label>
+                                                        <input type="text" class="form-control" id="lastname" name="lastname"  maxlength="128" readonly>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="last_name">Suffix</label>
+                                                        <input type="text" class="form-control"  id="suffix" name="suffix"  readonly maxlength="128">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="last_name">Birthdate</label>
+                                                            <input type="date" class="form-control" id="birthdate" name="birthdate" data-date-format="mm/dd/yyyy" maxlength="128" readonly>
+                                                        </div>
+                                                    </div>     
+                                                                        
+                                                    
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                        <label for="last_name">Gender</label>
+                                                        <input type="text" class="form-control"id="gender" name="gender"  readonly maxlength="128">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="email">Religion</label>
+                                                        <input type="text" class="form-control" id="religion" name="religion" readonly maxlength="128">
+                                                    </div>
+                                                </div>
+                                            
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="contact_no">Nationality</label>
+                                                        <input type="text" class="form-control" id="nationality"  name="nationality" readonly maxlength="128">
+                                                    </div>
+                                                </div>  
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                        <div class="form-group">
+                                                        <label for="last_name">Province</label>
+                                                        <input type="text" class="form-control"id="province" name="province" readonly maxlength="128">
+                                                        </div>
+                                                </div>
+                                            
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                    <label for="last_name">City</label>
+                                                        <input type="text" class="form-control"id="city" name="city" readonly maxlength="128">
+                                                    </div>
+                                                </div>  
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                    <label for="last_name">Barangay</label>
+                                                        <input type="text" class="form-control"id="barangay" name="barangay"  readonly maxlength="128">
+                                                    </div>
+                                                </div>
+                                            
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="contact_no">Address</label>
+                                                        <input type="text" class="form-control" id="address"  name="address" readonly maxlength="128">
+                                                    </div>
+                                                </div>  
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="email">Mother's Name</label>
+                                                        <input type="text" class="form-control" id="mother" name="mother" readonly maxlength="128">
+                                                    </div>
+                                                </div>
+                                            
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="contact_no">Father's Name</label>
+                                                        <input type="text" class="form-control" id="father"  name="father"  readonly maxlength="128">
+                                                    </div>
+                                                </div>  
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="email">Guardian</label>
+                                                        <input type="text" class="form-control" id="guardian" name="guardian" readonly maxlength="128">
+                                                    </div>
+                                                </div>
+                                            
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="contact_no">Contact No.</label>
+                                                        <input type="text" class="form-control" id="contactno"  name="contactno" readonly maxlength="11">
+                                                    </div>
+                                                </div>  
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="email">Email</label>
+                                                        <input type="email" class="form-control" id="email" name="email" readonly maxlength="128">
+                                                    </div>
+                                                </div>
+                                            
+                                                <div class="col-md-6">
+                                                        <div class="form-group">
+                                                        <label for="last_name">Status</label>
+                                                        <input type="text" class="form-control"id="status" name="status" readonly maxlength="128">
+                                                        </div>
+                                                </div> 
+                                            </div>
+
+										              </div>
+
+                                        
+
+
+                            <div class="modal-footer">
+                                <button type="submit" name="download-appointment" id="download-appointment" class="btn btn-primary" >Print</button>
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                   
                 </div><!-- /.box-body -->
                 <div class="box-footer clearfix">
@@ -106,3 +305,51 @@
 
 
 
+<script>
+jQuery(document).ready(function(){
+	
+	jQuery(document).on("click", ".detailsAppt", function(){
+
+		var id = $(this).data("id");
+		
+
+		$.ajax({
+				url:"student/getStudentData",
+				method:"POST",
+				dataType:"json",
+				data:{id:id},
+				success:function(data){
+
+				
+					$("#success-modal").modal('show');
+					$('#studenttype').val(data.record[0].studenttype);
+                    $('#lrn').val(data.record[0].lrn); 
+                    $('#idno').val(data.record[0].idno); 
+					$('#firstname').val(data.record[0].firstname); 
+					$('#middlename').val(data.record[0].middlename); 	
+                    $('#lastname').val(data.record[0].lastname); 	
+                    $('#suffix').val(data.record[0].suffix); 	
+					$('#birthdate').val(data.record[0].birthdate);
+					$('#gender').val(data.record[0].gender); 		
+					$('#religion').val(data.record[0].religion); 	
+                    $('#nationality').val(data.record[0].nationality);
+                    $('#province').val(data.record[0].province);
+                    $('#city').val(data.record[0].city);
+                    $('#barangay').val(data.record[0].barangay);
+                    $('#address').val(data.record[0].address);
+                    $('#mother').val(data.record[0].mother);
+                    $('#father').val(data.record[0].father);
+                    $('#guardian').val(data.record[0].guardian);
+                    $('#contactno').val(data.record[0].contactno);
+                    $('#email').val(data.record[0].email);
+                    $('#status').val(data.record[0].status);
+
+
+				}
+			});
+
+	});
+
+	
+});
+</script>
