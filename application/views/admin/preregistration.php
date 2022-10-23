@@ -52,7 +52,6 @@
                   <table class="table table-hover">
                     <tr>
                         <th>ID</th>
-                        <th>ID No.</th>
                         <th>LRN</th>
                         <th>Name</th>
                         <th>Birthdate</th>
@@ -72,7 +71,6 @@
                     ?>
                     <tr>
                     <td><?php echo $record->id ?></td>
-                        <td><?php echo $record->idno ?></td>
                         <td><?php echo $record->lrn ?></td>
                         <td><?php echo $record->name ?></td>
                         <td><?php echo date("m-d-Y", strtotime($record->birthdate)) ?></td>

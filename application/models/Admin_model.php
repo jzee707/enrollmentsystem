@@ -360,6 +360,7 @@ class Admin_model extends CI_Model {
         $likeCriteria = "(s.section LIKE '".$searchText."%' AND s.status='".'Active'."' OR s.gradelevel LIKE '".$searchText."%' AND s.status='".'Active'."' OR concat(f.firstname, ' ',f.lastname) LIKE '".$searchText."%' AND s.status='".'Active'."')";
                             
         $this->db->where($likeCriteria);
+        $this->db->order_by("s.gradelevel","ASC");
 
         $query = $this->db->get();
         
@@ -379,6 +380,7 @@ class Admin_model extends CI_Model {
         OR st.strandcode LIKE '".$searchText."%' AND s.status='".'Active'."')";
 
         $this->db->where($likeCriteria);
+        $this->db->order_by("s.gradelevel","ASC");
            
         $this->db->limit($page, $segment);
         $query = $this->db->get();

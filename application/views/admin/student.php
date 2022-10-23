@@ -53,7 +53,6 @@
                   <table class="table table-hover">
                     <tr>
                         <th>ID</th>
-                        <th>ID No.</th>
                         <th>LRN</th>
                         <th>Name</th>
                         <th>Birthdate</th>
@@ -73,7 +72,6 @@
                     ?>
                     <tr>
                     <td><?php echo $record->id ?></td>
-                        <td><?php echo $record->idno ?></td>
                         <td><?php echo $record->lrn ?></td>
                         <td><?php echo $record->name ?></td>
                         <td><?php echo date("m-d-Y", strtotime($record->birthdate)) ?></td>
@@ -86,7 +84,7 @@
                        
                             <a class="btn btn-sm btn-info detailsAppt" href="#" data-id="<?php echo $record->id; ?>" title="View"><i class="fa fa-eye"></i></a>
                             <a class="btn btn-sm btn-info" href="<?php echo base_url().'editStudent/'.$record->id; ?>" title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a class="btn btn-sm btn-danger" href="<?php echo base_url().'archivestudent/'.$record->id; ?>" title="Archive"><i class="fa fa-trash"></i></a> 
+                            <a class="btn btn-sm btn-danger archiveAppt" href="#" data-id="<?php echo $record->id; ?>" title="Archive"><i class="fa fa-trash"></i></a> 
                         </td>
                     </tr>
                     <?php
@@ -295,8 +293,28 @@
 									</div>
 								</div>
 							</div>
+
+                            <!-- Medium modal -->
+				      <div class="modal fade" id="archive-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+
+										<div class="modal-header">
+											<h1 class="modal-title" style="font-size:24px;font-weight:bold;" id="myLargeModalLabel">Are you sure to delete this record?</h1>
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										</div>
+
+
+										<div class="modal-footer">
+										    <button type="submit" name="archive-student" id="archive-student" class="btn btn-primary" >Yes</button>
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+										</div>
+									</div>
+								</div>
+							</div>
                   
-                </div><!-- /.box-body -->
+                
+                        </div><!-- /.box-body -->
                 <div class="box-footer clearfix">
                     <?php echo $this->pagination->create_links(); ?>
                 </div>
@@ -351,6 +369,16 @@ jQuery(document).ready(function(){
 			});
 
 	});
+
+    jQuery(document).on("click", ".archiveAppt", function(){
+
+var id = $(this).data("id");
+
+$("#archive-modal").modal('show');
+
+
+
+});
 
 	
 });
