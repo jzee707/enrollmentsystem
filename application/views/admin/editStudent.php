@@ -41,14 +41,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6">                                
-                                    <div class="form-group">
-                                        <label for="first_name">ID No.</label>
-                                        <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="idno" name="idno" value="<?php echo $studentInfo->idno;?>" maxlength="128" required>
-                                        <input type="hidden" class="form-control" id="sid" name="sid" value="<?php echo $studentInfo->id;?>" maxlength="128" required>
-                                    </div>
                                     
-                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="last_name">LRN</label>

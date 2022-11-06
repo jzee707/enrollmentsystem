@@ -123,7 +123,6 @@ class Student_model extends CI_Model {
     public function addStudent() {
 
         $data = array(
-            'idno' => $this->_idno,
             'lrn' => $this->_lrn,
             'studenttype' => $this->_studenttype,
             'firstname' => $this->_firstname,

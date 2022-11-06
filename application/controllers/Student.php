@@ -93,7 +93,7 @@ public function registration() {
             $this->addNewStudent();
         } else {
             
-            $idno = $this->security->xss_clean($this->input->post('idno'));
+
             $lrn = $this->security->xss_clean($this->input->post('lrn'));
             $studenttype = $this->security->xss_clean($this->input->post('studenttype'));
             $firstname = $this->security->xss_clean($this->input->post('firstname'));
@@ -116,7 +116,7 @@ public function registration() {
             $timeStamp = date('Y-m-d');
             $userid=0;    
                        
-            $this->auth->setIDNo($idno);  
+
             $this->auth->setLRN($lrn);
             $this->auth->setStudentType($studenttype);
             $this->auth->setFirstname($firstname);
@@ -171,7 +171,7 @@ public function registration() {
             
             $id = $this->input->post('sid');
                     
-            $this->form_validation->set_rules('idno', 'ID No.', 'trim|required');
+
             $this->form_validation->set_rules('lrn', 'LRN', 'trim|required|callback_checkLRN');
             $this->form_validation->set_rules('studenttype', 'Student Type', 'trim|required');
             $this->form_validation->set_rules('firstname', 'First Name', 'trim|required');
@@ -199,7 +199,7 @@ public function registration() {
             {
 
 
-                $idno = $this->security->xss_clean($this->input->post('idno'));
+
                 $lrn = $this->security->xss_clean($this->input->post('lrn'));
                 $studenttype = $this->security->xss_clean($this->input->post('studenttype'));
                 $firstname = $this->security->xss_clean($this->input->post('firstname'));
@@ -221,7 +221,7 @@ public function registration() {
                 $timeStamp = date('Y-m-d');
               
                 
-                $studentInfo = array('idno'=>$idno,'lrn'=>$lrn,'studenttype'=>$studenttype,'firstname'=>$firstname,'lastname'=>$lastname,'middlename'=>$middlename,'suffix'=>$suffix,'birthdate'=>$birthdate,'gender'=>$gender,'religion'=>$religion,'nationality'=>$nationality,'addid'=>$barangay,'address'=>$address,'mother'=>$mother,'father'=>$father,'guardian'=>$guardian,'contactno'=>$contactno,'status'=>$status,);
+                $studentInfo = array('lrn'=>$lrn,'studenttype'=>$studenttype,'firstname'=>$firstname,'lastname'=>$lastname,'middlename'=>$middlename,'suffix'=>$suffix,'birthdate'=>$birthdate,'gender'=>$gender,'religion'=>$religion,'nationality'=>$nationality,'addid'=>$barangay,'address'=>$address,'mother'=>$mother,'father'=>$father,'guardian'=>$guardian,'contactno'=>$contactno,'status'=>$status,);
                 
                 $result = $this->auth->editStudent($studentInfo, $id);
                 
@@ -493,7 +493,7 @@ public function registration() {
         $returns = $this->paginationCompress ( "student/studentListing/", $count, 10);
         
         $data['userRecords'] = $this->auth->studentListing($searchText, $returns["page"], $returns["segment"],$status);
-        
+        $data['totalStudent'] = $count;
 
             $this->load->view('templates/adminheader', $data);
             $this->load->view("admin/student",  $data);

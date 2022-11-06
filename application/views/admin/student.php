@@ -93,6 +93,7 @@
                     ?>
  
                   </table>
+                  
 
                   <!-- Medium modal -->
 				      <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -312,10 +313,14 @@
 									</div>
 								</div>
 							</div>
+                            
                   
                 
                         </div><!-- /.box-body -->
-                <div class="box-footer clearfix">
+
+                        <h4 class="box-title" style="font-size:15px">Total Students: <?php echo $totalStudent;?></h4>
+                
+                        <div class="box-footer clearfix">
                     <?php echo $this->pagination->create_links(); ?>
                 </div>
               </div><!-- /.box -->

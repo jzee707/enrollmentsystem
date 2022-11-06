@@ -41,13 +41,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6">                                
-                                    <div class="form-group">
-                                        <label for="first_name">ID No.</label>
-                                        <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control" id="idno" name="idno" maxlength="128">
-                                    </div>
                                     
-                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="last_name">LRN</label>

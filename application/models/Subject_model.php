@@ -130,7 +130,7 @@ class Subject_model extends CI_Model {
                             AND status='".'Active'."' AND type='".'JHS'."')";
                             
        $this->db->where($likeCriteria);
-       $this->db->order_by("gradelevel","ASC");
+       $this->db->order_by("id","ASC");
 
         $query = $this->db->get();
         
@@ -150,7 +150,7 @@ class Subject_model extends CI_Model {
         AND status='".'Active'."' AND type='".'JHS'."')";
 
         $this->db->where($likeCriteria);    
-        $this->db->order_by("gradelevel","ASC");   
+        $this->db->order_by("id","ASC");   
       
         $this->db->limit($page, $segment);
         $query = $this->db->get();
@@ -172,7 +172,7 @@ class Subject_model extends CI_Model {
         AND s.status='".'Active'."' AND s.type='".'SHS'."')";
                             
        $this->db->where($likeCriteria);
-       $this->db->order_by("s.gradelevel","ASC");
+       $this->db->order_by("s.id","ASC");
 
         $query = $this->db->get();
         
@@ -192,7 +192,7 @@ class Subject_model extends CI_Model {
         AND s.status='".'Active'."' AND s.type='".'SHS'."')";
 
         $this->db->where($likeCriteria);
-        $this->db->order_by("s.gradelevel","ASC");
+        $this->db->order_by("s.id","ASC");
       
         $this->db->limit($page, $segment);
         $query = $this->db->get();
