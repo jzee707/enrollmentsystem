@@ -330,9 +330,10 @@ public function registration() {
         
     }
 
-    function approvedRequest($id)
+    function approvedRequest()
     {
-                        
+        $id = $this->security->xss_clean($this->input->post('archiveid'));
+
                 $studentInfo = array('status'=>'Active',);
                 
                 $result = $this->auth->editStudent($studentInfo, $id);
@@ -359,8 +360,10 @@ public function registration() {
         
     }
 
-    function declinedRequest($id)
+    function declinedRequest()
     {
+        $id = $this->security->xss_clean($this->input->post('dcid'));
+
                         
                 $studentInfo = array('status'=>'Declined',);
                 
@@ -516,6 +519,7 @@ public function registration() {
         $count = $this->auth->studentsListingCount($searchText,$status);
 
         $returns = $this->paginationCompress ("student/prestudentListing/", $count, 10);
+        $data['totalStudent'] = $count;
         
         $data['userRecords'] = $this->auth->studentListing($searchText, $returns["page"], $returns["segment"],$status);
         

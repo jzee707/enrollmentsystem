@@ -131,7 +131,7 @@
 <script>
 jQuery(document).ready(function(){
 
-    jQuery(document).on("click", ".archiveAppt", function(){
+jQuery(document).on("click", ".archiveAppt", function(){
 
 var id = $(this).data("id");
 document.getElementById("archiveid").value= $(this).data("id");

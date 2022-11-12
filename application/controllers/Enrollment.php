@@ -436,6 +436,7 @@ function editSchedule($id)
         $count = $this->auth->enrollmentListingCount($searchText,$status,$schoolyear,$semester);
 
         $returns = $this->paginationCompress ( "enrollment/preenrollmentListing/", $count, 10 );
+        $data['totalStudent'] = $count;
         
         $data['userRecords'] = $this->auth->enrollmentListing($searchText, $status,$schoolyear,$semester,$returns["page"], $returns["segment"]);
         
@@ -446,8 +447,9 @@ function editSchedule($id)
 
     }
 
-    function approvedRequest($id)
+    function approvedRequest()
     {
+        $id = $this->security->xss_clean($this->input->post('archiveid'));
         $timeStamp = date('Y-m-d');
                         
                 $studentInfo = array('id'=>$id,'date_enrolled'=>$timeStamp,'status'=>'Active',);
@@ -476,8 +478,9 @@ function editSchedule($id)
         
     }
 
-    function declinedRequest($id)
+    function declinedRequest()
     {
+        $id = $this->security->xss_clean($this->input->post('dcid'));
                         
                 $studentInfo = array('id'=>$id,'status'=>'Declined',);
                 

@@ -267,9 +267,10 @@ function editFaculty($id)
         
     }
 
-    function retreievefaculty($id)
+    function retreievefaculty()
     {
-                        
+            $id = $this->security->xss_clean($this->input->post('archiveid'));
+
                 $studentInfo = array('status'=>'Active',);
 
                 $row = $this->db->select("*")->where('id',$id)->get("tbl_faculty")->row();
@@ -301,8 +302,9 @@ function editFaculty($id)
         
     }
 
-    function dropstudent($id)
+    function dropstudent()
     {
+        $id = $this->security->xss_clean($this->input->post('archiveid'));
                         
                 $studentInfo = array('status'=>'Dropped',);
                 
@@ -331,8 +333,9 @@ function editFaculty($id)
         
     }
 
-    function restorestudent($id)
+    function restorestudent()
     {
+        $id = $this->security->xss_clean($this->input->post('dcid'));
                         
                 $studentInfo = array('id'=>$id,'status'=>'Active',);
                 
@@ -482,6 +485,7 @@ function editFaculty($id)
         $returns = $this->paginationCompress ( "faculty/studentlist/", $count, 10 );
             
         $data['userRecords'] = $this->auth->studentListing($schedid, $searchText,$returns["page"], $returns["segment"]);
+        $data['totalStudent'] = $count;
         
         $this->load->view('templates/teacherheader', $data);
         $this->load->view('teacher/students', $data);
