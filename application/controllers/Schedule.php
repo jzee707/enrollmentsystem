@@ -248,8 +248,9 @@ function editSchedule($id)
         
     }
 
-    function archiveschedule($id)
+    function archiveschedule()
     {
+                $id = $this->security->xss_clean($this->input->post('archiveid'));
                         
                 $studentInfo = array('id'=>$id,'status'=>'Inactive',);
                 
@@ -274,8 +275,10 @@ function editSchedule($id)
         
     }
 
-    function retreieveschedule($id)
+    function retreieveschedule()
     {
+        $id = $this->security->xss_clean($this->input->post('archiveid'));
+                        
                         
                 $studentInfo = array('id'=>$id,'status'=>'Active',);
                 

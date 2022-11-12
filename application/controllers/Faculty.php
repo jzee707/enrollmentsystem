@@ -232,8 +232,9 @@ function editFaculty($id)
         
     }
 
-    function archivefaculty($id)
+    function archivefaculty()
     {
+            $id = $this->security->xss_clean($this->input->post('archiveid'));
                         
                 $studentInfo = array('status'=>'Inactive',);
 

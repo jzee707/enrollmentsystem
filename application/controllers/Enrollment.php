@@ -247,8 +247,10 @@ function editSchedule($id)
         
     }
 
- function archiveenrollment($id)
+ function archiveenrollment()
  {
+
+            $id = $this->security->xss_clean($this->input->post('archiveid'));
                      
              $studentInfo = array('id'=>$id,'status'=>'Inactive',);
              
@@ -273,8 +275,9 @@ function editSchedule($id)
      
  }
 
- function retreieveenrollment($id)
+ function retreieveenrollment()
  {
+    $id = $this->security->xss_clean($this->input->post('archiveid'));
                      
              $studentInfo = array('id'=>$id,'status'=>'Active',);
              
@@ -328,7 +331,7 @@ function editSchedule($id)
         $returns = $this->paginationCompress ( "enrollment/enrollmentListing/", $count, 10 );
         
         $data['userRecords'] = $this->auth->enrollmentListing($searchText, $status,$schoolyear,$semester,$returns["page"], $returns["segment"]);
-        
+        $data['totalStudent'] = $count;
 
             $this->load->view('templates/adminheader', $data);
             $this->load->view("admin/enrollment",  $data);

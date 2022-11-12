@@ -894,8 +894,9 @@ function signout()
 
     }
 
-    function archivestrand($id)
+    function archivestrand()
     {
+        $id = $this->security->xss_clean($this->input->post('archiveid'));
                         
                 $studentInfo = array('id'=>$id,'status'=>'Inactive',);
                 
@@ -920,8 +921,9 @@ function signout()
         
     }
 
-    function retrievestrand($id)
+    function retrievestrand()
     {
+        $id = $this->security->xss_clean($this->input->post('archiveid'));
                         
                 $studentInfo = array('id'=>$id,'status'=>'Active',);
                 

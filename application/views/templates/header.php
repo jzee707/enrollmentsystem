@@ -46,7 +46,7 @@
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
         <a href="<?php echo base_url(); ?>home" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <h2 class="m-0 text-primary"><img class="img-fluid" src="<?php echo base_url(); ?>assets/img/logos.png" width="80px" height="70px" alt=""></i>Western Colleges, Inc.</h2>
+            <h2 class="m-0 text-primary"></i>Western Colleges, Inc.</h2>
         </a>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
@@ -57,8 +57,8 @@
                 <a href="<?php echo base_url(); ?>about" class="nav-item nav-link">About</a>
                 <a href="<?php echo base_url(); ?>admission" class="nav-item nav-link">Admission</a>
                 <a href="<?php echo base_url(); ?>academics" class="nav-item nav-link">Academics</a>
-                <a href="<?php echo base_url(); ?>login" class="nav-item nav-link" id="mobile">Log In</a>
-                <a href="<?php echo base_url(); ?>login" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block" id="pc">Log In<i class="fa fa-arrow-right ms-3"></i></a>           
+                <!-- <a href="<?php echo base_url(); ?>login" class="nav-item nav-link" id="mobile">Log In</a>
+                <a href="<?php echo base_url(); ?>login" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block" id="pc">Log In<i class="fa fa-arrow-right ms-3"></i></a>            -->
                 
                 
                 <script type="text/javascript">

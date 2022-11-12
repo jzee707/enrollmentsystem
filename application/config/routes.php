@@ -70,28 +70,28 @@ $route['changepassword'] = 'admin/changepassword';
 $route['account'] = 'admin/account';
 
 $route['archivedstudent'] = 'student/studentArchivedListing';
-$route['retrievestudent/(:any)'] = 'student/retrievestudent/$1';    
-$route['archivestudent/(:any)'] = 'student/archivestudent/$1';
+$route['archivestudent'] = 'student/archivestudent';    
+$route['retrievestudent'] = 'student/retrievestudent';
 
 $route['archivedfaculty'] = 'faculty/facultyArchivedListing';
-$route['archivefaculty/(:any)'] = 'faculty/archivefaculty/$1';
-$route['retreievefaculty/(:any)'] = 'faculty/retreievefaculty/$1';
+$route['archivefaculty'] = 'faculty/archivefaculty';
+$route['retreievefaculty'] = 'faculty/retreievefaculty';
 
 $route['archivedschedule'] = 'schedule/scheduleArchivedListing';
-$route['archivedschedule/(:any)'] = 'schedule/archiveschedule/$1';
-$route['retreieveschedule/(:any)'] = 'schedule/retreieveschedule/$1';
+$route['archiveschedule'] = 'schedule/archiveschedule/$1';
+$route['retreieveschedule'] = 'schedule/retreieveschedule';
 
 $route['archivedenrollment'] = 'enrollment/enrollmentArchivedListing';
-$route['archivedenrollment/(:any)'] = 'enrollment/archiveenrollment/$1';
-$route['retreieveenrollment/(:any)'] = 'enrollment/retreieveenrollment/$1';
+$route['archiveenrollmen'] = 'enrollment/archiveenrollment';
+$route['retreieveenrollment'] = 'enrollment/retreieveenrollment';
 
 $route['archivedpreregistration'] = 'student/registrationArchivedListing';
 
 $route['archivedpreenrollment'] = 'enrollment/preenrollmentArchivedListing';
 
 $route['archivedstrand'] = 'admin/strandArchivedListing';
-$route['archivestrand/(:any)'] = 'admin/archivestrand/$1';
-$route['retrievestrand/(:any)'] = 'admin/retrievestrand/$1';
+$route['archivestrand'] = 'admin/archivestrand';
+$route['retrievestrand'] = 'admin/retrievestrand';
 
 $route['login'] = 'admin/login';
 $route['signup'] = 'auth/signup';

@@ -46,6 +46,7 @@
                                     <div class="form-group">
                                         <label for="last_name">LRN</label>
                                         <input type="number" class="form-control" id="lrn" name="lrn" value="<?php echo $studentInfo->lrn;?>" maxlength="128" required>
+                                        <input type="hidden" class="form-control" id="sid" name="sid" value="<?php echo $studentInfo->id;?>" maxlength="128" required>
                                     </div>
                                 </div>
                             </div>

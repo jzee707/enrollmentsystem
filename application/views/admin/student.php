@@ -93,7 +93,7 @@
                     ?>
  
                   </table>
-                  
+                </div><!-- /.box-body -->
 
                   <!-- Medium modal -->
 				      <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -293,30 +293,31 @@
 										</div>
 									</div>
 								</div>
-							</div>
+						</div>
 
                             <!-- Medium modal -->
-				      <div class="modal fade" id="archive-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-								<div class="modal-dialog modal-dialog-centered">
-									<div class="modal-content">
+                        <div class="modal fade" id="archive-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <form action="<?php echo base_url() ?>archivestudent" method="POST">
+                                    <div class="modal-content">
 
-										<div class="modal-header">
-											<h1 class="modal-title" style="font-size:24px;font-weight:bold;" id="myLargeModalLabel">Are you sure to delete this record?</h1>
-											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-										</div>
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h1 class="modal-title" style="font-size:24px;font-weight:bold;" id="myLargeModalLabel">Are you sure to delete this record?</h1>
+                                            <input type="hidden" class="form-control" id="archiveid" name="archiveid" value="">
+                                        </div>
 
 
-										<div class="modal-footer">
-										    <button type="submit" name="archive-student" id="archive-student" class="btn btn-primary" >Yes</button>
-											<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-										</div>
-									</div>
-								</div>
-							</div>
-                            
-                  
+                                        <div class="modal-footer">
+                                            <button type="submit" name="archive-student" id="archive-student" class="btn btn-primary" >Yes</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                 
-                        </div><!-- /.box-body -->
+                   
 
                         <h4 class="box-title" style="font-size:15px">Total Students: <?php echo $totalStudent;?></h4>
                 
@@ -375,9 +376,10 @@ jQuery(document).ready(function(){
 
 	});
 
-    jQuery(document).on("click", ".archiveAppt", function(){
+jQuery(document).on("click", ".archiveAppt", function(){
 
 var id = $(this).data("id");
+document.getElementById("archiveid").value= $(this).data("id");
 
 $("#archive-modal").modal('show');
 

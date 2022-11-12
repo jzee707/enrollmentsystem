@@ -86,7 +86,7 @@
 
                             <a class="btn btn-sm btn-info detailsAppt" href="#" data-id="<?php echo $record->id; ?>" title="View"><i class="fa fa-eye"></i></a>
                             <a class="btn btn-sm btn-info" href="<?php echo base_url().'editEnrollment/'.$record->id; ?>" title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a class="btn btn-sm btn-danger" href="<?php echo base_url().'archivedenrollment/'.$record->id; ?>" title="Archive"><i class="fa fa-trash"></i></a> 
+                            <a class="btn btn-sm btn-danger archiveAppt" href="#" data-id="<?php echo $record->id; ?>" title="Archive"><i class="fa fa-trash"></i></a> 
                         
                         </td>
                     </tr>
@@ -103,8 +103,9 @@
 									<div class="modal-content">
 
 										<div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 											<h5 class="modal-title" style="font-size:18px;font-weight:bold;" id="myLargeModalLabel">Enrollment Details</h5>
-											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+											
 										</div>
 
 
@@ -127,6 +128,32 @@
 				</div>
                   
                 </div><!-- /.box-body -->
+
+                <div class="modal fade" id="archive-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered">
+                                    <form action="<?php echo base_url() ?>archiveenrollment" method="POST">
+                                        <div class="modal-content">
+
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                <h1 class="modal-title" style="font-size:24px;font-weight:bold;" id="myLargeModalLabel">Are you sure to delete this record?</h1>
+                                                <input type="hidden" class="form-control" id="archiveid" name="archiveid" >
+                                            </div>
+
+
+                                            <div class="modal-footer">
+                                                <button type="submit" name="archive-student" id="archive-student" class="btn btn-primary" >Yes</button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                            </div>
+                                        </div>
+                                    </form>
+								</div>
+							</div>
+                
+                        </div><!-- /.box-body -->
+
+                <h4 class="box-title" style="font-size:15px">Total Students: <?php echo $totalStudent;?></h4>
+
                 <div class="box-footer clearfix">
                     <?php echo $this->pagination->create_links(); ?>
                 </div>
@@ -161,6 +188,17 @@ jQuery(document).ready(function(){
 		
 
 	});
+
+    jQuery(document).on("click", ".archiveAppt", function(){
+
+var id = $(this).data("id");
+document.getElementById("archiveid").value= $(this).data("id");
+
+$("#archive-modal").modal('show');
+
+
+
+});
     
 
     

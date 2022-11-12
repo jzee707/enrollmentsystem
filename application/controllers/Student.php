@@ -388,42 +388,47 @@ public function registration() {
         
     }
 
-    function archivestudent($id)
+    function archivestudent()
     {
                         
-                $studentInfo = array('status'=>'Inactive',);
+        $id = $this->security->xss_clean($this->input->post('archiveid'));
 
-                $row = $this->db->select("*")->where('id',$id)->get("tbl_student")->row();
-                $accountid = $row->accountid;
+        $studentInfo = array('status'=>'Inactive',);
 
-                $accountInfo = array('status'=>'Inactive',);
-                
-                $result = $this->auth->editStudent($studentInfo, $id);
+        $row = $this->db->select("*")->where('id',$id)->get("tbl_student")->row();
+        $accountid = $row->accountid;
 
-                
-                if($result == true)
-                {
-                    $this->auth->editAccount($accountInfo, $accountid);
+        $accountInfo = array('status'=>'Inactive',);
+        
+        $result = $this->auth->editStudent($studentInfo, $id);
 
-                    $this->session->set_flashdata('success', 'Student Data Archived.');                 
+        
+        if($result == true)
+        {
+            $this->auth->editAccount($accountInfo, $accountid);
 
-                    redirect('student');
-                   
-                }
+            $this->session->set_flashdata('success', 'Student Data Archived.');                 
 
-                else
-                {
-                    $this->session->set_flashdata('error', 'User updation failed');
+            redirect('student');
+            
+        }
 
-                    redirect('student');
-              
-                }
+        else
+        {
+            $this->session->set_flashdata('error', 'User updation failed');
+
+            redirect('student');
+        
+        }
         
     }
 
-    function retrievestudent($id)
+    function retrievestudent()
     {
                                            
+        $id = $this->security->xss_clean($this->input->post('archiveid'));
+
+        
                 $row = $this->db->select("*")->where('id',$id)->get("tbl_student")->row();
                 $accountid = $row->accountid;
                 $status = $row->status;

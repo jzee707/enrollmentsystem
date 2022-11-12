@@ -9,9 +9,23 @@
                     <div class="carousel-caption d-flex align-items-center">
                         <div class="container">
                             <div class="row align-items-center justify-content-center justify-content-lg-start">
-                                <div class="col-10 col-lg-7 text-center text-lg-start">
+                                <div class="col-lg-2">
+                                    
+                                    <img  src="<?php echo base_url(); ?>assets/img/logos.png" width="200" height="200" alt="">
+                                        
+                                    
+                                </div>
+                                <div class="col-lg-8 text-left text-lg-start">
                                     <h6 class="text-white text-uppercase mb-3 animated slideInDown"></h6>
                                     <h1 class="display-3 text-white mb-4 pb-3 animated slideInDown">Western Colleges High School Department</h1>
+                                   
+                                </div>
+
+                                <div class="col-lg-2 text-center text-lg-start">
+                                <a href="<?php echo base_url(); ?>login" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block" id="pc">Log In<i class="fa fa-arrow-right ms-3"></i></a>
+
+                                <br>
+                                <a href="<?php echo base_url(); ?>signup" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block" id="pc" style="background-color:#ffc107;border-color:#ffc107;">Sign Up<i class="fa fa-arrow-up ms-3"></i></a>
                                    
                                 </div>
 
@@ -74,7 +88,7 @@ life as the ideal forward which every student.
             <div class="row g-5">
                 <div class="col-lg-6 pt-4" style="min-height: 400px;">
                     <div class="position-relative h-100 wow fadeIn" data-wow-delay="0.1s">
-                        <img class="position-absolute img-fluid w-100 h-100" src="<?php echo base_url(); ?>assets/home/img/obj.jpg" style="object-fit: cover;" alt="">
+                        <img class="position-absolute img-fluid w-100 h-100" src="<?php echo base_url(); ?>assets/home/img/objective.png" style="object-fit: cover;" alt="">
                     </div>
                 </div>
                 <div class="col-lg-6">
