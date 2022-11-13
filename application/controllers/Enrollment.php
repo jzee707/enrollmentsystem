@@ -510,6 +510,7 @@ function editSchedule($id)
 
     function restoreRequest($id)
     {
+        $id = $this->security->xss_clean($this->input->post('id'));
                         
                 $studentInfo = array('id'=>$id,'status'=>'Requested',);
                 

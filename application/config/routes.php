@@ -98,6 +98,7 @@ $route['declinedrequest'] = 'student/declinedRequest';
 
 $route['approvedenrollment'] = 'enrollment/approvedRequest';
 $route['declinedenrollment'] = 'enrollment/declinedRequest';
+$route['restorerequest'] = 'enrollment/restoreRequest';
 
 $route['login'] = 'admin/login';
 $route['signup'] = 'auth/signup';

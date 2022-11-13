@@ -93,7 +93,7 @@
                  <!-- Medium modal -->
                  <div class="modal fade" id="archive-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
-                        <form action="<?php echo base_url() ?>retreieveenrollment" method="POST">
+                        <form action="<?php echo base_url() ?>restorerequest" method="POST">
                             <div class="modal-content">
 
                                 <div class="modal-header">
