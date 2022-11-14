@@ -464,7 +464,7 @@ function editSchedule($id)
 
                     $this->auth->SendEmailRegistration($student->firstname,$student->lastname,$student->email);
 
-                    redirect('enrollment');
+                    redirect('preenrollmentlist');
                    
                 }
 
@@ -494,7 +494,7 @@ function editSchedule($id)
 
                     $this->auth->SendEmailRegistrationDec($student->firstname,$student->lastname,$student->email);
 
-                    redirect('enrollment');
+                    redirect('preenrollmentlist');
                    
                 }
 
@@ -510,7 +510,7 @@ function editSchedule($id)
 
     function restoreRequest()
     {
-        $id = $this->security->xss_clean($this->input->post('id'));
+        $id = $this->security->xss_clean($this->input->post('archiveid'));
                         
                 $studentInfo = array('id'=>$id,'status'=>'Requested',);
                 
@@ -522,7 +522,7 @@ function editSchedule($id)
                 {
                     $this->session->set_flashdata('success', 'Enrollment Data Updated.');                 
 
-                    redirect('enrollment');
+                    redirect('preenrollmentlist');
                    
                 }
 
