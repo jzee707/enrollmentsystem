@@ -508,7 +508,7 @@ function editSchedule($id)
         
     }
 
-    function restoreRequest($id)
+    function restoreRequest()
     {
         $id = $this->security->xss_clean($this->input->post('id'));
                         
