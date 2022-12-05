@@ -66,6 +66,27 @@ public function forgotpassword() {
 
 }
 
+public function verifyaccount() {     
+         
+    $data = array();
+   
+    $this->load->view('templates/header', $data);
+    $this->load->view('auth/verifyaccount', $data);
+    $this->load->view('templates/footer', $data);
+
+}
+
+public function verification() {     
+         
+    $data = array();
+   
+    $this->load->view('templates/header', $data);
+    $this->load->view('auth/verifyaccount', $data);
+    $this->load->view('templates/footer', $data);
+
+}
+
+
 public function authentication($link) {     
          
     $data = array();
@@ -86,8 +107,6 @@ public function authentication($link) {
 
         redirect('forgotpassword');
     }
-
-    
 
 }
 
@@ -395,12 +414,10 @@ public function teacherdashboard() {
             $this->load->view('templates/userfooter', $data);
     
             
-        }
-            
-}
+        }         
+    }
 
 }
-
 
 
 function signout()
@@ -566,7 +583,7 @@ function signout()
         
     }
 
-    function generateRandomString($length =4) {
+    function generateRandomString($length =6) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
@@ -814,6 +831,55 @@ function signout()
    
     }
 
+    function verifynewaccount()
+    {
+        $this->form_validation->set_rules('email', 'Email', 'trim|required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->verifyaccount();
+        } else {
+            
+            $email = $this->security->xss_clean($this->input->post('email'));
+            $timeStamp = date('Y-m-d');
+
+            $id = "";
+
+
+            $row = $this->db->select("*")->where('email',$email)->get("tbl_account")->row();
+            
+            if (!empty($row->id))
+            {
+                $id = $row->id;
+
+                $accountInfo = array('status'=>'Inactive',);
+                
+                $this->auth->updateVerification($accountInfo, $id);
+
+                $rndkey = strtoupper($this->generateRandomString());
+
+                $this->auth->addNewVerification($id,$rndkey,$timeStamp);
+
+                $this->auth->sendEmailVerificationCode($email,$rndkey);
+
+                $this->session->set_flashdata('success', 'Verification Code was sent. Check your email.');
+
+                redirect('verification');
+
+            }
+            
+            else
+            {
+                $this->session->set_flashdata('success', "Email address didn't exists.");
+
+                redirect('verifyaccount');
+
+
+            }
+        }
+                  
+        
+    }
+
        public function getSectionStudentIrreg(){
         if($this->input->post('gradelevel'))
         {
@@ -849,6 +915,7 @@ function signout()
         }
 
     }
+   
 
     public function getCity(){
         if($this->input->post('province'))

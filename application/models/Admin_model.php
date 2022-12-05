@@ -189,11 +189,10 @@ class Admin_model extends CI_Model {
     
      function login($email, $password) {
 
-        $this->db->select('id as user_id, name, email,usertype, password');
+        $this->db->select('id as user_id, name, email,usertype, password,status');
         $this->db->from('tbl_account');
         $this->db->where('email', $email);
         $this->db->where('password', $password);
-        $this->db->where('status', 'Active');
         $this->db->limit(1);
 
         $query = $this->db->get();

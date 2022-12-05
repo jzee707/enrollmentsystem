@@ -600,7 +600,7 @@ function signout()
             $result = $this->auth->login($email, $password);
                    
             
-            if(!empty($result))
+            if($result->status == "Active")
             {
                       
                 $sessionArray = array('id'=>$result->user_id,                    
@@ -625,24 +625,24 @@ function signout()
                     if(!empty($student))
                     {
 
-                    if($student->status=="Requested")
-                    {
-                        redirect('registrationrequest');
-                        //$this->registration($student->id);
-                    
-                    }
+                        if($student->status=="Requested")
+                        {
+                            redirect('registrationrequest');
+                            //$this->registration($student->id);
+                        
+                        }
 
-                    else if($student->status=="Active")
-                    {
-                        redirect('studentdashboard');
+                        else if($student->status=="Active")
+                        {
+                            redirect('studentdashboard');
 
-                    }  
-                    
-                    else
-                    {
-                        redirect('registration');
+                        }  
+                        
+                        else
+                        {
+                            redirect('registration');
 
-                    }
+                        }
                     
                     }
 
@@ -660,6 +660,14 @@ function signout()
 
                  }
                 
+            }
+
+            else if($result->status == "Inactivated")
+            {
+                $this->session->set_flashdata('error', 'Your account was not verified. Please verified your account.');
+                
+                redirect('adminpanel');
+
             }
 
             else

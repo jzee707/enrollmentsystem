@@ -49,33 +49,21 @@
                         <?php } ?>
 
 
-                        <form action="<?php print site_url();?>adminlogin" method="post">
+                        <form action="<?php print site_url();?>auth/verifynewaccount" method="post">
 
                             <div class="form-group">
                                 <div class="input-group mb-2">
 
-                                    <input type="password" class="form-control border-0" id="verificationcode" name="verificationcode" placeholder="Verification Code" style="height: 55px;">
-                                
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" style="height:55px" type="button" id="btnshow" name="btnshow" tabindex="-1">Resend Email</button>
-                                    </div>
+                                    <input type="email" class="form-control border-0" id="email" name="email" placeholder="Email" style="height: 55px;">
 
                                 </div>
                             </div> 
 
                             <div class="col-12">
-                                <button class="btn btn-secondary w-100 py-3" type="submit">Verify Account</button>
+                                <button class="btn btn-secondary w-100 py-3" type="submit">Send Code</button>
                             </div>
 
-                            <div class="row">
-                                <div class="col-6">
-                                    <p class="mb-4" style="text-align:left"><a href="<?php print site_url();?>signup" style="color:white">Create Account</a></p>
-                                    
-                                </div>
-                                <div class="col-6">                                       
-                                    <p class="mb-4" style="text-align:right"><a href="<?php print site_url();?>forgotpassword" style="color:white">Sign Up</a></p>
-                                </div>
-                            </div>                               
+                            <p class="mb-4" style="color:white">Already have an Account? <a href="<?php print site_url();?>login" style="color:#ffc107">Log In Here.</a></p>                          
                             
                         </form>
                     </div>

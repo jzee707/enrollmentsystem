@@ -154,6 +154,7 @@ class Auth_model extends CI_Model {
             'password' => $this->_password,
             'usertype' => 'Student',
             'date_created' => $this->_timeStamp,
+            'status' => 'Inactivated',
         );
 
         $this->db->insert('tbl_account', $data);
@@ -223,6 +224,32 @@ class Auth_model extends CI_Model {
               
         return TRUE;
     }
+
+    public function addNewVerification($id,$rndkey,$timeStamp) {
+
+        $data = array(
+            'accountid' => $id,
+            'verificationcode' => $rndkey,
+            'date' =>  $timeStamp,
+        );
+
+        $this->db->insert('tbl_verification', $data);
+        if (!empty($this->db->insert_id()) && $this->db->insert_id() > 0) {
+            return TRUE;
+            
+        } else {
+            return FALSE;
+        }
+    }
+    
+        function updateVerification($accountInfo, $id)
+    {       
+        $this->db->where('accountid', $id);
+        $this->db->update('tbl_verification', $accountInfo);
+              
+        return TRUE;
+    }
+
 
     function changepassword($strandInfo, $id)
     {       
@@ -800,7 +827,42 @@ class Auth_model extends CI_Model {
    
     }
 
-    
+    public function sendEmailVerificationCode($email,$vcode) {   
+        
+        $subject = "Verification Code";
+        $message = "
+        <p>Good Day!</p>
+         
+        <p>Thank you for submitting a request to verify your account! </p>
+
+        <p>Verification Code : " .$vcode ." </p>
+
+        <p>Keep Safe,</p>
+
+        <p>Western Colleges Inc.</p>";
+		
+	
+        $this->load->config('email');
+        $this->load->library('email');
+
+		$this->email->set_newline("\r\n");
+
+        $this->email->from('wcihighschool2022@gmail.com');
+        $this->email->to($email);
+        $this->email->subject($subject);
+		$this->email->message($message); 
+
+		 if($this->email->send()){
+
+		}
+
+		else{
+   		show_error($this->email->print_debugger());
+		
+        } 
+
+    }
+
 
 }
 ?>

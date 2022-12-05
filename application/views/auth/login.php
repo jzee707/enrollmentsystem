@@ -55,7 +55,7 @@
                             <div class="form-group">
                                 <div class="input-group mb-2">
 
-                                            <input type="email" class="form-control border-0" id="email" name="email" placeholder="Email" style="height: 55px;">
+                                    <input type="email" class="form-control border-0" id="email" name="email" placeholder="Email" style="height: 55px;">
 
                                 </div>
                             </div> 
@@ -72,21 +72,21 @@
                                 </div>
                             </div> 
 
+                            <div class="col-12">
+                                <button class="btn btn-secondary w-100 py-3" type="submit">Log In</button>
+                            </div>
 
-                                <div class="col-12">
-                                    <button class="btn btn-secondary w-100 py-3" type="submit">Log In</button>
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="mb-4" style="text-align:left"><a href="<?php print site_url();?>signup" style="color:white">Create Account</a></p>
+                                    
                                 </div>
-
-                                <div class="row">
-                                    <div class="col-6">
-                                        <p class="mb-4" style="text-align:left"><a href="<?php print site_url();?>signup" style="color:white">Create Account</a></p>
-                                        
-                                    </div>
-                                    <div class="col-6">
-                                        
-                                        <p class="mb-4" style="text-align:right"><a href="<?php print site_url();?>forgotpassword" style="color:white">Forgot Password?</a></p>
-                                    </div>
-                                </div>                               
+                                <div class="col-6">                                       
+                                    <p class="mb-4" style="text-align:right"><a href="<?php print site_url();?>forgotpassword" style="color:white">Forgot Password?</a>
+                                    <br><a href="<?php print site_url();?>verifyaccount" style="color:white">Verify Account</a></p>                                 
+                                    
+                                </div>
+                            </div>                            
                             
                         </form>
                     </div>
@@ -97,9 +97,8 @@
     <!-- Booking End -->
 
 
-  <script type="text/javascript">
+<script type="text/javascript">
   
-
   var  password = document.getElementById("password");
   
   
@@ -120,7 +119,5 @@
       } 
    
      }
-  
-    
-  
-  </script>
+      
+</script>

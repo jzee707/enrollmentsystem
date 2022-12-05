@@ -112,6 +112,9 @@ $route['authentication/(:any)'] = 'auth/authentication/$1';
 $route['resetpassword/(:any)'] = 'auth/resetpassword/$1';
 $route['addAccount'] = 'auth/addAccount';
 
+$route['verifyaccount'] = 'auth/verifyaccount';
+$route['verification'] = 'auth/verification';
+
 $route['studentdashboard'] = 'auth/studentdashboard';
 $route['studentaccount'] = 'auth/studentaccount';
 $route['registrationrequest'] = 'auth/registrationrequest';
