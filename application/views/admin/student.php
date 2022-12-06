@@ -118,14 +118,7 @@
                                             </div>
 
                                             <div class="row">
-                                                <div class="col-md-6">                                
-                                                    <div class="form-group">
-                                                        <label for="first_name">ID No.</label>
-                                                        <input type="text" id="idno" name="idno">
-                                                        <input type="hidden" class="form-control" id="sid" name="sid" readonly maxlength="128" >
-                                                    </div>
-                                                    
-                                                </div>
+
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="last_name">LRN</label>
@@ -350,7 +343,6 @@ jQuery(document).ready(function(){
 					$("#success-modal").modal('show');
 					$('#studenttype').val(data.record[0].studenttype);
                     $('#lrn').val(data.record[0].lrn); 
-                    $('#idno').val(data.record[0].idno); 
 					$('#firstname').val(data.record[0].firstname); 
 					$('#middlename').val(data.record[0].middlename); 	
                     $('#lastname').val(data.record[0].lastname); 	

@@ -26,7 +26,13 @@
             </div>   
 
             <div class="col-xs-6  text-right">
-                <div class="form-group">       
+                <div class="form-group">      
+                <form action="<?php echo base_url() ?>auth/printEnrollment" method="POST">
+                  <input type="hidden" class="form-control" id="enrollmentid" name="enrollmentid" value="<?php echo $studentInfo->id;?>" >
+
+                  <button type="submit" name="download-enrollment" id="download-enrollment" class="btn btn-primary" ><i class="fa fa-print"></i>Print</button>
+
+                </form>
             
                 </div>
             </div>

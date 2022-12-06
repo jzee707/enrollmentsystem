@@ -86,6 +86,21 @@ public function verification() {
 
 }
 
+public function printEnrollment() {   
+    
+    $enrollmentid = $this->security->xss_clean($this->input->post('enrollmentid'));
+        
+    $data = array();
+
+    $data['enrollmentInfo'] = $this->auth->getEnrollmentDetails($enrollmentid);
+    $data['scheduleList'] = $this->auth->getScheduleListED($enrollmentid);
+   
+
+    $this->load->view('auth/printenrollment', $data);
+       
+
+}
+
 
 public function authentication($link) {     
          

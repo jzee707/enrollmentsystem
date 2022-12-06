@@ -2,7 +2,8 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-
+    
+    require_once(FCPATH.'application/libraries/tcpdf/tcpdf.php');
     
 class Enrollment extends CI_Controller {
 

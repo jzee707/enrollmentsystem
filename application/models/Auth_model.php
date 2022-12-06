@@ -505,6 +505,8 @@ class Auth_model extends CI_Model {
         return $query->row();
     }
 
+    
+
     function getScheduleList($section,$schoolyear) {
 
         $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
@@ -887,6 +889,39 @@ class Auth_model extends CI_Model {
         $query = $this->db->get();
         
         return $query->num_rows();
+    }
+
+    function getEnrollmentDetails($id)
+    {
+        $this->db->select("e.id,e.studentid,e.strandid,e.type,sd.sectionid,sc.section,e.status,sc.gradelevel,e.term,sy.schoolyear,concat(s.firstname, ' ',s.lastname) as student,s.firstname,s.lastname,st.strandcode,e.date_enrolled");
+        $this->db->from('tbl_enrollment e');
+        $this->db->join('tbl_enrollsched es','es.enrollmentid=e.id');
+        $this->db->join('tbl_schedule sd','sd.id=es.scheduleid');
+        $this->db->join('tbl_section sc','sc.id=sd.sectionid');
+        $this->db->join('tbl_schoolyear sy','sy.id=e.syid');
+        $this->db->join('tbl_student s','s.id=e.studentid');
+        $this->db->join('tbl_strand st','st.id=e.strandid','left');
+        $this->db->where('e.id', $id);
+        $query = $this->db->get();
+        
+        return $query->row();
+    }
+
+    function getScheduleListED($id) {
+
+        $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,sd.timefrom,sd.timeto,concat(a.firstname, ' ',a.lastname) as name, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
+        $this->db->from('tbl_schedule sd');
+        $this->db->join('tbl_faculty a','a.id=sd.adviserid');
+        $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
+        $this->db->join('tbl_section sc','sc.id=sd.sectionid');
+        $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
+        $this->db->join('tbl_enrollsched se','se.scheduleid=sd.id');
+        $this->db->where('se.enrollmentid',$id);  
+
+        $query = $this->db->get();
+        
+        $result = $query->result();        
+        return $result;
     }
 
 
