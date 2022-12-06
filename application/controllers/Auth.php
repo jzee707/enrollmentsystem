@@ -81,7 +81,7 @@ public function verification() {
     $data = array();
    
     $this->load->view('templates/header', $data);
-    $this->load->view('auth/verifyaccount', $data);
+    $this->load->view('auth/verification', $data);
     $this->load->view('templates/footer', $data);
 
 }
@@ -831,7 +831,7 @@ function signout()
    
     }
 
-    function verifynewaccount()
+    function sendvcode()
     {
         $this->form_validation->set_rules('email', 'Email', 'trim|required');
 
@@ -849,29 +849,115 @@ function signout()
             
             if (!empty($row->id))
             {
-                $id = $row->id;
+                if($row->status == "Inactivated")
+                {
+                    $id = $row->id;
 
-                $accountInfo = array('status'=>'Inactive',);
+                    $accountInfo = array('status'=>'Inactive',);
+                    
+                    $this->auth->updateVerification($accountInfo, $id);
+
+                    $rndkey = strtoupper($this->generateRandomString());
+
+                    $count = $this->auth->verificationCount();
+
+                    for ($x = 1; $x <= $count; $x++)
+                    {
+                        $vcode = $this->db->select("*")->where('verificationcode',$rndkey)->get("tbl_verification")->row();
+
+                        if (!empty($vcode->id))
+                        {
+                            $rndkey = strtoupper($this->generateRandomString());
+
+                        }
+
+                        else
+                        {
+                            break;
+
+                        }
+                        
+                    }
+
+
+                    $this->auth->addNewVerification($id,$rndkey,$timeStamp);
+
+                    $this->auth->sendEmailVerificationCode($email,$rndkey);
+
+                    $this->session->set_flashdata('success', 'Verification Code was sent. Check your email.');
+
+                    redirect('verification');
+
+                   
+
+                }
+
+                else
+                {
+                    $this->session->set_flashdata('error', "Account was already verified.");
+
+                    redirect('verification');   
+
+                }
+
                 
-                $this->auth->updateVerification($accountInfo, $id);
-
-                $rndkey = strtoupper($this->generateRandomString());
-
-                $this->auth->addNewVerification($id,$rndkey,$timeStamp);
-
-                $this->auth->sendEmailVerificationCode($email,$rndkey);
-
-                $this->session->set_flashdata('success', 'Verification Code was sent. Check your email.');
-
-                redirect('verification');
 
             }
             
             else
             {
-                $this->session->set_flashdata('success', "Email address didn't exists.");
+                $this->session->set_flashdata('error', "Email address didn't exists.");
 
                 redirect('verifyaccount');
+
+
+            }
+        }
+                  
+        
+    }
+
+    function verifynaccount()
+    {
+        $this->form_validation->set_rules('verificationcode', 'Verification Code', 'trim|required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->verification();
+        } else {
+            
+            $verificationcode = $this->security->xss_clean($this->input->post('verificationcode'));
+            $timeStamp = date('Y-m-d');
+
+            $id = "";
+
+
+            $row = $this->db->select("*")->where('verificationcode',$verificationcode)->where('status','Active')->get("tbl_verification")->row();
+            
+            if (!empty($row->id))
+            {
+
+                $id = $row->id;
+                $accountid = $row->accountid;
+
+                $vaccountInfo = array('status'=>'Inactive',);
+                $accountInfo = array('status'=>'Inactive',);
+                
+                $this->auth->submitVerification($vaccountInfo, $id);
+
+                $this->auth->editAccount($accountInfo, $accountid);
+
+
+                $this->session->set_flashdata('success', 'Your account was verified. Log in using your email and password.');
+
+                redirect('login');
+
+            }
+            
+            else
+            {
+                $this->session->set_flashdata('error', "Verification Code didn't exists or expired.");
+
+                redirect('verification');
 
 
             }

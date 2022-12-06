@@ -49,7 +49,7 @@
                         <?php } ?>
 
 
-                        <form action="<?php print site_url();?>auth/verifynewaccount" method="post">
+                        <form action="<?php print site_url();?>auth/sendvcode" method="post">
 
                             <div class="form-group">
                                 <div class="input-group mb-2">
@@ -60,7 +60,7 @@
                             </div> 
 
                             <div class="col-12">
-                                <button class="btn btn-secondary w-100 py-3" type="submit">Send Code</button>
+                                <button class="btn btn-secondary w-100 py-3" type="submit">Submit</button>
                             </div>
 
                             <p class="mb-4" style="color:white">Already have an Account? <a href="<?php print site_url();?>login" style="color:#ffc107">Log In Here.</a></p>                          

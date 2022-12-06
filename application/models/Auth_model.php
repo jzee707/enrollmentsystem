@@ -250,6 +250,22 @@ class Auth_model extends CI_Model {
         return TRUE;
     }
 
+    function submitVerification($accountInfo, $id)
+    {       
+        $this->db->where('id', $id);
+        $this->db->update('tbl_verification', $accountInfo);
+              
+        return TRUE;
+    }
+
+    function editAccount($accountInfo, $id)
+    {       
+        $this->db->where('id', $id);
+        $this->db->update('tbl_account', $accountInfo);
+              
+        return TRUE;
+    }
+
 
     function changepassword($strandInfo, $id)
     {       
@@ -861,6 +877,16 @@ class Auth_model extends CI_Model {
 		
         } 
 
+    }
+
+    function verificationCount()
+    {
+        $this->db->select("id,accountid,verificationcode");
+        $this->db->from('tbl_verification');
+
+        $query = $this->db->get();
+        
+        return $query->num_rows();
     }
 
 
