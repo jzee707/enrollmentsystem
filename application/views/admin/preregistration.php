@@ -277,7 +277,7 @@
 
 
                             <div class="modal-footer">
-                                <button type="submit" name="download-appointment" id="download-appointment" class="btn btn-primary" >Print</button>
+
                               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                           </div>
