@@ -182,7 +182,7 @@ function addAccount()
 
             if($chk > 0)
                 {
-                    $this->session->set_flashdata('success', 'Registration Successfully');
+                    $this->session->set_flashdata('success', 'Registration Successfully. Proceed to verify your account.');
                 }
                 else
                 {
@@ -955,7 +955,7 @@ function signout()
                 $accountid = $row->accountid;
 
                 $vaccountInfo = array('status'=>'Inactive',);
-                $accountInfo = array('status'=>'Inactive',);
+                $accountInfo = array('status'=>'Active',);
                 
                 $this->auth->submitVerification($vaccountInfo, $id);
 
