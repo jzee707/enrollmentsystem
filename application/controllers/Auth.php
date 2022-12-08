@@ -101,6 +101,33 @@ public function printEnrollment() {
 
 }
 
+public function printSched() {   
+    
+    $schedid = $this->security->xss_clean($this->input->post('schedid'));
+        
+    $data = array();
+
+    $data['scheduleInfo'] = $this->auth->scheduleInfo($schedid);
+    $data['studentListing'] = $this->auth->studentListing($schedid);
+   
+
+    $this->load->view('auth/printteachersched', $data);
+       
+
+}
+
+public function printStudentInfo() {   
+    
+    $studentid = $this->security->xss_clean($this->input->post('studentid'));
+        
+    $data = array();
+
+    $data['studentInfo'] = $this->auth->getStudentDetails($studentid);
+
+    $this->load->view('auth/printstudentdata', $data);
+       
+}
+
 
 public function authentication($link) {     
          

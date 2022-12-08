@@ -27,6 +27,12 @@
 
             <div class="col-xs-6  text-right">
                 <div class="form-group">       
+                <form action="<?php echo base_url() ?>auth/printSched" method="POST">
+                  <input type="hidden" class="form-control" id="schedid" name="schedid" value="<?php echo $sched;?>" >
+
+                  <button type="submit" name="download-sched" id="download-sched" class="btn btn-primary" ><i class="fa fa-print"></i>Print</button>
+
+                </form>
             
                 </div>
             </div>

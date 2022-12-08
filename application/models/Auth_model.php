@@ -924,6 +924,57 @@ class Auth_model extends CI_Model {
         return $result;
     }
 
+    function studentListing($schedid) {
+
+        $this->db->select("es.id,s.idno,concat(s.firstname, ' ',s.lastname) as name, s.address,e.type,es.status");
+        $this->db->from('tbl_enrollment e');
+        $this->db->join('tbl_enrollsched es','es.enrollmentid=e.id');
+        $this->db->join('tbl_schedule sd','sd.id=es.scheduleid');
+        $this->db->join('tbl_faculty a','a.id=sd.adviserid');
+        $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
+        $this->db->join('tbl_student s','s.id=e.studentid');
+        $this->db->join('tbl_section sc','sc.id=sd.sectionid');
+        $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
+        $this->db->join('tbl_strand st','st.id=sc.strandid','left');        
+        $this->db->where('sd.id', $schedid);
+
+        $query = $this->db->get();
+        
+        $result = $query->result();        
+        return $result;
+    }
+
+    function scheduleInfo($id) {
+
+        $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,a.firstname,a.lastname,concat(a.firstname, ' ',a.lastname) as name, sd.timefrom,sd.timeto,sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,st.strandcode,es.status");
+        $this->db->from('tbl_enrollment e');
+        $this->db->join('tbl_enrollsched es','es.enrollmentid=e.id');
+        $this->db->join('tbl_schedule sd','sd.id=es.scheduleid');
+        $this->db->join('tbl_faculty a','a.id=sd.adviserid');
+        $this->db->join('tbl_subject sb','sb.id=sd.subjectid');
+        $this->db->join('tbl_student s','s.id=e.studentid');
+        $this->db->join('tbl_section sc','sc.id=sd.sectionid');
+        $this->db->join('tbl_schoolyear sy','sy.id=sd.syid');
+        $this->db->join('tbl_strand st','st.id=sc.strandid','left');      
+        $this->db->where('sd.id', $id);
+
+        $query = $this->db->get();
+        
+        return $query->row();
+    }
+
+    function getStudentDetails($id)
+    {
+        $this->db->select("s.id,s.idno,s.lrn,CONCAT(s.firstname, ' ',s.lastname) name,s.firstname,s.lastname,s.middlename,s.suffix,s.birthdate,s.gender,s.addid,s.address,a.province,a.city,a.barangay,s.religion,s.nationality,ac.email,s.contactno,s.mother,s.father,s.guardian,s.studenttype,s.status");
+        $this->db->from('tbl_student as s');
+        $this->db->join('tbl_address as a','a.id=s.addid');
+        $this->db->join('tbl_account as ac','ac.id=s.accountid');
+        $this->db->where('s.id', $id);
+        $query = $this->db->get();
+        
+        return $query->row();
+    }
+
 
 }
 ?>

@@ -63,9 +63,9 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Western College');
-$pdf->SetTitle('WCI-'.$enrollmentInfo->lastname);
-$pdf->SetSubject('Enrollment Details');
-$pdf->SetKeywords('Enrollment Details');
+$pdf->SetTitle('WCI-'.$scheduleInfo->lastname);
+$pdf->SetSubject('Schedule Details');
+$pdf->SetKeywords('Schedule Details');
 
 // set default header data
 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -108,43 +108,41 @@ $html = '
 
 <h1 style="text-align:center; font-size:10px">______________________________________________________________________________________________________________________________</h1>
 
-<h1 style="text-align:right; font-size:12px">School Year: '.$enrollmentInfo->schoolyear.'</h1>
-<h1 style="text-align:right; font-size:12px">Term: '.$enrollmentInfo->term.'</h1>
+<h1 style="text-align:right; font-size:12px">School Year: '.$scheduleInfo->schoolyear.'</h1>
+<h1 style="text-align:right; font-size:12px">Term: '.$scheduleInfo->term.'</h1>
 
-<h1 style="text-align:left; font-size:14px">Name: '.$enrollmentInfo->teacher.'</h1>
-<h1 style="text-align:left; font-size:14px">Grade Level: '.$enrollmentInfo->gradelevel.'</h1>
-<h1 style="text-align:left; font-size:14px">Section: '.$enrollmentInfo->section.'</h1>
-<h1 style="text-align:left; font-size:14px">Strand: '.$enrollmentInfo->strandcode.'</h1>
+<h1 style="text-align:left; font-size:14px">Name: '.$scheduleInfo->name.'</h1>
+<h1 style="text-align:left; font-size:14px">Grade Level: '.$scheduleInfo->gradelevel.'</h1>
+<h1 style="text-align:left; font-size:14px">Section: '.$scheduleInfo->section.'</h1>
+<h1 style="text-align:left; font-size:14px">Strand: '.$scheduleInfo->strandcode.'</h1>
 
-<h1 style="text-align:left; font-size:14px">Subject: '.$enrollmentInfo->strandcode.'</h1>
-<h1 style="text-align:left; font-size:14px">Room: '.$enrollmentInfo->strandcode.'</h1>
-<h1 style="text-align:left; font-size:14px">Day: '.$enrollmentInfo->strandcode.'</h1>
-<h1 style="text-align:left; font-size:14px">Time: '.$enrollmentInfo->strandcode.'</h1>
+<h1 style="text-align:left; font-size:14px">Subject: '.$scheduleInfo->subject.'</h1>
+<h1 style="text-align:left; font-size:14px">Room: '.$scheduleInfo->room.'</h1>
+<h1 style="text-align:left; font-size:14px">Day: '.$scheduleInfo->day.'</h1>
+<h1 style="text-align:left; font-size:14px">Time: '.$scheduleInfo->time.'</h1>
 
 <h1 style="text-align:center; font-size:16px">Schedule List</h1>
 
 <table cellspacing="0" cellpadding="1" border="1" style="border-color:gray;">
 
                     <tr style="background-color:gray;color:white;text-align:center;font-weight:bold;">                
-                    <th>Subject</th>
-                    <th>Room</th>
-                    <th>Day</th>
-                    <th>Time</th>
-                    <th>Teacher</th>  
+                    <th>Student</th>
+                    <th>Address</th>
+                    <th>Student Type</th>
+                    <th>Status</th> 
                     </tr>
 
                     ';
-                    if(!empty($scheduleList))
+                    if(!empty($studentListing))
                     {
-                        foreach($scheduleList as $record)
+                        foreach($studentListing as $record)
                         {
                           $html .= '
                     <tr style="text-align:center">
-                    <td>'.$record->subject.'</td>
-                    <td>'.$record->room.'</td>
-                    <td>'.$record->day.'</td>
-                    <td>'.date("h:i A", strtotime($record->timefrom)) . ' - ' . date("h:i A", strtotime($record->timeto)).'</td>
                     <td>'.$record->name.'</td>
+                    <td>'.$record->address.'</td>
+                    <td>'.$record->type.'</td>
+                    <td>'.$record->status.'</td>
 
                     ';
    
@@ -167,7 +165,7 @@ $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output("WCI-enrollment-'$enrollmentInfo->lastname'.pdf", 'I');
+$pdf->Output("WCI-enrollment-'$scheduleInfo->lastname'.pdf", 'I');
 
 //============================================================+
 // END OF FILE

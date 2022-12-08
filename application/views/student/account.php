@@ -21,6 +21,18 @@
                         <h3 class="box-title">Account Details</h3>
                     </div><!-- /.box-header -->
                     <!-- form start -->
+                    
+                    <div class="text-right">
+                        <div class="form-group">       
+                            <form action="<?php echo base_url() ?>auth/printStudentInfo" method="POST">
+                                <input type="hidden" class="form-control" id="studentid" name="studentid" value="<?php echo $studentInfo->id;?>" >
+
+                                <button type="submit" name="download-sched" id="download-sched" class="btn btn-primary" ><i class="fa fa-print"></i>Print</button>
+
+                            </form>
+                
+                        </div>
+                    </div>
 
 
                     <form role="form" id="addUser" action="" method="post" role="form">

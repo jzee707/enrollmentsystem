@@ -98,10 +98,12 @@
                   <!-- Medium modal -->
 				      <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 								<div class="modal-dialog modal-dialog-centered">
+                                <form action="<?php echo base_url() ?>auth/printStudentInfo" method="POST">
 									<div class="modal-content">
 
 										<div class="modal-header">
 											<h5 class="modal-title" style="font-size:18px;font-weight:bold;" id="myLargeModalLabel">Student Details</h5>
+                                            <input type="hidden" class="form-control" id="studentid" name="studentid" >
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 										</div>
 
@@ -281,10 +283,11 @@
 
 
 										<div class="modal-footer">
-										    <button type="submit" name="download-appointment" id="download-appointment" class="btn btn-primary" >Print</button>
+										    <button type="submit" name="download-studentinfo" id="download-studentinfo" class="btn btn-primary" >Print</button>
 											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 										</div>
 									</div>
+                                    </form>
 								</div>
 						</div>
 
@@ -330,6 +333,8 @@ jQuery(document).ready(function(){
 	jQuery(document).on("click", ".detailsAppt", function(){
 
 		var id = $(this).data("id");
+        document.getElementById("studentid").value= $(this).data("id");
+
 		
 
 		$.ajax({

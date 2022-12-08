@@ -482,10 +482,11 @@ function editFaculty($id)
     
         $count = $this->auth->studentListingCount($schedid,$searchText);
     
-        $returns = $this->paginationCompress ( "faculty/studentlist/", $count, 10 );
+        $returns = $this->paginationCompress ("faculty/studentlist/", $count, 10 );
             
         $data['userRecords'] = $this->auth->studentListing($schedid, $searchText,$returns["page"], $returns["segment"]);
         $data['totalStudent'] = $count;
+        $data['sched'] = $schedid;
         
         $this->load->view('templates/teacherheader', $data);
         $this->load->view('teacher/students', $data);
