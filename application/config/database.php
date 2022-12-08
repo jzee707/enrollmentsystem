@@ -69,6 +69,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
+	'hostname' => 'databases-auth.000webhost.com',
+	'username' => 'id19973173_wcisystem',
+	'password' => 'G3fxloYVSOZ!K&qy',
+	'database' => 'id19973173_wcienrollment',
 */
 $active_group = 'default';
 $query_builder = TRUE;
@@ -77,7 +81,7 @@ $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
 	'username' => 'root',
-	'password' => '1234',
+	'password' => '123',
 	'database' => 'wcienrollment',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

@@ -121,7 +121,7 @@ $html = '
 <h1 style="text-align:left; font-size:14px">Day: '.$scheduleInfo->day.'</h1>
 <h1 style="text-align:left; font-size:14px">Time: '.$scheduleInfo->time.'</h1>
 
-<h1 style="text-align:center; font-size:16px">Schedule List</h1>
+<h1 style="text-align:center; font-size:16px">Student List</h1>
 
 <table cellspacing="0" cellpadding="1" border="1" style="border-color:gray;">
 
