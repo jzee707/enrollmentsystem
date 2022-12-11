@@ -276,20 +276,150 @@ function editSHSubject($id)
         
     }
 
+    function archiveshsubject()
+    {
+        $id = $this->security->xss_clean($this->input->post('archiveid'));
+                        
+                $studentInfo = array('id'=>$id,'status'=>'Inactive',);
+                
+                $result = $this->auth->editJHSubject($studentInfo, $id);
+
+                
+                if($result == true)
+                {
+                    $this->session->set_flashdata('success', 'SHS Subject Data Archived.');                 
+
+                    redirect('shsubject');
+                   
+                }
+
+                else
+                {
+                    $this->session->set_flashdata('error', 'User updation failed');
+
+                    redirect('shsubject');
+              
+                }
+        
+    }
+
+    function retrieveshsubject()
+    {
+        $id = $this->security->xss_clean($this->input->post('archiveid'));
+                        
+                $studentInfo = array('id'=>$id,'status'=>'Active',);
+                
+                $result = $this->auth->editJHSubject($studentInfo, $id);
+
+                
+                if($result == true)
+                {
+                    $this->session->set_flashdata('success', 'SHS Subject Data Retrieved.');                 
+
+                    redirect('archivedshsubject');
+                   
+                }
+
+                else
+                {
+                    $this->session->set_flashdata('error', 'User updation failed');
+
+                    redirect('archivedshsubject');
+              
+                }
+        
+    }
+
+    function archivejhsubject()
+    {
+        $id = $this->security->xss_clean($this->input->post('archiveid'));
+                        
+                $studentInfo = array('id'=>$id,'status'=>'Inactive',);
+                
+                $result = $this->auth->editJHSubject($studentInfo, $id);
+
+                
+                if($result == true)
+                {
+                    $this->session->set_flashdata('success', 'JHS Subject Data Archived.');                 
+
+                    redirect('jhsubject');
+                   
+                }
+
+                else
+                {
+                    $this->session->set_flashdata('error', 'User updation failed');
+
+                    redirect('jhsubject');
+              
+                }
+        
+    }
+
+    function retrievejhsubject()
+    {
+        $id = $this->security->xss_clean($this->input->post('archiveid'));
+                        
+                $studentInfo = array('id'=>$id,'status'=>'Active',);
+                
+                $result = $this->auth->editJHSubject($studentInfo, $id);
+
+                
+                if($result == true)
+                {
+                    $this->session->set_flashdata('success', 'JHS Subject Data Retrieved.');                 
+
+                    redirect('archivedjhsubject');
+                   
+                }
+
+                else
+                {
+                    $this->session->set_flashdata('error', 'User updation failed');
+
+                    redirect('archivedjhsubject');
+              
+                }
+        
+    }
+
     function jhsubjectListing()
     {
 
         $searchText = $this->security->xss_clean($this->input->post('searchText'));
+
+        $status ="Active";
            
-        $count = $this->auth->jhsubjectListingCount($searchText);
+        $count = $this->auth->jhsubjectListingCount($searchText,$status);
 
         $returns = $this->paginationCompress ( "subject/jhsubjectListing/", $count, 10 );
         
-        $data['userRecords'] = $this->auth->jhsubjectListing($searchText, $returns["page"], $returns["segment"]);
+        $data['userRecords'] = $this->auth->jhsubjectListing($searchText, $status, $returns["page"], $returns["segment"]);
         
 
             $this->load->view('templates/adminheader', $data);
             $this->load->view("admin/jhsubject",  $data);
+            $this->load->view('templates/adminfooter', $data);
+
+    }
+
+    function jhsArchivedListing()
+    {
+
+        $searchText = $this->security->xss_clean($this->input->post('searchText'));
+
+        $status ="Inactive";
+           
+        $count = $this->auth->jhsubjectListingCount($searchText,$status);
+
+        $returns = $this->paginationCompress ( "subject/jhsArchivedListing/", $count, 10 );
+        
+        $data['userRecords'] = $this->auth->jhsubjectListing($searchText, $status, $returns["page"], $returns["segment"]);
+        
+
+            $this->load->view('templates/adminheader', $data);
+            $this->load->view("admin/archivedjhsubject",  $data);
             $this->load->view('templates/adminfooter', $data);
 
     }
@@ -299,15 +429,37 @@ function editSHSubject($id)
 
         $searchText = $this->security->xss_clean($this->input->post('searchText'));
            
-        $count = $this->auth->shsubjectListingCount($searchText);
+        $status ="Active";
+
+        $count = $this->auth->shsubjectListingCount($searchText,$status);
 
         $returns = $this->paginationCompress ( "subject/shsubjectListing/", $count, 10 );
         
-        $data['userRecords'] = $this->auth->shsubjectListing($searchText, $returns["page"], $returns["segment"]);
+        $data['userRecords'] = $this->auth->shsubjectListing($searchText, $status, $returns["page"], $returns["segment"]);
         
 
             $this->load->view('templates/adminheader', $data);
             $this->load->view("admin/shsubject",  $data);
+            $this->load->view('templates/adminfooter', $data);
+
+    }
+
+    function shsArchivedListing()
+    {
+
+        $searchText = $this->security->xss_clean($this->input->post('searchText'));
+           
+        $status ="Inactive";
+
+        $count = $this->auth->shsubjectListingCount($searchText,$status);
+
+        $returns = $this->paginationCompress ( "subject/shsArchivedListing/", $count, 10 );
+        
+        $data['userRecords'] = $this->auth->shsubjectListing($searchText, $status, $returns["page"], $returns["segment"]);
+        
+
+            $this->load->view('templates/adminheader', $data);
+            $this->load->view("admin/archivedshsubject",  $data);
             $this->load->view('templates/adminfooter', $data);
 
     }

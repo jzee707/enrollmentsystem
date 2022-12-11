@@ -3,6 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+    require_once(FCPATH.'application/libraries/Tcpdf/Tcpdf.php');
     
 class Auth extends CI_Controller {
 
@@ -1136,6 +1137,7 @@ function signout()
        {
 
         $schoolyear = 0;
+        $sectionid = $this->input->post('sectionid');
 
         $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
         if (!empty($row->id))
@@ -1143,9 +1145,11 @@ function signout()
             $schoolyear = $row->id;
         }  
 
-        $rowsection = $this->db->select("sc.id,sc.section")->limit(1)->order_by("sc.section","ASC")->group_by("sc.section")->where('sc.gradelevel',$this->input->post('gradelevel'))->join("tbl_schedule sd","sd.sectionid=sc.id")->get("tbl_section sc")->row();
 
-           $result = $this->auth->getScheduleList($rowsection->id,$schoolyear);
+        $result = $this->auth->getScheduleList($sectionid,$schoolyear);
+
+        
+           
            $output = '
            
            <h3 align="center">Schedule List</h3>	

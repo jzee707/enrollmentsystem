@@ -61,7 +61,8 @@
                                     
                                         <div class="form-group">
                                             <label for="last_name">Section</label>
-                                            <input type="hidden" class="form-control" id="sectionid" name="sectionid" maxlength="128" required>
+                                            <input type="hidden" class="form-control" id="sectionid" name="sectionid">
+
                                             <br>
                                             <select name="section" id="section" class="form-control">
                                             <option disabled value="">Select Section</option>
@@ -212,6 +213,8 @@ $('#gradelevel').change(function(){
             document.getElementById("stype").value = "Regular";
 
 
+           
+
             $.ajax({
             url:"<?php echo base_url(); ?>auth/getSection",
             method:"POST",
@@ -219,11 +222,27 @@ $('#gradelevel').change(function(){
             data:{gradelevel:gradelevel},
             success:function(data)
             {
-                $('#sectionid').val(data.record);         
-  
+                $('#sectionid').val(data.record);
+                var sectionid = data.record;
+           
+           $.ajax({
+               url:"<?php echo base_url(); ?>auth/load_sched",
+               method:"POST",
+               data:{sectionid:sectionid},
+               success:function(data)
+               {
+               $('#sched_data').html(data);
+
+               }
+           });
+
             }
 
             });
+
+           
+
+           
 
             $.ajax({
             url:"<?php echo base_url(); ?>auth/getSectionStudent",
@@ -237,16 +256,8 @@ $('#gradelevel').change(function(){
 
             });
 
-        $.ajax({
-            url:"<?php echo base_url(); ?>auth/load_sched",
-            method:"POST",
-            data:{gradelevel:gradelevel},
-            success:function(data)
-            {
-            $('#sched_data').html(data);
-
-            }
-        });
+            
+            
 
         }
 

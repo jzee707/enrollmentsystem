@@ -93,6 +93,18 @@ $route['archivedstrand'] = 'admin/strandArchivedListing';
 $route['archivestrand'] = 'admin/archivestrand';
 $route['retrievestrand'] = 'admin/retrievestrand';
 
+$route['archivedsection'] = 'admin/sectionArchivedListing';
+$route['archivesection'] = 'admin/archivesection';
+$route['retrievesection'] = 'admin/retrievesection';
+
+$route['archivedshsubject'] = 'subject/shsArchivedListing';
+$route['archiveshsubject'] = 'subject/archiveshsubject';
+$route['retrieveshsubject'] = 'subject/retrieveshsubject';
+
+$route['archivedjhsubject'] = 'subject/jhsArchivedListing';
+$route['archivejhsubject'] = 'subject/archivejhsubject';
+$route['retrievejhsubject'] = 'subject/retrievejhsubject';
+
 $route['approvedrequest'] = 'student/approvedRequest';
 $route['declinedrequest'] = 'student/declinedRequest';
 

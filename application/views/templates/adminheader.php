@@ -162,6 +162,9 @@
                 <li><a href="<?php echo base_url(); ?>archivedfaculty"><i class="fa fa-users"></i>Faculty</a></li>
                 <li><a href="<?php echo base_url(); ?>archivedschedule"><i class="fa fa-users"></i>Schedule</a></li>
                 <li><a href="<?php echo base_url(); ?>archivedstrand"><i class="fa fa-users"></i>Strand</a></li>
+                <li><a href="<?php echo base_url(); ?>archivedsection"><i class="fa fa-users"></i>Section</a></li>
+                <li><a href="<?php echo base_url(); ?>archivedjhsubject"><i class="fa fa-users"></i>JHS Subject</a></li>
+                <li><a href="<?php echo base_url(); ?>archivedshsubject"><i class="fa fa-users"></i>SHS Subject</a></li>
                 <li><a href="<?php echo base_url(); ?>archivedenrollment"><i class="fa fa-users"></i>Enrollment</a></li>
                 <li><a href="<?php echo base_url(); ?>archivedpreregistration"><i class="fa fa-users"></i>Pre-Registration</a></li>
                 <li><a href="<?php echo base_url(); ?>archivedpreenrollment"><i class="fa fa-users"></i>Pre-Enrollment</a></li>

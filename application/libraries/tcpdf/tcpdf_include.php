@@ -28,13 +28,13 @@
 
 // Include the main TCPDF library (search the library on the following directories).
 $tcpdf_include_dirs = array(
-	realpath('../tcpdf.php'),
-	'/usr/share/php/tcpdf/tcpdf.php',
-	'/usr/share/tcpdf/tcpdf.php',
-	'/usr/share/php-tcpdf/tcpdf.php',
-	'/var/www/tcpdf/tcpdf.php',
-	'/var/www/html/tcpdf/tcpdf.php',
-	'/usr/local/apache2/htdocs/tcpdf/tcpdf.php'
+	realpath('../Tcpdf.php'),
+	'/usr/share/php/Tcpdf/Tcpdf.php',
+	'/usr/share/Tcpdf/Tcpdf.php',
+	'/usr/share/php-tcpdf/Tcpdf.php',
+	'/var/www/Tcpdf/Tcpdf.php',
+	'/var/www/html/Tcpdf/Tcpdf.php',
+	'/usr/local/apache2/htdocs/tcpdf/Tcpdf.php'
 );
 foreach ($tcpdf_include_dirs as $tcpdf_include_path) {
 	if (@file_exists($tcpdf_include_path)) {

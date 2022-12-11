@@ -117,17 +117,17 @@ class Subject_model extends CI_Model {
         return $query->row();
     }
     
-    function jhsubjectListingCount($searchText)
+    function jhsubjectListingCount($searchText,$status)
     {
         $this->db->select('id,gradelevel,subject,description,status');
         $this->db->from('tbl_subject');
 
 
             $likeCriteria = "(subject  LIKE '".$searchText."%'
-                            AND status='".'Active'."' AND type='".'JHS'."'
+                            AND status='".$status."' AND type='".'JHS'."'
                             OR description  LIKE '".$searchText."%'
-                            AND status='".'Active'."' AND type='".'JHS'."' OR gradelevel LIKE '".$searchText."%'
-                            AND status='".'Active'."' AND type='".'JHS'."')";
+                            AND status='".$status."' AND type='".'JHS'."' OR gradelevel LIKE '".$searchText."%'
+                            AND status='".$status."' AND type='".'JHS'."')";
                             
        $this->db->where($likeCriteria);
        $this->db->order_by("id","ASC");
@@ -137,17 +137,17 @@ class Subject_model extends CI_Model {
         return $query->num_rows();
     }
 
-    function jhsubjectListing($searchText, $page, $segment) {
+    function jhsubjectListing($searchText, $status, $page, $segment) {
 
         $this->db->select('id,gradelevel,subject,description,status');
         $this->db->from('tbl_subject');
 
 
         $likeCriteria = "(subject  LIKE '".$searchText."%'
-        AND status='".'Active'."' AND type='".'JHS'."'
+        AND status='".$status."' AND type='".'JHS'."'
         OR description  LIKE '".$searchText."%'
-        AND status='".'Active'."' AND type='".'JHS'."' OR gradelevel LIKE '".$searchText."%'
-        AND status='".'Active'."' AND type='".'JHS'."')";
+        AND status='".$status."' AND type='".'JHS'."' OR gradelevel LIKE '".$searchText."%'
+        AND status='".$status."' AND type='".'JHS'."')";
 
         $this->db->where($likeCriteria);    
         $this->db->order_by("id","ASC");   
@@ -159,17 +159,17 @@ class Subject_model extends CI_Model {
         return $result;
     }
 
-    function shsubjectListingCount($searchText)
+    function shsubjectListingCount($searchText,$status)
     {
         $this->db->select('s.id,s.gradelevel,s.subject,s.description,s.status,st.strandcode');
         $this->db->from('tbl_subject s');
         $this->db->join('tbl_strand st','st.id=s.strandid','left');
 
         $likeCriteria = "(s.subject  LIKE '".$searchText."%'
-        AND s.status='".'Active'."' AND s.type='".'SHS'."'  OR s.description  LIKE '".$searchText."%'
-        AND s.status='".'Active'."' AND s.type='".'SHS'."'  OR s.gradelevel LIKE '".$searchText."%'
-        AND s.status='".'Active'."' AND s.type='".'SHS'."'  OR st.strandcode  LIKE '".$searchText."%'
-        AND s.status='".'Active'."' AND s.type='".'SHS'."')";
+        AND s.status='".$status."' AND s.type='".'SHS'."'  OR s.description  LIKE '".$searchText."%'
+        AND s.status='".$status."' AND s.type='".'SHS'."'  OR s.gradelevel LIKE '".$searchText."%'
+        AND s.status='".$status."' AND s.type='".'SHS'."'  OR st.strandcode  LIKE '".$searchText."%'
+        AND s.status='".$status."' AND s.type='".'SHS'."')";
                             
        $this->db->where($likeCriteria);
        $this->db->order_by("s.id","ASC");
@@ -179,17 +179,17 @@ class Subject_model extends CI_Model {
         return $query->num_rows();
     }
 
-    function shsubjectListing($searchText, $page, $segment) {
+    function shsubjectListing($searchText, $status, $page, $segment) {
 
         $this->db->select('s.id,s.gradelevel,s.subject,s.description,s.status,st.strandcode');
         $this->db->from('tbl_subject s');
         $this->db->join('tbl_strand st','st.id=s.strandid','left');
 
         $likeCriteria = "(s.subject  LIKE '".$searchText."%'
-        AND s.status='".'Active'."' AND s.type='".'SHS'."'  OR s.description  LIKE '".$searchText."%'
-        AND s.status='".'Active'."' AND s.type='".'SHS'."'  OR s.gradelevel LIKE '".$searchText."%'
-        AND s.status='".'Active'."' AND s.type='".'SHS'."'  OR st.strandcode  LIKE '".$searchText."%'
-        AND s.status='".'Active'."' AND s.type='".'SHS'."')";
+        AND s.status='".$status."' AND s.type='".'SHS'."'  OR s.description  LIKE '".$searchText."%'
+        AND s.status='".$status."' AND s.type='".'SHS'."'  OR s.gradelevel LIKE '".$searchText."%'
+        AND s.status='".$status."' AND s.type='".'SHS'."'  OR st.strandcode  LIKE '".$searchText."%'
+        AND s.status='".$status."'AND s.type='".'SHS'."')";
 
         $this->db->where($likeCriteria);
         $this->db->order_by("s.id","ASC");

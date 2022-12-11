@@ -27,7 +27,7 @@
  */
 
 // Include the main TCPDF library (search for installation path).
-require_once('application/libraries/tcpdf/tcpdf_include.php');
+require_once('application/libraries/Tcpdf/tcpdf_include.php');
 
 // Extend the TCPDF class to create custom Header and Footer
  class MYPDF extends TCPDF {

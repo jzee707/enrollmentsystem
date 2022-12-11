@@ -3,6 +3,8 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+    require_once(FCPATH.'application/libraries/Tcpdf/Tcpdf.php');
+
     
 class Admin extends CI_Controller {
 
@@ -872,16 +874,38 @@ function signout()
     {
 
         $searchText = $this->security->xss_clean($this->input->post('searchText'));
+
+        $status ="Active";
            
-        $count = $this->auth->sectionListingCount($searchText);
+        $count = $this->auth->sectionListingCount($searchText,$status);
 
         $returns = $this->paginationCompress ("admin/sectionListing/", $count, 10 );
         
-        $data['userRecords'] = $this->auth->sectionListing($searchText, $returns["page"], $returns["segment"]);
+        $data['userRecords'] = $this->auth->sectionListing($searchText, $status, $returns["page"], $returns["segment"]);
         
 
             $this->load->view('templates/adminheader', $data);
             $this->load->view("admin/section",  $data);
+            $this->load->view('templates/adminfooter', $data);
+
+    }
+
+    function sectionArchivedListing()
+    {
+
+        $searchText = $this->security->xss_clean($this->input->post('searchText'));
+
+        $status ="Inactive";
+           
+        $count = $this->auth->sectionListingCount($searchText,$status);
+
+        $returns = $this->paginationCompress ("admin/sectionArchivedListing/", $count, 10 );
+        
+        $data['userRecords'] = $this->auth->sectionListing($searchText, $status, $returns["page"], $returns["segment"]);
+        
+
+            $this->load->view('templates/adminheader', $data);
+            $this->load->view("admin/archivedsection",  $data);
             $this->load->view('templates/adminfooter', $data);
 
     }
@@ -951,6 +975,60 @@ function signout()
                     $this->session->set_flashdata('error', 'User updation failed');
 
                     redirect('archivedstrand');
+              
+                }
+        
+    }
+
+    function archivesection()
+    {
+        $id = $this->security->xss_clean($this->input->post('archiveid'));
+                        
+                $studentInfo = array('id'=>$id,'status'=>'Inactive',);
+                
+                $result = $this->auth->editSection($studentInfo, $id);
+
+                
+                if($result == true)
+                {
+                    $this->session->set_flashdata('success', 'Section Data Archived.');                 
+
+                    redirect('section');
+                   
+                }
+
+                else
+                {
+                    $this->session->set_flashdata('error', 'User updation failed');
+
+                    redirect('section');
+              
+                }
+        
+    }
+
+    function retrievesection()
+    {
+        $id = $this->security->xss_clean($this->input->post('archiveid'));
+                        
+                $studentInfo = array('id'=>$id,'status'=>'Active',);
+                
+                $result = $this->auth->editSection($studentInfo, $id);
+
+                
+                if($result == true)
+                {
+                    $this->session->set_flashdata('success', 'Section Data Retrieved.');                 
+
+                    redirect('archivedsection');
+                   
+                }
+
+                else
+                {
+                    $this->session->set_flashdata('error', 'User updation failed');
+
+                    redirect('archivedsection');
               
                 }
         

@@ -3,7 +3,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <i class="fa fa-users"></i> Senior High Subject Management
+        <i class="fa fa-users"></i> Junior High Subject Management
 
       </h1>
     </section>
@@ -27,8 +27,7 @@
 
             <div class="col-xs-6  text-right">
                 <div class="form-group">       
-               
-                    <a class="btn btn-primary" href="<?php echo base_url(); ?>addNewSHSubject"><i class="fa fa-plus"></i> Add New</a>
+
                 </div>
             </div>
         </div>
@@ -36,10 +35,10 @@
             <div class="col-xs-12">
               <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Senior High Subject List</h3>
+                    <h3 class="box-title">Junior High Subject Archived List</h3>
                     <div class="box-tools">
 
-                        <form action="<?php echo base_url() ?>shsubject" method="POST" id="searchList">
+                        <form action="<?php echo base_url() ?>jhsubject" method="POST" id="searchList">
                             <div class="input-group">
                               <input type="text" name="searchText"  class="form-control input-sm pull-right" style="width: 150px;" placeholder="Search"/>
                               <div class="input-group-btn">
@@ -54,10 +53,8 @@
                     <tr>
                         <th>ID</th>
                         <th>Grade Level</th>
-                        <th>Strand</th>
                         <th>Subject</th>
                         <th>Description</th>
-                       
 
                         <th class="text-center"></th>
                     </tr>
@@ -71,15 +68,13 @@
                     <tr>
                     <td><?php echo $record->id ?></td>
                         <td><?php echo $record->gradelevel ?></td>
-                        <td><?php echo $record->strandcode ?></td>
                         <td><?php echo $record->subject ?></td>
                         <td><?php echo $record->description ?></td>
-                       
 
                         <td class="text-center">
                        
-                            <a class="btn btn-sm btn-info" href="<?php echo base_url().'editSHSubject/'.$record->id; ?>" title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a class="btn btn-sm btn-danger archiveAppt" href="#" data-id="<?php echo $record->id; ?>" title="Archive"><i class="fa fa-trash"></i></a> 
+
+                        <a class="btn btn-sm btn-danger archiveAppt" href="#" data-id="<?php echo $record->id; ?>" title="Restore"><i class="fa fa-check"></i></a>
                            
                         </td>
                     </tr>
@@ -92,15 +87,15 @@
                   
                 </div><!-- /.box-body -->
 
-                <!-- Medium modal -->
-                <div class="modal fade" id="archive-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                 <!-- Medium modal -->
+                 <div class="modal fade" id="archive-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
-                        <form action="<?php echo base_url() ?>archiveshsubject" method="POST">
+                        <form action="<?php echo base_url() ?>retrievejhsubject" method="POST">
                             <div class="modal-content">
 
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h1 class="modal-title" style="font-size:24px;font-weight:bold;" id="myLargeModalLabel">Are you sure to delete this record?</h1>
+                                    <h1 class="modal-title" style="font-size:24px;font-weight:bold;" id="myLargeModalLabel">Are you sure to retrieve this record?</h1>
                                     <input type="hidden" class="form-control" id="archiveid" name="archiveid" value="">
                                 </div>
 
@@ -114,6 +109,8 @@
                     </div>
                 </div>
 
+
+
                 <div class="box-footer clearfix">
                     <?php echo $this->pagination->create_links(); ?>
                 </div>
@@ -122,6 +119,7 @@
         </div>
     </section>
 </div>
+
 
 
 <script>
@@ -139,4 +137,3 @@ $("#archive-modal").modal('show');
 	
 });
 </script>
-

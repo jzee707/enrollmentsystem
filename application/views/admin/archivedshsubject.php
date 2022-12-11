@@ -36,7 +36,7 @@
             <div class="col-xs-12">
               <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Senior High Subject List</h3>
+                    <h3 class="box-title">Senior High Subject Archived List</h3>
                     <div class="box-tools">
 
                         <form action="<?php echo base_url() ?>shsubject" method="POST" id="searchList">
@@ -78,8 +78,7 @@
 
                         <td class="text-center">
                        
-                            <a class="btn btn-sm btn-info" href="<?php echo base_url().'editSHSubject/'.$record->id; ?>" title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a class="btn btn-sm btn-danger archiveAppt" href="#" data-id="<?php echo $record->id; ?>" title="Archive"><i class="fa fa-trash"></i></a> 
+                        <a class="btn btn-sm btn-danger archiveAppt" href="#" data-id="<?php echo $record->id; ?>" title="Restore"><i class="fa fa-check"></i></a>
                            
                         </td>
                     </tr>
@@ -95,12 +94,12 @@
                 <!-- Medium modal -->
                 <div class="modal fade" id="archive-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
-                        <form action="<?php echo base_url() ?>archiveshsubject" method="POST">
+                        <form action="<?php echo base_url() ?>retrieveshsubject" method="POST">
                             <div class="modal-content">
 
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h1 class="modal-title" style="font-size:24px;font-weight:bold;" id="myLargeModalLabel">Are you sure to delete this record?</h1>
+                                    <h1 class="modal-title" style="font-size:24px;font-weight:bold;" id="myLargeModalLabel">Are you sure to retrieve this record?</h1>
                                     <input type="hidden" class="form-control" id="archiveid" name="archiveid" value="">
                                 </div>
 
@@ -113,6 +112,7 @@
                         </form>
                     </div>
                 </div>
+
 
                 <div class="box-footer clearfix">
                     <?php echo $this->pagination->create_links(); ?>

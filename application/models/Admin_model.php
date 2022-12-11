@@ -349,14 +349,14 @@ class Admin_model extends CI_Model {
     }
    
 
-    function sectionListingCount($searchText)
+    function sectionListingCount($searchText,$status)
     {
         $this->db->select("s.id,s.section,s.gradelevel,concat(f.firstname, ' ',f.lastname) as name,st.strandcode,s.level,s.status");
         $this->db->from('tbl_section s');
         $this->db->join('tbl_faculty f','f.id=s.adviserid');
         $this->db->join('tbl_strand st','st.id=s.strandid','left');
 
-        $likeCriteria = "(s.section LIKE '".$searchText."%' AND s.status='".'Active'."' OR s.gradelevel LIKE '".$searchText."%' AND s.status='".'Active'."' OR concat(f.firstname, ' ',f.lastname) LIKE '".$searchText."%' AND s.status='".'Active'."')";
+        $likeCriteria = "(s.section LIKE '".$searchText."%' AND s.status='".$status."'  OR s.gradelevel LIKE '".$searchText."%' AND s.status='".$status."' OR concat(f.firstname, ' ',f.lastname) LIKE '".$searchText."%' AND s.status='".$status."' )";
                             
         $this->db->where($likeCriteria);
         $this->db->order_by("s.id","ASC");
@@ -366,17 +366,17 @@ class Admin_model extends CI_Model {
         return $query->num_rows();
     }
 
-    function sectionListing($searchText, $page, $segment) {
+    function sectionListing($searchText, $status, $page, $segment) {
 
         $this->db->select("s.id,s.section,s.gradelevel,concat(f.firstname, ' ',f.lastname) as name,st.strandcode,s.level,s.status");
         $this->db->from('tbl_section s');
         $this->db->join('tbl_faculty f','f.id=s.adviserid');
         $this->db->join('tbl_strand st','st.id=s.strandid','left');
 
-        $likeCriteria = "(s.section LIKE '".$searchText."%' AND s.status='".'Active'."' 
-        OR s.gradelevel LIKE '".$searchText."%' AND s.status='".'Active'."' 
-        OR concat(f.firstname, ' ',f.lastname) LIKE '".$searchText."%' AND s.status='".'Active'."'
-        OR st.strandcode LIKE '".$searchText."%' AND s.status='".'Active'."')";
+        $likeCriteria = "(s.section LIKE '".$searchText."%' AND s.status='".$status."' 
+        OR s.gradelevel LIKE '".$searchText."%' AND s.status='".$status."' 
+        OR concat(f.firstname, ' ',f.lastname) LIKE '".$searchText."%' AND s.status='".$status."'
+        OR st.strandcode LIKE '".$searchText."' AND s.status='".$status."')";
 
         $this->db->where($likeCriteria);
         $this->db->order_by("s.id","ASC");
