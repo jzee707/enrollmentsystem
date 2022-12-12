@@ -168,7 +168,7 @@ class Schedule_model extends CI_Model {
         return $query->row();
     }
     
-    function scheduleListingCount($searchText = '',$status,$schoolyear,$term)
+    function scheduleListingCount($searchText,$status,$schoolyear,$term)
     {
         $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.timefrom,sd.timeto, sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
         $this->db->from('tbl_schedule sd');
@@ -194,7 +194,7 @@ class Schedule_model extends CI_Model {
         return $query->num_rows();
     }
 
-    function scheduleListing($searchText = '', $status,$schoolyear,$term,$page, $segment) {
+    function scheduleListing($searchText, $status,$schoolyear,$term,$page, $segment) {
 
         $this->db->select("sd.id,sd.room,sd.day,concat(sd.timefrom, ' - ',sd.timeto) as time,concat(a.firstname, ' ',a.lastname) as name, sd.timefrom,sd.timeto,sd.term, sb.gradelevel,sb.subject,sc.section,sy.schoolyear,sd.status");
         $this->db->from('tbl_schedule sd');

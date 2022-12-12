@@ -35,7 +35,7 @@
 
                         <form action="<?php echo base_url() ?>archivedschedule" method="POST" id="searchList">
                             <div class="input-group">
-                              <input type="text" name="searchText"  class="form-control input-sm pull-right" style="width: 150px;" placeholder="Search"/>
+                              <input type="text" name="searchText" value="<?php echo $searchText ?>" class="form-control input-sm pull-right" style="width: 150px;" placeholder="Search"/>
                               <div class="input-group-btn">
                                 <button class="btn btn-sm btn-default searchList"><i class="fa fa-search"></i></button>
                               </div>
@@ -138,5 +138,16 @@ $("#archive-modal").modal('show');
     
 	
 });
+</script>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery('ul.pagination li a').click(function (e) {
+            e.preventDefault();            
+            var link = jQuery(this).get(0).href;            
+            var value = link.substring(link.lastIndexOf('/') + 1);
+            jQuery("#searchList").attr("action", baseURL + "schedule/scheduleArchivedListing/" + value);
+            jQuery("#searchList").submit();
+        });
+    });
 </script>
 

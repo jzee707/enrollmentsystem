@@ -371,6 +371,8 @@ function editFaculty($id)
         $count = $this->auth->facultyListingCount($searchText,$status);
 
         $returns = $this->paginationCompress ("faculty/facultyListing/", $count, 10 );
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->facultyListing($searchText, $status,$returns["page"], $returns["segment"]);
         
@@ -390,6 +392,8 @@ function editFaculty($id)
         $count = $this->auth->facultyListingCount($searchText,$status);
 
         $returns = $this->paginationCompress ( "faculty/facultyListing/", $count, 10 );
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->facultyListing($searchText, $status,$returns["page"], $returns["segment"]);
         
@@ -421,6 +425,8 @@ function editFaculty($id)
         $count = $this->auth->scheduleListingCount($id,$schoolyear,$searchText);
     
         $returns = $this->paginationCompress ( "faculty/myschedule/", $count, 10 );
+
+        $data['searchText'] = $searchText;
             
         $data['userRecords'] = $this->auth->scheduleListing($id,$schoolyear,$searchText,$returns["page"], $returns["segment"]);
         
@@ -483,6 +489,8 @@ function editFaculty($id)
         $count = $this->auth->studentListingCount($schedid,$searchText);
     
         $returns = $this->paginationCompress ("faculty/studentlist/", $count, 10 );
+
+        $data['searchText'] = $searchText;
             
         $data['userRecords'] = $this->auth->studentListing($schedid, $searchText,$returns["page"], $returns["segment"]);
         $data['totalStudent'] = $count;

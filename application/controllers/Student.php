@@ -499,6 +499,8 @@ public function registration() {
         $count = $this->auth->studentsListingCount($searchText,$status); 
 
         $returns = $this->paginationCompress ( "student/studentListing/", $count, 10);
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->studentListing($searchText, $returns["page"], $returns["segment"],$status);
         $data['totalStudent'] = $count;
@@ -519,6 +521,8 @@ public function registration() {
         $count = $this->auth->studentsListingCount($searchText,$status);
 
         $returns = $this->paginationCompress ("student/prestudentListing/", $count, 10);
+
+        $data['searchText'] = $searchText;
         $data['totalStudent'] = $count;
         
         $data['userRecords'] = $this->auth->studentListing($searchText, $returns["page"], $returns["segment"],$status);
@@ -539,6 +543,8 @@ public function registration() {
         $count = $this->auth->studentsListingCount($searchText,$status); 
 
         $returns = $this->paginationCompress ( "student/studentArchivedListing/", $count, 10);
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->studentListing($searchText, $returns["page"], $returns["segment"],$status);
         
@@ -558,6 +564,8 @@ public function registration() {
         $count = $this->auth->studentsListingCount($searchText,$status); 
 
         $returns = $this->paginationCompress ( "student/registrationArchivedListing/", $count, 10);
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->studentListing($searchText, $returns["page"], $returns["segment"],$status);
         

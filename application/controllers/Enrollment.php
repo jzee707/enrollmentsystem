@@ -330,6 +330,8 @@ function editSchedule($id)
         $count = $this->auth->enrollmentListingCount($searchText,$status,$schoolyear,$semester);
 
         $returns = $this->paginationCompress ( "enrollment/enrollmentListing/", $count, 10 );
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->enrollmentListing($searchText, $status,$schoolyear,$semester,$returns["page"], $returns["segment"]);
         $data['totalStudent'] = $count;
@@ -366,6 +368,8 @@ function editSchedule($id)
         $count = $this->auth->enrollmentListingCount($searchText,$status,$schoolyear,$semester);
 
         $returns = $this->paginationCompress ( "enrollment/enrollmentArchivedListing/", $count, 10 );
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->enrollmentListing($searchText, $status,$schoolyear,$semester,$returns["page"], $returns["segment"]);
         
@@ -402,6 +406,8 @@ function editSchedule($id)
         $count = $this->auth->enrollmentListingCount($searchText,$status,$schoolyear,$semester);
 
         $returns = $this->paginationCompress ( "enrollment/preenrollmentArchivedListing/", $count, 10 );
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->enrollmentListing($searchText, $status,$schoolyear,$semester,$returns["page"], $returns["segment"]);
         
@@ -437,6 +443,8 @@ function editSchedule($id)
         $count = $this->auth->enrollmentListingCount($searchText,$status,$schoolyear,$semester);
 
         $returns = $this->paginationCompress ( "enrollment/preenrollmentListing/", $count, 10 );
+
+        $data['searchText'] = $searchText;
         $data['totalStudent'] = $count;
         
         $data['userRecords'] = $this->auth->enrollmentListing($searchText, $status,$schoolyear,$semester,$returns["page"], $returns["segment"]);

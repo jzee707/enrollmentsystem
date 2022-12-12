@@ -394,6 +394,8 @@ function editSHSubject($id)
         $count = $this->auth->jhsubjectListingCount($searchText,$status);
 
         $returns = $this->paginationCompress ( "subject/jhsubjectListing/", $count, 10 );
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->jhsubjectListing($searchText, $status, $returns["page"], $returns["segment"]);
         
@@ -414,6 +416,8 @@ function editSHSubject($id)
         $count = $this->auth->jhsubjectListingCount($searchText,$status);
 
         $returns = $this->paginationCompress ( "subject/jhsArchivedListing/", $count, 10 );
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->jhsubjectListing($searchText, $status, $returns["page"], $returns["segment"]);
         
@@ -434,6 +438,8 @@ function editSHSubject($id)
         $count = $this->auth->shsubjectListingCount($searchText,$status);
 
         $returns = $this->paginationCompress ( "subject/shsubjectListing/", $count, 10 );
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->shsubjectListing($searchText, $status, $returns["page"], $returns["segment"]);
         
@@ -454,6 +460,8 @@ function editSHSubject($id)
         $count = $this->auth->shsubjectListingCount($searchText,$status);
 
         $returns = $this->paginationCompress ( "subject/shsArchivedListing/", $count, 10 );
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->shsubjectListing($searchText, $status, $returns["page"], $returns["segment"]);
         

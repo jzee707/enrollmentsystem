@@ -330,6 +330,8 @@ function editSchedule($id)
         $count = $this->auth->scheduleListingCount($searchText,$status,$schoolyear,$semester);
 
         $returns = $this->paginationCompress ( "schedule/scheduleListing/", $count, 10 );
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->scheduleListing($searchText, $status,$schoolyear,$semester,$returns["page"], $returns["segment"]);
         
@@ -365,6 +367,8 @@ function editSchedule($id)
         }
            
         $count = $this->auth->scheduleListingCount($searchText,$status,$schoolyear,$semester);
+
+        $data['searchText'] = $searchText;
 
         $returns = $this->paginationCompress ( "schedule/scheduleListing/", $count, 10 );
         

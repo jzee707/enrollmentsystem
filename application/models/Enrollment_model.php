@@ -561,7 +561,7 @@ class Enrollment_model extends CI_Model {
 
         if($gradelevel == "Grade 11" && $semester == "2nd")
         {
-            $likeCriteria = "(sb.gradelevel = '".$gradelevel."' AND sd.sectionid='".$section."' AND sd.syid='".$schoolyear."' AND sd.term IN ('".'1st'."','".'2nd'."'))";
+            $likeCriteria = "(sb.gradelevel = '".$gradelevel."' AND sd.sectionid='".$section."' AND sd.syid='".$schoolyear."' AND sd.term= '".$semester."')";
 
 
         }
@@ -576,7 +576,7 @@ class Enrollment_model extends CI_Model {
 
         if($gradelevel == "Grade 12" && $semester == "2nd")
         {
-            $likeCriteria = "(sb.gradelevel = '".$gradelevel."' AND sd.sectionid='".$section."' AND sd.syid='".$schoolyear."' AND sd.term IN ('".'1st'."','".'2nd'."'))";
+            $likeCriteria = "(sb.gradelevel = '".$gradelevel."' AND sd.sectionid='".$section."' AND sd.syid='".$schoolyear."' AND sd.term= '".$semester."')";
 
 
         }

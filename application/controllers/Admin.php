@@ -822,6 +822,8 @@ function signout()
 
     
         $returns = $this->paginationCompress ("admin/strandListing/", $count, 10 );
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->strandListing($searchText, $status,$returns["page"], $returns["segment"]);
         
@@ -842,6 +844,8 @@ function signout()
         $count = $this->auth->strandListingCount($searchText,$status);
 
         $returns = $this->paginationCompress ("admin/strandArchivedListing/", $count, 10 );
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->strandListing($searchText, $status,$returns["page"], $returns["segment"]);
         
@@ -860,6 +864,8 @@ function signout()
         $count = $this->auth->schoolyearListingCount($searchText);
 
         $returns = $this->paginationCompress ("admin/schoolyearListing/", $count, 10 );
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->schoolyearListing($searchText, $returns["page"], $returns["segment"]);
         
@@ -880,6 +886,8 @@ function signout()
         $count = $this->auth->sectionListingCount($searchText,$status);
 
         $returns = $this->paginationCompress ("admin/sectionListing/", $count, 10 );
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->sectionListing($searchText, $status, $returns["page"], $returns["segment"]);
         
@@ -900,6 +908,8 @@ function signout()
         $count = $this->auth->sectionListingCount($searchText,$status);
 
         $returns = $this->paginationCompress ("admin/sectionArchivedListing/", $count, 10 );
+
+        $data['searchText'] = $searchText;
         
         $data['userRecords'] = $this->auth->sectionListing($searchText, $status, $returns["page"], $returns["segment"]);
         
