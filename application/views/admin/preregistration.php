@@ -353,7 +353,7 @@ jQuery(document).ready(function(){
 		
 
 		$.ajax({
-				url:"student/getStudentData",
+				url:"<?php echo base_url(); ?>student/getStudentData",
 				method:"POST",
 				dataType:"json",
 				data:{id:id},

@@ -338,7 +338,7 @@ jQuery(document).ready(function(){
 		
 
 		$.ajax({
-				url:"student/getStudentData",
+				url:"<?php echo base_url(); ?>student/getStudentData",
 				method:"POST",
 				dataType:"json",
 				data:{id:id},
@@ -386,4 +386,15 @@ $("#archive-modal").modal('show');
 
 	
 });
+</script>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery('ul.pagination li a').click(function (e) {
+            e.preventDefault();            
+            var link = jQuery(this).get(0).href;            
+            var value = link.substring(link.lastIndexOf('/') + 1);
+            jQuery("#searchList").attr("action", baseURL + "student/studentListing/" + value);
+            jQuery("#searchList").submit();
+        });
+    });
 </script>
