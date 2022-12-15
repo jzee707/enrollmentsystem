@@ -51,7 +51,7 @@ function editSchedule($id)
  function addSchedule()
     {
                
-        $this->form_validation->set_rules('subject', 'Subject', 'trim|required');
+        $this->form_validation->set_rules('subject', 'Subject', 'trim|required|callback_checkSchedule');
         $this->form_validation->set_rules('section', 'Section', 'trim|required');
         $this->form_validation->set_rules('gradelevel', 'Grade Level', 'trim|required');
         $this->form_validation->set_rules('adviser', 'Adviser', 'trim|required');
@@ -380,6 +380,46 @@ function editSchedule($id)
             $this->load->view('templates/adminfooter', $data);
 
     }
+
+    function checkSchedule() 
+    {
+
+        $gradelevel = $this->security->xss_clean($this->input->post('gradelevel'));
+        $strand = $this->security->xss_clean($this->input->post('strand'));
+        $section = $this->security->xss_clean($this->input->post('section'));
+        $subject = $this->security->xss_clean($this->input->post('subject'));
+
+        if($strand == "")
+        {
+            $strand = 0;
+
+        }
+
+        $schoolyear = 0;
+
+            $row = $this->db->select("*")->where('status',"Active")->get("tbl_schoolyear")->row();
+		if (!empty($row->id))
+		{
+			$schoolyear = $row->id;
+		}
+
+
+        $check = $this->db->get_where('tbl_schedule', array('sectionid' => $section,'subjectid' => $subject,'syid' => $schoolyear), 1);
+
+        if ($check->num_rows() > 0) {
+
+            $this->form_validation->set_message('checkSchedule', 'This Schedule already exists.');
+
+            return FALSE;
+        }
+
+        else
+        {
+            return TRUE;
+        }
+     
+     
+    } 
 
     public function getCity(){
         if($this->input->post('province'))
