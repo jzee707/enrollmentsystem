@@ -387,6 +387,7 @@ $("#archive-modal").modal('show');
 	
 });
 </script>
+
 <script type="text/javascript">
     jQuery(document).ready(function(){
         jQuery('ul.pagination li a').click(function (e) {

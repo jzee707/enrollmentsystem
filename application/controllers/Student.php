@@ -247,6 +247,7 @@ public function registration() {
         
     }
 
+
     function addReStudent()
     {
                
@@ -264,6 +265,9 @@ public function registration() {
         $this->form_validation->set_rules('guardian', 'Guardian', 'trim|required');
         $this->form_validation->set_rules('contactno', 'Contact No.', 'trim|required');
         $this->form_validation->set_rules('status', 'Status', 'trim|required');
+
+        $this->form_validation->set_rules('chk4', 'Data Privacy Policy', 'required|callback_checkDPP');
+
 
  
         if ($this->form_validation->run() == FALSE) {
@@ -671,6 +675,29 @@ public function registration() {
         }   
      
        } 
+
+       function checkDPP() {
+
+
+        $chk1 = $this->security->xss_clean($this->input->post('chk1'));
+        $chk2 = $this->security->xss_clean($this->input->post('chk2'));
+        $chk3 = $this->security->xss_clean($this->input->post('chk3'));
+        $chk4 = $this->security->xss_clean($this->input->post('chk4'));
+
+        if($chk1 == "" && $chk2 == "" && $chk3 == "" && $chk4 != "")
+        {
+            $this->form_validation->set_message('checkDPP', 'Kindly check the data privacy policy.');
+
+        }
+        
+        else if($chk4 == "")
+        {
+            $this->form_validation->set_message('checkDPP', 'Data Privacy Field is required.');
+
+        }
+
+     
+       }
 
     public function getCity(){
         if($this->input->post('province'))

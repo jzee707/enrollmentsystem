@@ -35,14 +35,57 @@ class Admin extends CI_Controller {
     else
     {
         $usertype = $this->session->userdata('usertype');
+        $user_id = $this->session->userdata('id');
+    
+        if($usertype == "Administrator")
+             {
+                redirect('dashboard');
+               
+             }
 
-        if($usertype == "Administrator"){
-           
-            redirect('dashboard');
-        }    
+             else if($usertype == "Student")
+             {
+                $student = $this->auth->getStudentData($user_id);
+
+                if(!empty($student))
+                {
+
+                    if($student->status=="Requested")
+                    {
+                        redirect('registrationrequest');
+                        //$this->registration($student->id);
+                    
+                    }
+
+                    else if($student->status=="Active")
+                    {
+                        redirect('studentdashboard');
+
+                    }  
+                    
+                    else
+                    {
+                        redirect('registration');
+
+                    }
+                
+                }
+
+                else
+                {
+                    redirect('registration');
+
+                }
+
+             }
+
+             else if($usertype == "Teacher")
+             {
+                redirect('teacherdashboard');
+
+             }   
     }
 
-    
     }
 
  
