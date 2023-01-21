@@ -266,7 +266,7 @@ public function registration() {
         $this->form_validation->set_rules('contactno', 'Contact No.', 'trim|required');
         $this->form_validation->set_rules('status', 'Status', 'trim|required');
 
-        $this->form_validation->set_rules('chk4', 'Data Privacy Policy', 'required|callback_checkDPP');
+        $this->form_validation->set_rules('chk4', 'Data Privacy Policy', 'required');
 
 
  
